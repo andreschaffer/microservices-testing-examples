@@ -1,0 +1,23 @@
+creditScoreServiceUrl: http://localhost:8088
+
+eventPublisher:
+  topic: special-membership-topic
+  configs:
+    bootstrap.servers: localhost:9092
+
+server:
+  applicationConnectors:
+    - type: http
+      port: 0
+  adminConnectors:
+    - type: http
+      port: 0
+
+logging:
+  level: INFO
+  loggers:
+      kafka: WARN
+      org.apache.kafka: WARN
+      org.apache.zookeeper: WARN
+  appenders:
+    - type: console
