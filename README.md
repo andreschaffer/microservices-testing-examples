@@ -8,7 +8,7 @@ The problem with alternative _b_ is that the mocks might not behave the same way
 and thus we might miss integration problems.
 
 So, how to proceed? Glad you asked.  
-This project will focus on Consumer Driven Contract Testing to overcome those limitations. 
+This project will focus on [Consumer Driven Contract Testing](http://martinfowler.com/articles/consumerDrivenContracts.html) to overcome those limitations. 
 It is a technique based on mocks, so that we benefit from fast feedback and no scalability issues, that attacks
 the problem of potential incompatible behavior by recording the interactions with the mocks 
 and then allowing the real services to test that they behave the same way the mock did instead.
