@@ -1,5 +1,3 @@
-This project aims to provide examples of how to test microservices.
-
 # Strategy
 When it comes to testing microservices, there are two alternatives:  
 a) Deploy all of them and test them in an end-to-end fashion  
