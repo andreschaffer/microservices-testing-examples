@@ -34,7 +34,7 @@ the welcome-member-email-service that then contacts the new member with a warm w
 
 # Pact Broker
 While testing, the way we'll make the interactions records (called pacts from now on) available to the real services 
-is through a pact broker. We can run it with docker and access it on a browser (http://localhost).
+is through a pact broker. We can run it with docker and access it on a browser [http://localhost](http://localhost).
 
 ```bash
 docker run --name pact-broker-postgres -d postgres
