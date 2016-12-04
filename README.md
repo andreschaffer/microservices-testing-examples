@@ -37,8 +37,8 @@ While testing, the way we'll make the interactions records (called pacts from no
 is through a pact broker. We can run it with docker and access it on a browser [(http://localhost)](http://localhost).
 
 ```bash
-docker run --name pact-broker-postgres -d postgres
-docker run --name pact-broker --link pact-broker-postgres -e PACT_BROKER_DATABASE_HOST=pact-broker-postgres -e PACT_BROKER_DATABASE_USERNAME=postgres -p 80:80 -d dius/pact_broker
+docker run --name pact-broker-postgres -d postgres:9.6.1-alpine
+docker run --name pact-broker --link pact-broker-postgres -e PACT_BROKER_DATABASE_HOST=pact-broker-postgres -e PACT_BROKER_DATABASE_USERNAME=postgres -p 80:80 -d dius/pact_broker:0.0.6
 ```
 
 # Running the tests
