@@ -1,3 +1,5 @@
+# Microservices Testing Examples
+
 # Strategy
 When it comes to testing microservices, there are two alternatives:  
 a) Deploy all of them and test them in an end-to-end fashion  
@@ -66,4 +68,4 @@ The pact verification tests also have their own package (\*.pacts.dependents). H
 Now it's time for you to go ahead and take a look at those tests! Try changing a contract and see the tests fail :)
 
 ### Dependencies graph
-Visit the pact broker page again after running the tests and check the pacts are there together with a cool dependencies graph.
+Visit the pact broker page again after running the tests and check the pacts are there together with a cool dependencies graph [(http://localhost)](http://localhost).
