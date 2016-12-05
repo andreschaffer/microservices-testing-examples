@@ -1,4 +1,15 @@
+sudo: required
+services:
+  - docker
+before_script:
+  - docker run --name pact-broker-postgres -d postgres:9.6.1-alpine
+  - docker run --name pact-broker --link pact-broker-postgres -e PACT_BROKER_DATABASE_HOST=pact-broker-postgres -e PACT_BROKER_DATABASE_USERNAME=postgres -p 80:80 -d dius/pact_broker:0.0.6
+
 language: java
 jdk:
   - oraclejdk8
-script: mvn clean verify
+script: mvn clean verify -Pupload-pacts,verify-pacts
+
+after_script:
+  - docker rm -f pact-broker
+  - docker rm -f pact-broker-postgres
