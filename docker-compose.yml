@@ -1,0 +1,13 @@
+version: '2'
+services:
+  postgres:
+    image: postgres:9.6.1-alpine
+  pact-broker:
+    image: dius/pact_broker:0.0.6
+    links:
+      - postgres
+    environment:
+      - PACT_BROKER_DATABASE_HOST=postgres
+      - PACT_BROKER_DATABASE_USERNAME=postgres
+    ports:
+      - "80:80"

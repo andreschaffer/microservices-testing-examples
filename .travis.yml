@@ -1,0 +1,16 @@
+sudo: required
+services:
+  - docker
+before_script:
+  - docker-compose up -d
+
+language: java
+jdk:
+  - oraclejdk8
+script: mvn clean verify -Pupload-pacts,verify-pacts
+cache:
+  directories:
+  - $HOME/.m2
+
+after_script:
+  - docker-compose down
