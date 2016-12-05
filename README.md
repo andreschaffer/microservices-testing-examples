@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/andreschaffer/microservices-testing-examples.svg?branch=master)](https://travis-ci.org/andreschaffer/microservices-testing-examples)
 # Microservices Testing Examples
 
 # Strategy
