@@ -7,10 +7,13 @@ before_script:
 language: java
 jdk:
   - oraclejdk8
-script: mvn clean verify -Pupload-pacts,verify-pacts
+script: mvn clean verify -Pupload-pacts,verify-pacts,code-coverage
 cache:
   directories:
   - $HOME/.m2
+
+after_success:
+  - mvn coveralls:report -Pcode-coverage
 
 after_script:
   - docker-compose down
