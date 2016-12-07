@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/andreschaffer/microservices-testing-examples.svg?branch=master)](https://travis-ci.org/andreschaffer/microservices-testing-examples)
+[![Coverage Status](https://coveralls.io/repos/github/andreschaffer/microservices-testing-examples/badge.svg?branch=master)](https://coveralls.io/github/andreschaffer/microservices-testing-examples?branch=master)
 # Microservices Testing Examples
 
 # Strategy
