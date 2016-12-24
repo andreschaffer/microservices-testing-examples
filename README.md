@@ -69,4 +69,5 @@ The pact verification tests also have their own package (\*.pacts.dependents). H
 Now it's time for you to go ahead and take a look at those tests! Try changing a contract and see the tests fail :)
 
 ### Dependencies graph
-Visit the pact broker page again after running the tests and check the pacts are there together with a cool dependencies graph [(http://localhost)](http://localhost).
+Visit the pact broker page again after running the tests and check the pacts are there together with a cool dependencies graph:  
+![alt text](https://github.com/andreschaffer/microservices-testing-examples/blob/master/docs/images/pact_broker_dependencies_graph.png "Pact broker dependencies graph")
