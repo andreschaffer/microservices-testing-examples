@@ -1,5 +1,6 @@
 package specialmembershipservice.it;
 
+import com.github.charithe.kafka.EphemeralKafkaBroker;
 import com.github.charithe.kafka.KafkaJunitRule;
 import com.github.restdriver.clientdriver.ClientDriverResponse;
 import com.github.restdriver.clientdriver.ClientDriverRule;
@@ -31,7 +32,8 @@ import static specialmembershipservice.it.IntegrationEnvironment.*;
 
 public class SpecialMembershipsIT {
 
-    private static final KafkaJunitRule KAFKA_RULE = new KafkaJunitRule(KAFKA_PORT);
+    private static final EphemeralKafkaBroker KAFKA_BROKER = EphemeralKafkaBroker.create(KAFKA_PORT);
+    private static final KafkaJunitRule KAFKA_RULE = new KafkaJunitRule(KAFKA_BROKER);
 
     private static final DropwizardAppRule<SpecialMembershipServiceConfiguration> SPECIAL_MEMBERSHIP_SERVICE_RULE =
             new DropwizardAppRule<>(SpecialMembershipServiceApplication.class, INTEGRATION_YML);
@@ -133,8 +135,8 @@ public class SpecialMembershipsIT {
     }
 
     private void verifyPublishedMemberSignedUpEvent(String email) throws Exception {
-        String memberSignedUpEvent = KAFKA_RULE.pollStringMessages(SPECIAL_MEMBERSHIP_TOPIC, 1).get(1, SECONDS)
-                .get(0).value();
+        String memberSignedUpEvent = KAFKA_RULE.helper().consumeStrings(SPECIAL_MEMBERSHIP_TOPIC, 1).get(1, SECONDS)
+                .get(0);
         String eventType = "memberSignedUpEvent";
         assertThat(memberSignedUpEvent, hasJsonPath("$.@type", equalTo(eventType)));
         assertThat(memberSignedUpEvent, hasJsonPath("$.email", equalTo(email)));

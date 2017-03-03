@@ -7,6 +7,7 @@ import au.com.dius.pact.provider.junit.loader.PactBroker;
 import au.com.dius.pact.provider.junit.target.AmqpTarget;
 import au.com.dius.pact.provider.junit.target.Target;
 import au.com.dius.pact.provider.junit.target.TestTarget;
+import com.github.charithe.kafka.EphemeralKafkaBroker;
 import com.github.charithe.kafka.KafkaJunitRule;
 import com.github.restdriver.clientdriver.ClientDriverResponse;
 import com.github.restdriver.clientdriver.ClientDriverRule;
@@ -39,7 +40,8 @@ import static specialmembershipservice.it.pacts.PactConstants.*;
 @Provider(SPECIAL_MEMBERSHIP_SERVICE)
 public class MessagePactsVerifications {
 
-    private static final KafkaJunitRule KAFKA_RULE = new KafkaJunitRule(KAFKA_PORT);
+    private static final EphemeralKafkaBroker KAFKA_BROKER = EphemeralKafkaBroker.create(KAFKA_PORT);
+    private static final KafkaJunitRule KAFKA_RULE = new KafkaJunitRule(KAFKA_BROKER);
 
     private static final ClientDriverRule CREDIT_SCORE_SERVICE_RULE = new ClientDriverRule(CREDIT_SCORE_SERVICE_PORT);
 
@@ -74,7 +76,7 @@ public class MessagePactsVerifications {
         Response response = resourcesClient.postSpecialMembership(specialMembershipDto);
         response.close();
         assertThat(response.getStatus(), equalTo(200));
-        return KAFKA_RULE.pollStringMessages(SPECIAL_MEMBERSHIP_TOPIC, 1).get(1, SECONDS).get(0).value();
+        return KAFKA_RULE.helper().consumeStrings(SPECIAL_MEMBERSHIP_TOPIC, 1).get(1, SECONDS).get(0);
     }
 
     private void setCreditScoreServiceResponse(String email, ClientDriverResponse giveResponse) {

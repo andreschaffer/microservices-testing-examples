@@ -6,9 +6,9 @@ import au.com.dius.pact.consumer.Pact;
 import au.com.dius.pact.consumer.PactVerification;
 import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
 import au.com.dius.pact.model.v3.messaging.MessagePact;
+import com.github.charithe.kafka.EphemeralKafkaBroker;
 import com.github.charithe.kafka.KafkaJunitRule;
 import io.dropwizard.testing.junit.DropwizardAppRule;
-import org.apache.kafka.clients.producer.ProducerRecord;
 import org.junit.*;
 import org.junit.rules.RuleChain;
 import org.subethamail.wiser.Wiser;
@@ -31,7 +31,8 @@ import static welcomememberemailservice.it.pacts.PactConstants.WELCOME_MEMBER_EM
 
 public class MemberSignedUpEventPactIT {
 
-    private static final KafkaJunitRule KAFKA_RULE = new KafkaJunitRule(KAFKA_PORT);
+    private static final EphemeralKafkaBroker KAFKA_BROKER = EphemeralKafkaBroker.create(KAFKA_PORT);
+    private static final KafkaJunitRule KAFKA_RULE = new KafkaJunitRule(KAFKA_BROKER);
 
     private static final DropwizardAppRule<WelcomeMemberEmailServiceConfiguration> SERVICE_RULE =
             new DropwizardAppRule<>(WelcomeMemberEmailServiceApplication.class, INTEGRATION_YML);
@@ -81,9 +82,9 @@ public class MemberSignedUpEventPactIT {
     }
 
     private void publishMessageAndWaitToBeConsumed(String topic, String message, String groupId) {
-        KafkaOffsets kafkaOffsets = new KafkaOffsets(KAFKA_HOST, KAFKA_RULE.kafkaBrokerPort());
+        KafkaOffsets kafkaOffsets = new KafkaOffsets(KAFKA_HOST, KAFKA_RULE.helper().kafkaPort());
         long previousOffset = Math.max(kafkaOffsets.readOffset(topic, groupId), 0);
-        KAFKA_RULE.createStringProducer().send(new ProducerRecord<>(topic, message));
+        KAFKA_RULE.helper().produceStrings(topic, message);
         await().atMost(5, SECONDS).until(() -> kafkaOffsets.readOffset(topic, groupId), equalTo(previousOffset + 1));
     }
 }

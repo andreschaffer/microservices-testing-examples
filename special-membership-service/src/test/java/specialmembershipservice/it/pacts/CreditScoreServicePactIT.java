@@ -3,10 +3,10 @@ package specialmembershipservice.it.pacts;
 import au.com.dius.pact.consumer.Pact;
 import au.com.dius.pact.consumer.PactProviderRule;
 import au.com.dius.pact.consumer.PactVerification;
-import au.com.dius.pact.consumer.PactVerifications;
 import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.model.PactFragment;
+import com.github.charithe.kafka.EphemeralKafkaBroker;
 import com.github.charithe.kafka.KafkaJunitRule;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.BeforeClass;
@@ -33,7 +33,8 @@ import static specialmembershipservice.it.pacts.PactConstants.SPECIAL_MEMBERSHIP
 
 public class CreditScoreServicePactIT {
 
-    private static final KafkaJunitRule KAFKA_RULE = new KafkaJunitRule(KAFKA_PORT);
+    private static final EphemeralKafkaBroker KAFKA_BROKER = EphemeralKafkaBroker.create(KAFKA_PORT);
+    private static final KafkaJunitRule KAFKA_RULE = new KafkaJunitRule(KAFKA_BROKER);
 
     private static final DropwizardAppRule<SpecialMembershipServiceConfiguration> SPECIAL_MEMBERSHIP_SERVICE_RULE =
             new DropwizardAppRule<>(SpecialMembershipServiceApplication.class, INTEGRATION_YML);
