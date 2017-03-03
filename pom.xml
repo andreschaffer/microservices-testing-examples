@@ -141,7 +141,7 @@
                     <plugin>
                         <groupId>com.github.warmuuh</groupId>
                         <artifactId>pactbroker-maven-plugin</artifactId>
-                        <version>0.0.9</version>
+                        <version>0.0.10</version>
                         <executions>
                             <execution>
                                 <id>upload-pacts</id>
