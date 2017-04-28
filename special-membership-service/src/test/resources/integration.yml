@@ -4,7 +4,6 @@ eventPublisher:
   topic: special-membership-topic
   configs:
     bootstrap.servers: localhost:9092
-    session.timeout.ms: 5000
 
 server:
   applicationConnectors:
