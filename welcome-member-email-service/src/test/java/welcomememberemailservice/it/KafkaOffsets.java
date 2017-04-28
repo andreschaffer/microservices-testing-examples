@@ -1,16 +1,15 @@
 package welcomememberemailservice.it;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.Collections.singletonList;
+
+import java.time.Duration;
+import java.util.Random;
 import kafka.common.OffsetMetadataAndError;
 import kafka.common.TopicAndPartition;
 import kafka.javaapi.OffsetFetchRequest;
 import kafka.javaapi.OffsetFetchResponse;
 import kafka.network.BlockingChannel;
-
-import java.time.Duration;
-import java.util.Random;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-import static java.util.Collections.singletonList;
 
 public class KafkaOffsets {
 
@@ -31,7 +30,7 @@ public class KafkaOffsets {
         BlockingChannel channel = new BlockingChannel(host, port,
                 BlockingChannel.UseDefaultBufferSize(),
                 BlockingChannel.UseDefaultBufferSize(),
-                (int) Duration.ofSeconds(3).toMillis());
+                (int) Duration.ofSeconds(10).toMillis());
         try {
             channel.connect();
             TopicAndPartition topicAndPartition = new TopicAndPartition(topic, partition);
