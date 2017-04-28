@@ -3,6 +3,7 @@ package specialmembershipservice.it.pacts.dependents;
 import au.com.dius.pact.provider.PactVerifyProvider;
 import au.com.dius.pact.provider.junit.PactRunner;
 import au.com.dius.pact.provider.junit.Provider;
+import au.com.dius.pact.provider.junit.State;
 import au.com.dius.pact.provider.junit.loader.PactBroker;
 import au.com.dius.pact.provider.junit.target.AmqpTarget;
 import au.com.dius.pact.provider.junit.target.Target;
@@ -27,6 +28,7 @@ import java.util.Map;
 import static com.github.restdriver.clientdriver.ClientDriverRequest.Method.GET;
 import static com.github.restdriver.clientdriver.RestClientDriver.giveResponse;
 import static com.github.restdriver.clientdriver.RestClientDriver.onRequestTo;
+import static java.util.Collections.singletonList;
 import static java.util.Collections.singletonMap;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -66,16 +68,20 @@ public class MessagePactsVerifications {
     }
 
     @TestTarget
-    public final Target target = new AmqpTarget();
+    public final Target target = new AmqpTarget(singletonList(this.getClass().getPackage().getName() + ".*"));
 
-    @PactVerifyProvider("An event notifying Tony Stark's new membership")
-    public String verifyTonyStarksNewMembershipEvent() throws Exception {
+    @State("Tony Stark became a new member")
+    public void tonyStarkBecameANewMember() {
         String email = "tony.stark@example.com";
         setCreditScoreServiceResponse(email, giveResponse("{\"creditScore\":850}", APPLICATION_JSON));
         Map<String, Object> specialMembershipDto = singletonMap("email", email);
         Response response = resourcesClient.postSpecialMembership(specialMembershipDto);
         response.close();
         assertThat(response.getStatus(), equalTo(200));
+    }
+
+    @PactVerifyProvider("An event notifying Tony Stark's new membership")
+    public String verifyTonyStarksNewMembershipEvent() throws Exception {
         return KAFKA_RULE.helper().consumeStrings(SPECIAL_MEMBERSHIP_TOPIC, 1).get(1, SECONDS).get(0);
     }
 
