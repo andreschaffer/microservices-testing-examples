@@ -52,7 +52,7 @@ mvn clean verify -Pupload-pacts,verify-pacts
 
 ### Behind the curtains
 We created two auxiliary maven profiles to hold control of uploading the pacts to the broker (upload-pacts) 
-and downloading and running the pact verification tests (verify-pacts).  
+and downloading the pacts from the broker / running the pact verification tests (verify-pacts).  
 Here the welcome-email-service is built first and publishes the pact with special-membership-service;  
 Special-membership-service verifies that pact and publishes its own pact with credit-score-service;  
 Credit-score-service finally verifies the pact, concluding the chain.
