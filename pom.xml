@@ -131,7 +131,27 @@
                 </executions>
             </plugin>
         </plugins>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.github.warmuuh</groupId>
+                    <artifactId>pactbroker-maven-plugin</artifactId>
+                    <version>0.0.10</version>
+                    <configuration>
+                        <brokerUrl>http://localhost</brokerUrl>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </pluginRepository>
+    </pluginRepositories>
 
     <profiles>
         <profile>
@@ -141,7 +161,6 @@
                     <plugin>
                         <groupId>com.github.warmuuh</groupId>
                         <artifactId>pactbroker-maven-plugin</artifactId>
-                        <version>0.0.10</version>
                         <executions>
                             <execution>
                                 <id>upload-pacts</id>
@@ -150,7 +169,6 @@
                                     <goal>upload-pacts</goal>
                                 </goals>
                                 <configuration>
-                                    <brokerUrl>http://localhost</brokerUrl>
                                     <pacts>${project.build.directory}/pacts</pacts>
                                 </configuration>
                             </execution>
@@ -158,19 +176,30 @@
                     </plugin>
                 </plugins>
             </build>
-
-            <pluginRepositories>
-                <pluginRepository>
-                    <id>jitpack.io</id>
-                    <url>https://jitpack.io</url>
-                </pluginRepository>
-            </pluginRepositories>
         </profile>
 
         <profile>
             <id>verify-pacts</id>
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>com.github.warmuuh</groupId>
+                        <artifactId>pactbroker-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>download-pacts</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>download-pacts</goal>
+                                </goals>
+                                <configuration>
+                                    <pacts>${project.build.testOutputDirectory}/pacts-dependents</pacts>
+                                    <provider>${project.artifactId}</provider>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-failsafe-plugin</artifactId>

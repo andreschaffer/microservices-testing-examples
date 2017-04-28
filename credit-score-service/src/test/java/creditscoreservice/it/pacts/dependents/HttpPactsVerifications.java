@@ -3,7 +3,7 @@ package creditscoreservice.it.pacts.dependents;
 import au.com.dius.pact.provider.junit.PactRunner;
 import au.com.dius.pact.provider.junit.Provider;
 import au.com.dius.pact.provider.junit.State;
-import au.com.dius.pact.provider.junit.loader.PactBroker;
+import au.com.dius.pact.provider.junit.loader.PactFolder;
 import au.com.dius.pact.provider.junit.target.HttpTarget;
 import au.com.dius.pact.provider.junit.target.Target;
 import au.com.dius.pact.provider.junit.target.TestTarget;
@@ -17,10 +17,11 @@ import org.junit.ClassRule;
 import org.junit.runner.RunWith;
 
 import static creditscoreservice.it.IntegrationEnvironment.INTEGRATION_YML;
-import static creditscoreservice.it.pacts.PactConstants.*;
+import static creditscoreservice.it.pacts.PactConstants.CREDIT_SCORE_SERVICE;
+import static creditscoreservice.it.pacts.PactConstants.PACTS_DOWNLOAD_FOLDER;
 
 @RunWith(PactRunner.class)
-@PactBroker(host = BROKER_HOST, port = BROKER_PORT)
+@PactFolder(PACTS_DOWNLOAD_FOLDER)
 @Provider(CREDIT_SCORE_SERVICE)
 public class HttpPactsVerifications {
 

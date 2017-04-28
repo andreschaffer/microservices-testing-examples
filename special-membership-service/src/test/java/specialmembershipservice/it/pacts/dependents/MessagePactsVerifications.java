@@ -4,7 +4,7 @@ import au.com.dius.pact.provider.PactVerifyProvider;
 import au.com.dius.pact.provider.junit.PactRunner;
 import au.com.dius.pact.provider.junit.Provider;
 import au.com.dius.pact.provider.junit.State;
-import au.com.dius.pact.provider.junit.loader.PactBroker;
+import au.com.dius.pact.provider.junit.loader.PactFolder;
 import au.com.dius.pact.provider.junit.target.AmqpTarget;
 import au.com.dius.pact.provider.junit.target.Target;
 import au.com.dius.pact.provider.junit.target.TestTarget;
@@ -35,10 +35,11 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static specialmembershipservice.it.IntegrationEnvironment.*;
-import static specialmembershipservice.it.pacts.PactConstants.*;
+import static specialmembershipservice.it.pacts.PactConstants.PACTS_DOWNLOAD_FOLDER;
+import static specialmembershipservice.it.pacts.PactConstants.SPECIAL_MEMBERSHIP_SERVICE;
 
 @RunWith(PactRunner.class)
-@PactBroker(host = BROKER_HOST, port = BROKER_PORT)
+@PactFolder(PACTS_DOWNLOAD_FOLDER)
 @Provider(SPECIAL_MEMBERSHIP_SERVICE)
 public class MessagePactsVerifications {
 
