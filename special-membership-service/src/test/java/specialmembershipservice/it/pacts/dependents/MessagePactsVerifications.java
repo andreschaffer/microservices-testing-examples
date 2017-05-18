@@ -1,7 +1,23 @@
 package specialmembershipservice.it.pacts.dependents;
 
+import static com.github.restdriver.clientdriver.ClientDriverRequest.Method.GET;
+import static com.github.restdriver.clientdriver.RestClientDriver.giveResponse;
+import static com.github.restdriver.clientdriver.RestClientDriver.onRequestTo;
+import static java.util.Collections.singletonList;
+import static java.util.Collections.singletonMap;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
+import static specialmembershipservice.it.IntegrationEnvironment.CREDIT_SCORE_SERVICE_PORT;
+import static specialmembershipservice.it.IntegrationEnvironment.INTEGRATION_YML;
+import static specialmembershipservice.it.IntegrationEnvironment.KAFKA_PORT;
+import static specialmembershipservice.it.IntegrationEnvironment.SPECIAL_MEMBERSHIP_TOPIC;
+import static specialmembershipservice.it.pacts.PactConstants.PACTS_DOWNLOAD_FOLDER;
+import static specialmembershipservice.it.pacts.PactConstants.SPECIAL_MEMBERSHIP_SERVICE;
+
 import au.com.dius.pact.provider.PactVerifyProvider;
-import au.com.dius.pact.provider.junit.PactRunner;
+import au.com.dius.pact.provider.junit.MessagePactRunner;
 import au.com.dius.pact.provider.junit.Provider;
 import au.com.dius.pact.provider.junit.State;
 import au.com.dius.pact.provider.junit.loader.PactFolder;
@@ -13,6 +29,8 @@ import com.github.charithe.kafka.KafkaJunitRule;
 import com.github.restdriver.clientdriver.ClientDriverResponse;
 import com.github.restdriver.clientdriver.ClientDriverRule;
 import io.dropwizard.testing.junit.DropwizardAppRule;
+import java.util.Map;
+import javax.ws.rs.core.Response;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -22,23 +40,7 @@ import specialmembership.bootstrap.SpecialMembershipServiceApplication;
 import specialmembership.bootstrap.SpecialMembershipServiceConfiguration;
 import specialmembershipservice.it.client.ResourcesClient;
 
-import javax.ws.rs.core.Response;
-import java.util.Map;
-
-import static com.github.restdriver.clientdriver.ClientDriverRequest.Method.GET;
-import static com.github.restdriver.clientdriver.RestClientDriver.giveResponse;
-import static com.github.restdriver.clientdriver.RestClientDriver.onRequestTo;
-import static java.util.Collections.singletonList;
-import static java.util.Collections.singletonMap;
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
-import static specialmembershipservice.it.IntegrationEnvironment.*;
-import static specialmembershipservice.it.pacts.PactConstants.PACTS_DOWNLOAD_FOLDER;
-import static specialmembershipservice.it.pacts.PactConstants.SPECIAL_MEMBERSHIP_SERVICE;
-
-@RunWith(PactRunner.class)
+@RunWith(MessagePactRunner.class)
 @PactFolder(PACTS_DOWNLOAD_FOLDER)
 @Provider(SPECIAL_MEMBERSHIP_SERVICE)
 public class MessagePactsVerifications {

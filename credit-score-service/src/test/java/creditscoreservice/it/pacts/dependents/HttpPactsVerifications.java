@@ -1,7 +1,11 @@
 package creditscoreservice.it.pacts.dependents;
 
-import au.com.dius.pact.provider.junit.PactRunner;
+import static creditscoreservice.it.IntegrationEnvironment.INTEGRATION_YML;
+import static creditscoreservice.it.pacts.PactConstants.CREDIT_SCORE_SERVICE;
+import static creditscoreservice.it.pacts.PactConstants.PACTS_DOWNLOAD_FOLDER;
+
 import au.com.dius.pact.provider.junit.Provider;
+import au.com.dius.pact.provider.junit.RestPactRunner;
 import au.com.dius.pact.provider.junit.State;
 import au.com.dius.pact.provider.junit.loader.PactFolder;
 import au.com.dius.pact.provider.junit.target.HttpTarget;
@@ -16,11 +20,7 @@ import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.runner.RunWith;
 
-import static creditscoreservice.it.IntegrationEnvironment.INTEGRATION_YML;
-import static creditscoreservice.it.pacts.PactConstants.CREDIT_SCORE_SERVICE;
-import static creditscoreservice.it.pacts.PactConstants.PACTS_DOWNLOAD_FOLDER;
-
-@RunWith(PactRunner.class)
+@RunWith(RestPactRunner.class)
 @PactFolder(PACTS_DOWNLOAD_FOLDER)
 @Provider(CREDIT_SCORE_SERVICE)
 public class HttpPactsVerifications {
