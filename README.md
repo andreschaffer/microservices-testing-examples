@@ -70,3 +70,12 @@ Now it's time for you to go ahead and take a look at those tests! Try changing a
 ### Dependencies graph
 Visit the pact broker page again after running the tests and check the pacts are there together with a cool dependencies graph:  
 ![alt text](https://github.com/andreschaffer/microservices-testing-examples/blob/master/docs/images/pact_broker_dependencies_graph.png "Pact broker dependencies graph")
+
+# Contributing
+If you would like to help making this project better, see the [CONTRIBUTING.md](CONTRIBUTING.md).  
+
+# Maintainers
+Send any other comments, flowers and suggestions to [André Schaffer](https://github.com/andreschaffer).
+
+# License
+This project is distributed under the [MIT License](LICENSE).
