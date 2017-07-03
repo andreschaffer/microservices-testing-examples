@@ -1,5 +1,20 @@
 package welcomememberemailservice.it.pacts;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.await;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.assertThat;
+import static welcomememberemailservice.it.IntegrationEnvironment.INTEGRATION_YML;
+import static welcomememberemailservice.it.IntegrationEnvironment.KAFKA_HOST;
+import static welcomememberemailservice.it.IntegrationEnvironment.KAFKA_PORT;
+import static welcomememberemailservice.it.IntegrationEnvironment.SMTP_SERVER_PORT;
+import static welcomememberemailservice.it.IntegrationEnvironment.SPECIAL_MEMBERSHIP_TOPIC;
+import static welcomememberemailservice.it.IntegrationEnvironment.WELCOME_EMAIL_GROUP_ID;
+import static welcomememberemailservice.it.pacts.PactConstants.SPECIAL_MEMBERSHIP_SERVICE;
+import static welcomememberemailservice.it.pacts.PactConstants.WELCOME_MEMBER_EMAIL_SERVICE;
+
 import au.com.dius.pact.consumer.MessagePactBuilder;
 import au.com.dius.pact.consumer.MessagePactProviderRule;
 import au.com.dius.pact.consumer.Pact;
@@ -9,25 +24,18 @@ import au.com.dius.pact.model.v3.messaging.MessagePact;
 import com.github.charithe.kafka.EphemeralKafkaBroker;
 import com.github.charithe.kafka.KafkaJunitRule;
 import io.dropwizard.testing.junit.DropwizardAppRule;
-import org.junit.*;
+import java.util.HashMap;
+import java.util.Map;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.ClassRule;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.subethamail.wiser.Wiser;
 import welcomememberemailservice.bootstrap.WelcomeMemberEmailServiceApplication;
 import welcomememberemailservice.bootstrap.WelcomeMemberEmailServiceConfiguration;
 import welcomememberemailservice.it.KafkaOffsets;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.await;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.assertThat;
-import static welcomememberemailservice.it.IntegrationEnvironment.*;
-import static welcomememberemailservice.it.pacts.PactConstants.SPECIAL_MEMBERSHIP_SERVICE;
-import static welcomememberemailservice.it.pacts.PactConstants.WELCOME_MEMBER_EMAIL_SERVICE;
 
 public class MemberSignedUpEventPactIT {
 
@@ -64,7 +72,6 @@ public class MemberSignedUpEventPactIT {
                 .stringMatcher("email", ".+@.+\\..+", "tony.stark@example.com");
 
         Map<String, String> metadata = new HashMap<>();
-        metadata.put("contentType", "application/json");
 
         return builder.given("Tony Stark became a new member")
                 .expectsToReceive("An event notifying Tony Stark's new membership")
