@@ -30,7 +30,7 @@ public class KafkaOffsets {
         BlockingChannel channel = new BlockingChannel(host, port,
                 BlockingChannel.UseDefaultBufferSize(),
                 BlockingChannel.UseDefaultBufferSize(),
-                (int) Duration.ofSeconds(10).toMillis());
+                (int) Duration.ofSeconds(20).toMillis());
         try {
             channel.connect();
             TopicAndPartition topicAndPartition = new TopicAndPartition(topic, partition);
