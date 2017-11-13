@@ -1,37 +1,15 @@
 package creditscoreservice.it;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.google.common.collect.ImmutableMap;
-import creditscoreservice.bootstrap.CreditScoreServiceApplication;
-import creditscoreservice.bootstrap.CreditScoreServiceConfiguration;
-import creditscoreservice.it.client.ResourcesClient;
-import io.dropwizard.testing.junit.DropwizardAppRule;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
-
-import javax.ws.rs.core.Response;
-
-import static creditscoreservice.it.IntegrationEnvironment.INTEGRATION_YML;
 import static java.util.Collections.singletonMap;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-public class CreditScoreIT {
+import com.fasterxml.jackson.databind.JsonNode;
+import com.google.common.collect.ImmutableMap;
+import javax.ws.rs.core.Response;
+import org.junit.Test;
 
-    @ClassRule
-    public static final DropwizardAppRule<CreditScoreServiceConfiguration> CREDIT_SCORE_SERVICE_RULE =
-            new DropwizardAppRule<>(CreditScoreServiceApplication.class, INTEGRATION_YML);
-
-    private static ResourcesClient resourcesClient;
-    private static StateSetup stateSetup;
-
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-        resourcesClient = new ResourcesClient(
-                CREDIT_SCORE_SERVICE_RULE.getEnvironment(), CREDIT_SCORE_SERVICE_RULE.getLocalPort());
-        stateSetup = new StateSetup(resourcesClient);
-    }
+public class CreditScoreIT extends IntegrationTestBase {
 
     @Test
     public void saveCreditScore() throws Exception {
@@ -48,7 +26,7 @@ public class CreditScoreIT {
     public void updateCreditScore() throws Exception {
         String email = "slumdog.millionaire@example.com";
         Integer oldCreditScore = 300, newCreditScore = 850;
-        stateSetup.newCreditScore(email, oldCreditScore);
+        setupCreditScoreState(email, oldCreditScore);
         Response response = resourcesClient.putCreditScore(email, singletonMap("creditScore", newCreditScore));
         JsonNode creditScoreDto = response.readEntity(JsonNode.class);
         assertThat(creditScoreDto.path("creditScore").intValue(), equalTo(newCreditScore));
@@ -76,7 +54,7 @@ public class CreditScoreIT {
     public void returnCreditScore() throws Exception {
         String email = "nemo@example.com";
         Integer creditScore = 600;
-        stateSetup.newCreditScore(email, creditScore);
+        setupCreditScoreState(email, creditScore);
         Response response = resourcesClient.getCreditScore(email);
         JsonNode creditScoreDto = response.readEntity(JsonNode.class);
         assertThat(creditScoreDto.path("creditScore").intValue(), equalTo(creditScore));
