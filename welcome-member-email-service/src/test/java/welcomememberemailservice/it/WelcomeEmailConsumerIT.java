@@ -2,7 +2,6 @@ package welcomememberemailservice.it;
 
 import static java.lang.String.format;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
@@ -14,8 +13,8 @@ public class WelcomeEmailConsumerIT extends IntegrationTestBase {
         String type = "memberSignedUpEvent", email = "clark.kent@example.com";
         String memberSignedUpEvent = format("{\"@type\":\"%s\",\"email\":\"%s\"}", type, email);
         publishMessageAndWaitToBeConsumed(SPECIAL_MEMBERSHIP_TOPIC, memberSignedUpEvent, WELCOME_EMAIL_GROUP_ID);
-        assertThat(smtpServer.getMessages(), hasSize(1));
-        assertThat(smtpServer.getMessages().get(0).getEnvelopeReceiver(), equalTo(email));
+        assertAnEmailWasSent();
+        assertThat(getLastSentEmail().getEnvelopeReceiver(), equalTo(email));
     }
 
     @Test
@@ -23,7 +22,7 @@ public class WelcomeEmailConsumerIT extends IntegrationTestBase {
         String type = "unknownEvent", email = "the.riddler@example.com";
         String memberSignedUpEvent = format("{\"@type\":\"%s\",\"email\":\"%s\"}", type, email);
         publishMessageAndWaitToBeConsumed(SPECIAL_MEMBERSHIP_TOPIC, memberSignedUpEvent, WELCOME_EMAIL_GROUP_ID);
-        assertThat(smtpServer.getMessages(), hasSize(0));
+        assertNoEmailWasSent();
     }
 
     @Test
@@ -31,13 +30,13 @@ public class WelcomeEmailConsumerIT extends IntegrationTestBase {
         String type = "memberSignedUpEvent", email = "notAnEmail";
         String memberSignedUpEvent = format("{\"@type\":\"%s\",\"email\":\"%s\"}", type, email);
         publishMessageAndWaitToBeConsumed(SPECIAL_MEMBERSHIP_TOPIC, memberSignedUpEvent, WELCOME_EMAIL_GROUP_ID);
-        assertThat(smtpServer.getMessages(), hasSize(0));
+        assertNoEmailWasSent();
     }
 
     @Test
     public void ignoreMalformedEvent() throws Exception {
         publishMessageAndWaitToBeConsumed(SPECIAL_MEMBERSHIP_TOPIC, "foobar", WELCOME_EMAIL_GROUP_ID);
-        assertThat(smtpServer.getMessages(), hasSize(0));
+        assertNoEmailWasSent();
     }
 
     @Test
@@ -45,7 +44,7 @@ public class WelcomeEmailConsumerIT extends IntegrationTestBase {
         String type = "memberSignedUpEvent", email = "clark.kent@example.com";
         String memberSignedUpEvent = format("{\"@type\":\"%s\",\"email\":\"%s\",\"foo\":\"bar\"}", type, email);
         publishMessageAndWaitToBeConsumed(SPECIAL_MEMBERSHIP_TOPIC, memberSignedUpEvent, WELCOME_EMAIL_GROUP_ID);
-        assertThat(smtpServer.getMessages(), hasSize(1));
-        assertThat(smtpServer.getMessages().get(0).getEnvelopeReceiver(), equalTo(email));
+        assertAnEmailWasSent();
+        assertThat(getLastSentEmail().getEnvelopeReceiver(), equalTo(email));
     }
 }

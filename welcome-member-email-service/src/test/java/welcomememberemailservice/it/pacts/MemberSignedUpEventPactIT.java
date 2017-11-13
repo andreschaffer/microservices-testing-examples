@@ -1,8 +1,6 @@
 package welcomememberemailservice.it.pacts;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.assertThat;
 import static welcomememberemailservice.it.pacts.PactConstants.SPECIAL_MEMBERSHIP_SERVICE;
 import static welcomememberemailservice.it.pacts.PactConstants.WELCOME_MEMBER_EMAIL_SERVICE;
 
@@ -44,6 +42,6 @@ public class MemberSignedUpEventPactIT extends IntegrationTestBase {
     public void sendWelcomeEmailToTonyStark() throws Exception {
         String memberSignedUpEvent = new String(specialMembershipServiceRule.getMessage(), UTF_8);
         publishMessageAndWaitToBeConsumed(SPECIAL_MEMBERSHIP_TOPIC, memberSignedUpEvent, WELCOME_EMAIL_GROUP_ID);
-        assertThat(smtpServer.getMessages(), hasSize(1));
+        assertAnEmailWasSent();
     }
 }
