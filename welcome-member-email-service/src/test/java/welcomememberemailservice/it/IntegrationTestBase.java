@@ -15,6 +15,7 @@ import org.junit.rules.RuleChain;
 import org.subethamail.wiser.Wiser;
 import welcomememberemailservice.bootstrap.WelcomeMemberEmailServiceApplication;
 import welcomememberemailservice.bootstrap.WelcomeMemberEmailServiceConfiguration;
+import welcomememberemailservice.it.kafka.KafkaOffsets;
 
 public abstract class IntegrationTestBase {
 

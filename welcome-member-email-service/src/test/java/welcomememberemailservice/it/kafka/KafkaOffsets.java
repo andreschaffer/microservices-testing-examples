@@ -1,4 +1,4 @@
-package welcomememberemailservice.it;
+package welcomememberemailservice.it.kafka;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Collections.singletonList;
