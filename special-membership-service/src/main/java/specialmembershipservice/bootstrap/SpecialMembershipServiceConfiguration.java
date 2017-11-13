@@ -1,4 +1,4 @@
-package specialmembership.bootstrap;
+package specialmembershipservice.bootstrap;
 
 import io.dropwizard.Configuration;
 import org.hibernate.validator.constraints.URL;

@@ -1,4 +1,4 @@
-package specialmembership.bootstrap;
+package specialmembershipservice.bootstrap;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.dropwizard.Application;

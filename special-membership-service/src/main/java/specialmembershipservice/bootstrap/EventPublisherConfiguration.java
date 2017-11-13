@@ -1,4 +1,4 @@
-package specialmembership.bootstrap;
+package specialmembershipservice.bootstrap;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;

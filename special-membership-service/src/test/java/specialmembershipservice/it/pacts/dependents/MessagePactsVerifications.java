@@ -36,8 +36,8 @@ import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
-import specialmembership.bootstrap.SpecialMembershipServiceApplication;
-import specialmembership.bootstrap.SpecialMembershipServiceConfiguration;
+import specialmembershipservice.bootstrap.SpecialMembershipServiceApplication;
+import specialmembershipservice.bootstrap.SpecialMembershipServiceConfiguration;
 import specialmembershipservice.it.client.ResourcesClient;
 
 @RunWith(MessagePactRunner.class)
