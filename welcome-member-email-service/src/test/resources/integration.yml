@@ -3,7 +3,6 @@ consumer:
   configs:
     bootstrap.servers: localhost:9092
     group.id: welcome-member-email-consumer
-    session.timeout.ms: 20000
 
 emailSender:
   host: localhost

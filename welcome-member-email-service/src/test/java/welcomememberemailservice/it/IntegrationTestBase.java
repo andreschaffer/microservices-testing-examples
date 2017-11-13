@@ -74,6 +74,6 @@ public abstract class IntegrationTestBase {
     KafkaOffsets kafkaOffsets = new KafkaOffsets(KAFKA_HOST, KAFKA_RULE.helper().kafkaPort());
     long previousOffset = Math.max(kafkaOffsets.readOffset(topic, groupId), 0);
     KAFKA_RULE.helper().produceStrings(topic, message);
-    await().atMost(30, SECONDS).until(() -> kafkaOffsets.readOffset(topic, groupId), equalTo(previousOffset + 1));
+    await().atMost(10, SECONDS).until(() -> kafkaOffsets.readOffset(topic, groupId), equalTo(previousOffset + 1));
   }
 }
