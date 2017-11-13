@@ -23,17 +23,18 @@ import welcomememberemailservice.it.smtp.SmtpServerRule;
 
 public abstract class IntegrationTestBase {
 
-  protected static final int SMTP_SERVER_PORT = 2525;
-  protected static final String KAFKA_HOST = "localhost";
-  protected static final int KAFKA_PORT = 9092;
-  protected static final String SPECIAL_MEMBERSHIP_TOPIC = "special-membership-topic";
-  protected static final String WELCOME_EMAIL_GROUP_ID = "welcome-member-email-consumer";
+  private static final String INTEGRATION_YML = resourceFilePath("integration.yml");
+  private static final String KAFKA_HOST = "localhost";
+  private static final int KAFKA_PORT = 9092;
+  private static final String SPECIAL_MEMBERSHIP_TOPIC = "special-membership-topic";
+  private static final String WELCOME_EMAIL_GROUP_ID = "welcome-member-email-consumer";
+  private static final int SMTP_SERVER_PORT = 2525;
 
   private static final EphemeralKafkaBroker KAFKA_BROKER = EphemeralKafkaBroker.create(KAFKA_PORT);
   private static final KafkaJunitRule KAFKA_RULE = new KafkaJunitRule(KAFKA_BROKER);
   private static final SmtpServerRule SMTP_SERVER_RULE = new SmtpServerRule(SMTP_SERVER_PORT);
   private static final DropwizardAppRule<WelcomeMemberEmailServiceConfiguration> SERVICE_RULE =
-      new DropwizardAppRule<>(WelcomeMemberEmailServiceApplication.class, resourceFilePath("integration.yml"));
+      new DropwizardAppRule<>(WelcomeMemberEmailServiceApplication.class, INTEGRATION_YML);
 
   @ClassRule
   public static final RuleChain RULES = RuleChain
@@ -63,6 +64,10 @@ public abstract class IntegrationTestBase {
 
   protected WiserMessage getLastSentEmail() {
     return getEmails().get(getEmails().size() - 1);
+  }
+
+  protected void publishMembershipMessageAndWaitToBeConsumed(String message) {
+    publishMessageAndWaitToBeConsumed(SPECIAL_MEMBERSHIP_TOPIC, message, WELCOME_EMAIL_GROUP_ID);
   }
 
   protected void publishMessageAndWaitToBeConsumed(String topic, String message, String groupId) {

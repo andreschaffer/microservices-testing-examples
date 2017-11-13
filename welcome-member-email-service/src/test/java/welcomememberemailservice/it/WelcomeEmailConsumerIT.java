@@ -12,7 +12,7 @@ public class WelcomeEmailConsumerIT extends IntegrationTestBase {
     public void sendWelcomeEmailToNewMember() throws Exception {
         String type = "memberSignedUpEvent", email = "clark.kent@example.com";
         String memberSignedUpEvent = format("{\"@type\":\"%s\",\"email\":\"%s\"}", type, email);
-        publishMessageAndWaitToBeConsumed(SPECIAL_MEMBERSHIP_TOPIC, memberSignedUpEvent, WELCOME_EMAIL_GROUP_ID);
+        publishMembershipMessageAndWaitToBeConsumed(memberSignedUpEvent);
         assertAnEmailWasSent();
         assertThat(getLastSentEmail().getEnvelopeReceiver(), equalTo(email));
     }
@@ -21,7 +21,7 @@ public class WelcomeEmailConsumerIT extends IntegrationTestBase {
     public void ignoreUnknownEvent() throws Exception {
         String type = "unknownEvent", email = "the.riddler@example.com";
         String memberSignedUpEvent = format("{\"@type\":\"%s\",\"email\":\"%s\"}", type, email);
-        publishMessageAndWaitToBeConsumed(SPECIAL_MEMBERSHIP_TOPIC, memberSignedUpEvent, WELCOME_EMAIL_GROUP_ID);
+        publishMembershipMessageAndWaitToBeConsumed(memberSignedUpEvent);
         assertNoEmailWasSent();
     }
 
@@ -29,13 +29,13 @@ public class WelcomeEmailConsumerIT extends IntegrationTestBase {
     public void ignoreMemberSignedUpEventWithBadProperties() throws Exception {
         String type = "memberSignedUpEvent", email = "notAnEmail";
         String memberSignedUpEvent = format("{\"@type\":\"%s\",\"email\":\"%s\"}", type, email);
-        publishMessageAndWaitToBeConsumed(SPECIAL_MEMBERSHIP_TOPIC, memberSignedUpEvent, WELCOME_EMAIL_GROUP_ID);
+        publishMembershipMessageAndWaitToBeConsumed(memberSignedUpEvent);
         assertNoEmailWasSent();
     }
 
     @Test
     public void ignoreMalformedEvent() throws Exception {
-        publishMessageAndWaitToBeConsumed(SPECIAL_MEMBERSHIP_TOPIC, "foobar", WELCOME_EMAIL_GROUP_ID);
+        publishMembershipMessageAndWaitToBeConsumed("foobar");
         assertNoEmailWasSent();
     }
 
@@ -43,7 +43,7 @@ public class WelcomeEmailConsumerIT extends IntegrationTestBase {
     public void forwardCompatibility() throws Exception {
         String type = "memberSignedUpEvent", email = "clark.kent@example.com";
         String memberSignedUpEvent = format("{\"@type\":\"%s\",\"email\":\"%s\",\"foo\":\"bar\"}", type, email);
-        publishMessageAndWaitToBeConsumed(SPECIAL_MEMBERSHIP_TOPIC, memberSignedUpEvent, WELCOME_EMAIL_GROUP_ID);
+        publishMembershipMessageAndWaitToBeConsumed(memberSignedUpEvent);
         assertAnEmailWasSent();
         assertThat(getLastSentEmail().getEnvelopeReceiver(), equalTo(email));
     }

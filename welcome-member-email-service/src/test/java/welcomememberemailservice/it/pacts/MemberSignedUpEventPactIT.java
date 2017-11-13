@@ -41,7 +41,7 @@ public class MemberSignedUpEventPactIT extends IntegrationTestBase {
     @Test
     public void sendWelcomeEmailToTonyStark() throws Exception {
         String memberSignedUpEvent = new String(specialMembershipServiceRule.getMessage(), UTF_8);
-        publishMessageAndWaitToBeConsumed(SPECIAL_MEMBERSHIP_TOPIC, memberSignedUpEvent, WELCOME_EMAIL_GROUP_ID);
+        publishMembershipMessageAndWaitToBeConsumed(memberSignedUpEvent);
         assertAnEmailWasSent();
     }
 }
