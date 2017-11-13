@@ -1,4 +1,4 @@
-package specialmembershipservice.it;
+package specialmembershipservice.it.matchers;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;

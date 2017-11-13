@@ -6,10 +6,6 @@ import static javax.ws.rs.core.HttpHeaders.CONTENT_TYPE;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
-import static specialmembershipservice.it.IntegrationEnvironment.CREDIT_SCORE_SERVICE_HOST;
-import static specialmembershipservice.it.IntegrationEnvironment.CREDIT_SCORE_SERVICE_PORT;
-import static specialmembershipservice.it.IntegrationEnvironment.INTEGRATION_YML;
-import static specialmembershipservice.it.IntegrationEnvironment.KAFKA_PORT;
 import static specialmembershipservice.it.pacts.PactConstants.CREDIT_SCORE_SERVICE;
 import static specialmembershipservice.it.pacts.PactConstants.SPECIAL_MEMBERSHIP_SERVICE;
 
@@ -19,42 +15,17 @@ import au.com.dius.pact.consumer.PactVerification;
 import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.model.RequestResponsePact;
-import com.github.charithe.kafka.EphemeralKafkaBroker;
-import com.github.charithe.kafka.KafkaJunitRule;
-import io.dropwizard.testing.junit.DropwizardAppRule;
 import java.util.Map;
 import javax.ws.rs.core.Response;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.RuleChain;
-import specialmembershipservice.bootstrap.SpecialMembershipServiceApplication;
-import specialmembershipservice.bootstrap.SpecialMembershipServiceConfiguration;
-import specialmembershipservice.it.client.ResourcesClient;
+import specialmembershipservice.it.IntegrationTestBase;
 
-public class CreditScoreServicePactIT {
-
-    private static final EphemeralKafkaBroker KAFKA_BROKER = EphemeralKafkaBroker.create(KAFKA_PORT);
-    private static final KafkaJunitRule KAFKA_RULE = new KafkaJunitRule(KAFKA_BROKER);
-
-    private static final DropwizardAppRule<SpecialMembershipServiceConfiguration> SPECIAL_MEMBERSHIP_SERVICE_RULE =
-            new DropwizardAppRule<>(SpecialMembershipServiceApplication.class, INTEGRATION_YML);
-
-    @ClassRule
-    public static final RuleChain RULES = RuleChain.outerRule(KAFKA_RULE).around(SPECIAL_MEMBERSHIP_SERVICE_RULE);
-
-    private static ResourcesClient resourcesClient;
-
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-        resourcesClient = new ResourcesClient(
-                SPECIAL_MEMBERSHIP_SERVICE_RULE.getEnvironment(), SPECIAL_MEMBERSHIP_SERVICE_RULE.getLocalPort());
-    }
+public class CreditScoreServicePactIT extends IntegrationTestBase {
 
     @Rule
-    public PactProviderRuleMk2 creditScoreServiceRule =
-            new PactProviderRuleMk2(CREDIT_SCORE_SERVICE, CREDIT_SCORE_SERVICE_HOST, CREDIT_SCORE_SERVICE_PORT, V3, this);
+    public final PactProviderRuleMk2 creditScoreServiceRule = new PactProviderRuleMk2(
+        CREDIT_SCORE_SERVICE, CREDIT_SCORE_SERVICE_HOST, CREDIT_SCORE_SERVICE_PORT, V3, this);
 
     @Pact(provider = CREDIT_SCORE_SERVICE, consumer = SPECIAL_MEMBERSHIP_SERVICE)
     public RequestResponsePact tonyStarkCreditScore(PactDslWithProvider pact) {
@@ -68,6 +39,15 @@ public class CreditScoreServicePactIT {
                 .toPact();
     }
 
+    @PactVerification(value = CREDIT_SCORE_SERVICE, fragment = "tonyStarkCreditScore")
+    @Test
+    public void createSpecialMembershipToTonyStark() throws Exception {
+        Map<String, Object> specialMembershipDto = singletonMap("email", "tony.stark@example.com");
+        Response response = resourcesClient.postSpecialMembership(specialMembershipDto);
+        response.close();
+        assertThat(response.getStatus(), equalTo(200));
+    }
+
     @Pact(provider = CREDIT_SCORE_SERVICE, consumer = SPECIAL_MEMBERSHIP_SERVICE)
     public RequestResponsePact hawleyGriffinCreditScore(PactDslWithProvider pact) {
         return pact.given("There is not a hawley.griffin@example.com")
@@ -76,15 +56,6 @@ public class CreditScoreServicePactIT {
                 .willRespondWith()
                 .status(404)
                 .toPact();
-    }
-
-    @PactVerification(value = CREDIT_SCORE_SERVICE, fragment = "tonyStarkCreditScore")
-    @Test
-    public void createSpecialMembershipToTonyStark() throws Exception {
-        Map<String, Object> specialMembershipDto = singletonMap("email", "tony.stark@example.com");
-        Response response = resourcesClient.postSpecialMembership(specialMembershipDto);
-        response.close();
-        assertThat(response.getStatus(), equalTo(200));
     }
 
     @PactVerification(value = CREDIT_SCORE_SERVICE, fragment = "hawleyGriffinCreditScore")
