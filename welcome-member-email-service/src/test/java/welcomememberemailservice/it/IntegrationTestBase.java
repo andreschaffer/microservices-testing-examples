@@ -46,34 +46,35 @@ public abstract class IntegrationTestBase {
 
   @Before
   public void setUp() throws Exception {
-    emailsBeforeTest = getEmails();
+      emailsBeforeTest = getEmails();
   }
 
   private List<WiserMessage> getEmails() {
-    return new ArrayList<>(SMTP_SERVER_RULE.getSmtpServer().getMessages());
+      return new ArrayList<>(SMTP_SERVER_RULE.getSmtpServer().getMessages());
   }
 
 
   protected void assertNoEmailWasSent() {
-    assertThat(getEmails(), hasSize(emailsBeforeTest.size()));
+      assertThat(getEmails(), hasSize(emailsBeforeTest.size()));
   }
 
   protected void assertAnEmailWasSent() {
-    assertThat(getEmails(), hasSize(emailsBeforeTest.size() + 1));
+      assertThat(getEmails(), hasSize(emailsBeforeTest.size() + 1));
   }
 
   protected WiserMessage getLastSentEmail() {
-    return getEmails().get(getEmails().size() - 1);
+      return getEmails().get(getEmails().size() - 1);
   }
 
   protected void publishMembershipMessageAndWaitToBeConsumed(String message) {
-    publishMessageAndWaitToBeConsumed(SPECIAL_MEMBERSHIP_TOPIC, message, WELCOME_EMAIL_GROUP_ID);
+      publishMessageAndWaitToBeConsumed(SPECIAL_MEMBERSHIP_TOPIC, message, WELCOME_EMAIL_GROUP_ID);
   }
 
   protected void publishMessageAndWaitToBeConsumed(String topic, String message, String groupId) {
-    KafkaOffsets kafkaOffsets = new KafkaOffsets(KAFKA_HOST, KAFKA_RULE.helper().kafkaPort());
-    long previousOffset = Math.max(kafkaOffsets.readOffset(topic, groupId), 0);
-    KAFKA_RULE.helper().produceStrings(topic, message);
-    await().atMost(10, SECONDS).until(() -> kafkaOffsets.readOffset(topic, groupId), equalTo(previousOffset + 1));
+      KafkaOffsets kafkaOffsets = new KafkaOffsets(KAFKA_HOST, KAFKA_RULE.helper().kafkaPort());
+      long previousOffset = Math.max(kafkaOffsets.readOffset(topic, groupId), 0);
+      KAFKA_RULE.helper().produceStrings(topic, message);
+      await().atMost(10, SECONDS).until(
+          () -> kafkaOffsets.readOffset(topic, groupId), equalTo(previousOffset + 1));
   }
 }
