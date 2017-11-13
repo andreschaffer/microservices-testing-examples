@@ -15,22 +15,22 @@ import org.junit.ClassRule;
 
 public abstract class IntegrationTestBase {
 
-  private static final String INTEGRATION_YML = resourceFilePath("integration.yml");
+    private static final String INTEGRATION_YML = resourceFilePath("integration.yml");
 
-  @ClassRule
-  public static final DropwizardAppRule<CreditScoreServiceConfiguration> SERVICE_RULE =
-      new DropwizardAppRule<>(CreditScoreServiceApplication.class, INTEGRATION_YML);
+    @ClassRule
+    public static final DropwizardAppRule<CreditScoreServiceConfiguration> SERVICE_RULE =
+        new DropwizardAppRule<>(CreditScoreServiceApplication.class, INTEGRATION_YML);
 
-  protected static ResourcesClient resourcesClient;
+    protected static ResourcesClient resourcesClient;
 
-  @BeforeClass
-  public static void setUpClass() throws Exception {
-      resourcesClient = new ResourcesClient(SERVICE_RULE.getEnvironment(), SERVICE_RULE.getLocalPort());
-  }
+    @BeforeClass
+    public static void setUpClass() throws Exception {
+        resourcesClient = new ResourcesClient(SERVICE_RULE.getEnvironment(), SERVICE_RULE.getLocalPort());
+    }
 
-  protected static void setupCreditScoreState(String email, Integer creditScore) {
-      Response response = resourcesClient.putCreditScore(email, singletonMap("creditScore", creditScore));
-      response.close();
-      assertThat(response.getStatus(), equalTo(200));
-  }
+    protected static void setupCreditScoreState(String email, Integer creditScore) {
+        Response response = resourcesClient.putCreditScore(email, singletonMap("creditScore", creditScore));
+        response.close();
+        assertThat(response.getStatus(), equalTo(200));
+    }
 }
