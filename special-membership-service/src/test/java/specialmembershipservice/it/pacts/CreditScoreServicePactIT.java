@@ -34,8 +34,8 @@ public class CreditScoreServicePactIT extends IntegrationTestBase {
                 .path("/credit-scores/tony.stark@example.com").method("GET")
                 .willRespondWith()
                 .status(200)
-                .body(new PactDslJsonBody().integerType("creditScore", 850))
                 .headers(singletonMap(CONTENT_TYPE, APPLICATION_JSON))
+                .body(new PactDslJsonBody().integerType("creditScore", 850))
                 .toPact();
     }
 
