@@ -1,6 +1,19 @@
 package specialmembershipservice.it.pacts;
 
-import static au.com.dius.pact.model.PactSpecVersion.V3;
+import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
+import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
+import au.com.dius.pact.consumer.junit.PactProviderRule;
+import au.com.dius.pact.consumer.junit.PactVerification;
+import au.com.dius.pact.core.model.RequestResponsePact;
+import au.com.dius.pact.core.model.annotations.Pact;
+import org.junit.Rule;
+import org.junit.Test;
+import specialmembershipservice.it.IntegrationTestBase;
+
+import javax.ws.rs.core.Response;
+import java.util.Map;
+
+import static au.com.dius.pact.core.model.PactSpecVersion.V3;
 import static java.util.Collections.singletonMap;
 import static javax.ws.rs.core.HttpHeaders.CONTENT_TYPE;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -9,22 +22,10 @@ import static org.junit.Assert.assertThat;
 import static specialmembershipservice.it.pacts.PactConstants.CREDIT_SCORE_SERVICE;
 import static specialmembershipservice.it.pacts.PactConstants.SPECIAL_MEMBERSHIP_SERVICE;
 
-import au.com.dius.pact.consumer.Pact;
-import au.com.dius.pact.consumer.PactProviderRuleMk2;
-import au.com.dius.pact.consumer.PactVerification;
-import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
-import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
-import au.com.dius.pact.model.RequestResponsePact;
-import java.util.Map;
-import javax.ws.rs.core.Response;
-import org.junit.Rule;
-import org.junit.Test;
-import specialmembershipservice.it.IntegrationTestBase;
-
 public class CreditScoreServicePactIT extends IntegrationTestBase {
 
     @Rule
-    public final PactProviderRuleMk2 creditScoreServiceRule = new PactProviderRuleMk2(
+    public final PactProviderRule creditScoreServiceRule = new PactProviderRule(
         CREDIT_SCORE_SERVICE, CREDIT_SCORE_SERVICE_HOST, CREDIT_SCORE_SERVICE_PORT, V3, this);
 
     @Pact(provider = CREDIT_SCORE_SERVICE, consumer = SPECIAL_MEMBERSHIP_SERVICE)

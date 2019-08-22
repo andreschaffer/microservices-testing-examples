@@ -30,11 +30,10 @@ import specialmembershipservice.it.creditscoreservice.CreditScoreServiceRule;
 public class MessagePactsVerifications extends IntegrationTestBase {
 
     @Rule
-    public final CreditScoreServiceRule creditScoreServiceRule =
-        new CreditScoreServiceRule(CREDIT_SCORE_SERVICE_PORT);
+    public final CreditScoreServiceRule creditScoreServiceRule = new CreditScoreServiceRule(CREDIT_SCORE_SERVICE_PORT);
 
     @TestTarget
-    public final Target target = new AmqpTarget(singletonList(this.getClass().getPackage().getName() + ".*"));
+    public final Target target = new AmqpTarget(singletonList(this.getClass().getPackage().getName()));
 
     @State("Tony Stark became a new member")
     public void tonyStarkBecameANewMember() {
