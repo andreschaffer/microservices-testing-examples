@@ -3,7 +3,7 @@ services:
   postgres:
     image: postgres:9.6.1-alpine
   pact-broker:
-    image: dius/pact_broker:0.0.7
+    image: dius/pact-broker:2.35.0-1
     links:
       - postgres
     environment:

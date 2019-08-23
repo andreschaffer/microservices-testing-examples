@@ -1,21 +1,20 @@
 package creditscoreservice.it.pacts.dependents;
 
-import static creditscoreservice.it.pacts.PactConstants.CREDIT_SCORE_SERVICE;
-import static creditscoreservice.it.pacts.PactConstants.PACTS_DOWNLOAD_FOLDER;
-
 import au.com.dius.pact.provider.junit.Provider;
 import au.com.dius.pact.provider.junit.RestPactRunner;
 import au.com.dius.pact.provider.junit.State;
-import au.com.dius.pact.provider.junit.loader.PactFolder;
+import au.com.dius.pact.provider.junit.loader.PactBroker;
 import au.com.dius.pact.provider.junit.target.HttpTarget;
 import au.com.dius.pact.provider.junit.target.Target;
 import au.com.dius.pact.provider.junit.target.TestTarget;
 import creditscoreservice.it.IntegrationTestBase;
 import org.junit.runner.RunWith;
 
+import static creditscoreservice.it.pacts.PactConstants.*;
+
 @RunWith(RestPactRunner.class)
-@PactFolder(PACTS_DOWNLOAD_FOLDER)
 @Provider(CREDIT_SCORE_SERVICE)
+@PactBroker(host = PACT_BROKER_URL, port = PACT_BROKER_PORT)
 public class HttpPactsVerifications extends IntegrationTestBase {
 
     @TestTarget
