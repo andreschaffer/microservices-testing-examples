@@ -54,6 +54,9 @@ public class WelcomeEmailConsumer implements Managed {
             } catch (WakeupException e) {
                 if (!stop.get()) throw e;
                 continue;
+            } catch (Exception e) {
+                LOG.error("Unexpected exception. Breaking consumer loop.", e);
+                throw e;
             }
             for (ConsumerRecord<String, String> record : records) {
                 acceptMessage(record);
