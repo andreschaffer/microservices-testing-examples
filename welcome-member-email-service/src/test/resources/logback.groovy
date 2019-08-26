@@ -5,6 +5,6 @@ appender("CONSOLE", ConsoleAppender) {
 }
 
 root(INFO, ["CONSOLE"])
-logger("kafka", INFO)
-logger("org.apache.kafka", INFO)
-logger("org.apache.zookeeper", INFO)
+logger("kafka", WARN)
+logger("org.apache.kafka", WARN)
+logger("org.apache.zookeeper", WARN)
