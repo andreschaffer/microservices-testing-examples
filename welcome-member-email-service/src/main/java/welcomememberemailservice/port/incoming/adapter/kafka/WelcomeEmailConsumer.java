@@ -57,10 +57,7 @@ public class WelcomeEmailConsumer implements Managed {
             }
             for (ConsumerRecord<String, String> record : records) {
                 acceptMessage(record);
-                long offsetToCommit = record.offset() + 1;
-                consumer.commitSync(singletonMap(
-                        new TopicPartition(record.topic(), record.partition()),
-                        new OffsetAndMetadata(offsetToCommit)));
+                commitOffset(record);
             }
         }
     }
@@ -77,6 +74,14 @@ public class WelcomeEmailConsumer implements Managed {
         } catch (InvalidMessageException e) {
             LOG.warn("Invalid message: {}. Ignoring and continuing.", message.value(), e);
         }
+    }
+
+    private void commitOffset(ConsumerRecord<String, String> record) {
+        long offsetToCommit = record.offset() + 1;
+        LOG.info("Committing offset {} partition {} topic {}", offsetToCommit, record.partition(), record.topic());
+        consumer.commitSync(singletonMap(
+                new TopicPartition(record.topic(), record.partition()),
+                new OffsetAndMetadata(offsetToCommit)));
     }
 
     @Override
