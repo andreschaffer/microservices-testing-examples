@@ -1,6 +1,7 @@
 package welcomememberemailservice.it;
 
 import static io.dropwizard.testing.ResourceHelpers.resourceFilePath;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.equalTo;
@@ -74,7 +75,8 @@ public abstract class IntegrationTestBase {
         KafkaOffsets kafkaOffsets = new KafkaOffsets(KAFKA_HOST, KAFKA_RULE.helper().kafkaPort());
         long previousOffset = Math.max(kafkaOffsets.readOffset(topic, groupId), 0);
         KAFKA_RULE.helper().produceStrings(topic, message);
-        await().atMost(10, SECONDS).until(
-            () -> kafkaOffsets.readOffset(topic, groupId), equalTo(previousOffset + 1));
+        await().atMost(10, SECONDS)
+                .pollInterval(300, MILLISECONDS)
+                .until(() -> kafkaOffsets.readOffset(topic, groupId), equalTo(previousOffset + 1));
     }
 }
