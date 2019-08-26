@@ -12,14 +12,14 @@
     </root>
 
     <logger name="kafka">
-        <level value="TRACE" />
+        <level value="WARN" />
     </logger>
 
     <logger name="org.apache.kafka">
-        <level value="TRACE" />
+        <level value="WARN" />
     </logger>
 
     <logger name="org.apache.zookeeper">
-        <level value="TRACE" />
+        <level value="WARN" />
     </logger>
 </configuration>
