@@ -47,6 +47,8 @@ public class WelcomeEmailConsumer implements Managed {
 
     private void acceptMessages() {
         consumer.subscribe(singletonList(topic));
+        LOG.info("Subscribed consumer to topic {}", topic);
+
         while (!stop.get()) {
             ConsumerRecords<String, String> records;
             try {
