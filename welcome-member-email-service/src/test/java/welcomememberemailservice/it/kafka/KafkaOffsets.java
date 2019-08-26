@@ -32,8 +32,6 @@ public class KafkaOffsets {
     }
 
     public long readOffset(String topic, int partition, String groupId) {
-        LOG.info("Reading offset for topic {} partition {} groupId {}", topic, partition, groupId);
-
         BlockingChannel channel = new BlockingChannel(host, port,
                 BlockingChannel.UseDefaultBufferSize(),
                 BlockingChannel.UseDefaultBufferSize(),
@@ -46,7 +44,9 @@ public class KafkaOffsets {
             channel.send(offsetFetchRequest.underlying());
             OffsetFetchResponse fetchResponse = OffsetFetchResponse.readFrom(channel.receive().payload());
             OffsetMetadataAndError result = fetchResponse.offsets().get(topicAndPartition);
-            return result.offset();
+            long offset = result.offset();
+            LOG.info("Offset {} at topic {} partition {} groupId {}", offset, topic, partition, groupId);
+            return offset;
         } finally {
             channel.disconnect();
         }
