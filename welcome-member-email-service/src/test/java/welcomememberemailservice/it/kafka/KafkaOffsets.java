@@ -3,6 +3,7 @@ package welcomememberemailservice.it.kafka;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Collections.singletonList;
 
+import java.lang.invoke.MethodHandles;
 import java.time.Duration;
 import java.util.Random;
 import kafka.common.OffsetMetadataAndError;
@@ -10,9 +11,13 @@ import kafka.common.TopicAndPartition;
 import kafka.javaapi.OffsetFetchRequest;
 import kafka.javaapi.OffsetFetchResponse;
 import kafka.network.BlockingChannel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import welcomememberemailservice.port.incoming.adapter.kafka.WelcomeEmailConsumer;
 
 public class KafkaOffsets {
 
+    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static final Random RANDOM = new Random();
     private final String host;
     private final Integer port;
@@ -27,6 +32,8 @@ public class KafkaOffsets {
     }
 
     public long readOffset(String topic, int partition, String groupId) {
+        LOG.info("Reading offset for topic {} partition {} groupId {}", topic, partition, groupId);
+
         BlockingChannel channel = new BlockingChannel(host, port,
                 BlockingChannel.UseDefaultBufferSize(),
                 BlockingChannel.UseDefaultBufferSize(),
