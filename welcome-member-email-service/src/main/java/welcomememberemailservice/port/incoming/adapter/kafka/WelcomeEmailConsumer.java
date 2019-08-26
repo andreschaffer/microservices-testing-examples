@@ -42,7 +42,7 @@ public class WelcomeEmailConsumer implements Managed {
 
     @Override
     public void start() throws Exception {
-        Executors.newFixedThreadPool(1).submit(this::acceptMessages);
+        Executors.newFixedThreadPool(1).execute(this::acceptMessages);
     }
 
     private void acceptMessages() {
@@ -54,9 +54,6 @@ public class WelcomeEmailConsumer implements Managed {
             } catch (WakeupException e) {
                 if (!stop.get()) throw e;
                 continue;
-            } catch (Exception e) {
-                LOG.error("Unexpected exception. Breaking consumer loop.", e);
-                throw e;
             }
             for (ConsumerRecord<String, String> record : records) {
                 acceptMessage(record);
