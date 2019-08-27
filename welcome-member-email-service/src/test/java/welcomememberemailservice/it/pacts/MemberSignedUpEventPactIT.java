@@ -5,13 +5,14 @@ import static welcomememberemailservice.it.pacts.PactConstants.SPECIAL_MEMBERSHI
 import static welcomememberemailservice.it.pacts.PactConstants.WELCOME_MEMBER_EMAIL_SERVICE;
 
 import au.com.dius.pact.consumer.MessagePactBuilder;
-import au.com.dius.pact.consumer.MessagePactProviderRule;
-import au.com.dius.pact.consumer.Pact;
-import au.com.dius.pact.consumer.PactVerification;
 import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
-import au.com.dius.pact.model.v3.messaging.MessagePact;
+import au.com.dius.pact.consumer.junit.MessagePactProviderRule;
 import java.util.HashMap;
 import java.util.Map;
+
+import au.com.dius.pact.consumer.junit.PactVerification;
+import au.com.dius.pact.core.model.annotations.Pact;
+import au.com.dius.pact.core.model.messaging.MessagePact;
 import org.junit.Rule;
 import org.junit.Test;
 import welcomememberemailservice.it.IntegrationTestBase;

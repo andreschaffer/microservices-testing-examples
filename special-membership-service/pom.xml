@@ -24,6 +24,11 @@
         </dependency>
 
         <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>io.dropwizard</groupId>
             <artifactId>dropwizard-testing</artifactId>
             <scope>test</scope>
@@ -54,13 +59,13 @@
 
         <dependency>
             <groupId>au.com.dius</groupId>
-            <artifactId>pact-jvm-consumer-junit_2.11</artifactId>
+            <artifactId>pact-jvm-consumer-junit</artifactId>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>au.com.dius</groupId>
-            <artifactId>pact-jvm-provider-junit_2.11</artifactId>
+            <artifactId>pact-jvm-provider-junit</artifactId>
             <scope>test</scope>
         </dependency>
 

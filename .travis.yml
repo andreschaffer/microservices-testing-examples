@@ -6,7 +6,7 @@ before_script:
 
 language: java
 jdk:
-  - oraclejdk8
+  - oraclejdk11
 script: mvn clean verify -Pupload-pacts,verify-pacts,code-coverage
 cache:
   directories:

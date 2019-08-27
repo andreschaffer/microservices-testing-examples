@@ -16,9 +16,11 @@
     </modules>
 
     <properties>
-        <java.version>1.8</java.version>
-        <dropwizard.version>1.2.0</dropwizard.version>
-        <pact.version>3.5.8</pact.version>
+        <java.version>11</java.version>
+        <dropwizard.version>1.3.14</dropwizard.version>
+        <pact.version>4.0.0-beta.5</pact.version>
+        <jaxb-api.version>2.3.1</jaxb-api.version>
+        <mvn-test-plugins.version>3.0.0-M3</mvn-test-plugins.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
@@ -35,6 +37,12 @@
                 <groupId>io.dropwizard</groupId>
                 <artifactId>dropwizard-client</artifactId>
                 <version>${dropwizard.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.xml.bind</groupId>
+                <artifactId>jaxb-api</artifactId>
+                <version>${jaxb-api.version}</version>
             </dependency>
 
             <dependency>
@@ -141,7 +149,7 @@
 
             <dependency>
                 <groupId>au.com.dius</groupId>
-                <artifactId>pact-jvm-consumer-junit_2.11</artifactId>
+                <artifactId>pact-jvm-consumer-junit</artifactId>
                 <version>${pact.version}</version>
                 <exclusions>
                     <exclusion>
@@ -157,7 +165,7 @@
 
             <dependency>
                 <groupId>au.com.dius</groupId>
-                <artifactId>pact-jvm-provider-junit_2.11</artifactId>
+                <artifactId>pact-jvm-provider-junit</artifactId>
                 <version>${pact.version}</version>
                 <exclusions>
                     <exclusion>
@@ -188,7 +196,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.1</version>
+                <version>3.8.1</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -197,8 +205,14 @@
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${mvn-test-plugins.version}</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.19.1</version>
+                <version>${mvn-test-plugins.version}</version>
                 <executions>
                     <execution>
                         <goals>
@@ -209,27 +223,7 @@
                 </executions>
             </plugin>
         </plugins>
-
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>com.github.warmuuh</groupId>
-                    <artifactId>pactbroker-maven-plugin</artifactId>
-                    <version>0.0.10</version>
-                    <configuration>
-                        <brokerUrl>http://localhost</brokerUrl>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
     </build>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </pluginRepository>
-    </pluginRepositories>
 
     <profiles>
         <profile>
@@ -237,20 +231,22 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>com.github.warmuuh</groupId>
-                        <artifactId>pactbroker-maven-plugin</artifactId>
+                        <groupId>au.com.dius</groupId>
+                        <artifactId>pact-jvm-provider-maven</artifactId>
+                        <version>4.0.0-beta.5</version>
                         <executions>
                             <execution>
                                 <id>upload-pacts</id>
                                 <phase>verify</phase>
                                 <goals>
-                                    <goal>upload-pacts</goal>
+                                    <goal>publish</goal>
                                 </goals>
-                                <configuration>
-                                    <pacts>${project.build.directory}/pacts</pacts>
-                                </configuration>
                             </execution>
                         </executions>
+                        <configuration>
+                            <pactDirectory>${project.build.directory}/pacts</pactDirectory>
+                            <pactBrokerUrl>http://localhost</pactBrokerUrl>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
@@ -260,24 +256,6 @@
             <id>verify-pacts</id>
             <build>
                 <plugins>
-                    <plugin>
-                        <groupId>com.github.warmuuh</groupId>
-                        <artifactId>pactbroker-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>download-pacts</id>
-                                <phase>generate-resources</phase>
-                                <goals>
-                                    <goal>download-pacts</goal>
-                                </goals>
-                                <configuration>
-                                    <pacts>${project.build.testOutputDirectory}/pacts-dependents</pacts>
-                                    <provider>${project.artifactId}</provider>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-failsafe-plugin</artifactId>
@@ -309,7 +287,7 @@
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>0.7.9</version>
+                        <version>0.8.3</version>
                         <executions>
                             <execution>
                                 <id>prepare-agent</id>
@@ -336,12 +314,26 @@
                                 </goals>
                             </execution>
                         </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>javax.xml.bind</groupId>
+                                <artifactId>jaxb-api</artifactId>
+                                <version>${jaxb-api.version}</version>
+                            </dependency>
+                        </dependencies>
                     </plugin>
 
                     <plugin>
                         <groupId>org.eluder.coveralls</groupId>
                         <artifactId>coveralls-maven-plugin</artifactId>
                         <version>4.3.0</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>javax.xml.bind</groupId>
+                                <artifactId>jaxb-api</artifactId>
+                                <version>${jaxb-api.version}</version>
+                            </dependency>
+                        </dependencies>
                     </plugin>
                 </plugins>
             </build>
