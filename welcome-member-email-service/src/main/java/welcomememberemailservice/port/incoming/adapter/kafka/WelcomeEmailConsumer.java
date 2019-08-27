@@ -80,7 +80,6 @@ public class WelcomeEmailConsumer implements Managed {
 
     private void commitOffset(ConsumerRecord<String, String> record) {
         long offsetToCommit = record.offset() + 1;
-        LOG.info("Committing offset {} partition {} topic {}", offsetToCommit, record.partition(), record.topic());
         consumer.commitSync(singletonMap(
                 new TopicPartition(record.topic(), record.partition()),
                 new OffsetAndMetadata(offsetToCommit)));
