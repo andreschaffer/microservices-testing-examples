@@ -86,6 +86,6 @@ public abstract class IntegrationTestBase {
         KAFKA_RULE.helper().produceStrings(topic, message);
 
         LOG.info("Waiting for message to be consumed from topic {}", topic);
-        await().atMost(10, SECONDS).until(() -> kafkaOffsets.readOffset(topic, groupId), equalTo(previousOffset + 1));
+        await().atMost(5, SECONDS).until(() -> kafkaOffsets.readOffset(topic, groupId), equalTo(previousOffset + 1));
     }
 }
