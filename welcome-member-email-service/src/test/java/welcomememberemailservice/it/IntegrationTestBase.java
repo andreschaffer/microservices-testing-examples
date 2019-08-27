@@ -39,7 +39,7 @@ public abstract class IntegrationTestBase {
     private static final int SMTP_SERVER_PORT = 2525;
 
     private static final EphemeralKafkaBroker KAFKA_BROKER = EphemeralKafkaBroker.create(KAFKA_PORT);
-    private static final KafkaJunitRule KAFKA_RULE = new KafkaJunitRule(KAFKA_BROKER);
+    private static final KafkaJunitRule KAFKA_RULE = new KafkaJunitRule(KAFKA_BROKER).waitForStartup();
     private static final SmtpServerRule SMTP_SERVER_RULE = new SmtpServerRule(SMTP_SERVER_PORT);
     private static final DropwizardAppRule<WelcomeMemberEmailServiceConfiguration> SERVICE_RULE =
         new DropwizardAppRule<>(WelcomeMemberEmailServiceApplication.class, INTEGRATION_YML);
