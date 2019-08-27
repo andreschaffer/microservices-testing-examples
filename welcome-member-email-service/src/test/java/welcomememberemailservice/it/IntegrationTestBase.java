@@ -30,7 +30,7 @@ import welcomememberemailservice.port.incoming.adapter.kafka.WelcomeEmailConsume
 
 public abstract class IntegrationTestBase {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().getClass());
+    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static final String INTEGRATION_YML = resourceFilePath("integration.yml");
     private static final String KAFKA_HOST = "localhost";
     private static final int KAFKA_PORT = 9092;
