@@ -227,32 +227,6 @@
 
     <profiles>
         <profile>
-            <id>upload-pacts</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>au.com.dius</groupId>
-                        <artifactId>pact-jvm-provider-maven</artifactId>
-                        <version>4.0.0-beta.5</version>
-                        <executions>
-                            <execution>
-                                <id>upload-pacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>publish</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <pactDirectory>${project.build.directory}/pacts</pactDirectory>
-                            <pactBrokerUrl>http://localhost</pactBrokerUrl>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
             <id>consumer-pacts</id>
             <build>
                 <plugins>
@@ -318,34 +292,6 @@
                                     <excludes>
                                         <exclude>**/*IT.java</exclude>
                                     </excludes>
-                                    <useManifestOnlyJar>false</useManifestOnlyJar>
-                                    <useSystemClassLoader>true</useSystemClassLoader>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <id>verify-pacts</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-failsafe-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>verify-pacts</id>
-                                <goals>
-                                    <goal>integration-test</goal>
-                                    <goal>verify</goal>
-                                </goals>
-                                <configuration>
-                                    <includes>
-                                        <include>**/*PactsVerifications.java</include>
-                                    </includes>
                                     <useManifestOnlyJar>false</useManifestOnlyJar>
                                     <useSystemClassLoader>true</useSystemClassLoader>
                                 </configuration>
