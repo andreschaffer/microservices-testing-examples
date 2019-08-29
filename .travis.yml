@@ -2,12 +2,17 @@ sudo: required
 services:
   - docker
 before_script:
-  - docker-compose up -d
+  - docker-compose -f pact-tools/pact-broker/docker-compose.yml up -d
+  - docker build -t pact-cli pact-tools/pact-cli
 
 language: java
 jdk:
   - oraclejdk11
-script: mvn clean verify -Pupload-pacts,verify-pacts,code-coverage
+script:
+  - mvn clean verify -Pcode-coverage
+  - mvn verify -Pconsumer-pacts
+  - /bin/bash pact-tools/scripts/publish-pacts.sh
+  - mvn verify -Pprovider-pacts -Dpact.verifier.publishResults=true
 cache:
   directories:
   - $HOME/.m2
