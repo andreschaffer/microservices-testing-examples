@@ -45,9 +45,12 @@ docker-compose up -d
 ```
 
 # Running the tests
-We can run all the tests with [Maven](https://maven.apache.org/) like this:
+We can run all the flows with [Maven](https://maven.apache.org/) and the pact cli like this:
 ```bash
-mvn clean verify -Pupload-pacts,verify-pacts
+mvn clean verify
+mvn clean verify -Pconsumer-pacts
+docker run --net=host -v `pwd`/**/target/pacts:/target/pacts pact-cli publish /target/pacts --broker-base-url=localhost --consumer-app-version=1.0-SNAPSHOT
+mvn clean verify -Pprovider-pacts -Dpact.verifier.publishResults=true
 ```
 
 ### Behind the curtains
