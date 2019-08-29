@@ -17,7 +17,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import welcomememberemailservice.it.IntegrationTestBase;
 
-public class MemberSignedUpEventPactIT extends IntegrationTestBase {
+public class MemberSignedUpEventPactContracts extends IntegrationTestBase {
 
     @Rule
     public final MessagePactProviderRule specialMembershipServiceRule =
