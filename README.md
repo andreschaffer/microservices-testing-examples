@@ -135,7 +135,7 @@ When a change is pushed to Project A repo, its pipeline is triggered:
 * **Verify Pacts:** download its consumers' pacts (tagged as prod) from the pact broker, verify all of them and publish the results to the pact broker.
 * **Create Pacts:** create its pacts and publish them to the pact broker.
 
-Pact broker will trigger all provider pipelines that has a contract with Project A as consumer:
+The pact broker will trigger all provider pipelines that has a contract with Project A as consumer:
 
 * **Checkout Prod Version:** checkout Project B code corresponding to its prod tag.
 * **Verify Pacts:** download the pacts that Project A created with B, verify them and publish the results to the pact broker.
@@ -144,8 +144,7 @@ Meanwhile, the pipeline of Project A was hanging in the **Can I Deploy?** until 
 * **Deploy:** with confidence that it can interact with its neighbours, we can deploy Project A to production.
 * **Tag Pacts as Prod:** tag all its pacts and verifications as prod in the pact broker.
 
-**Disclaimer**: You can see these building blocks in our travis file, but the flow looks a little bit different (e.g. no provider support pipeline), 
-because we have all the projects in the same repo and always run with a new local pact broker.
+**Disclaimer**: You can see these building blocks in our travis file, but the flow looks a little bit different whereas the provider support pipelines are simulated.
 
 
 # Contributing
