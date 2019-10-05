@@ -14,7 +14,6 @@ jdk:
 
 script:
   - mvn clean verify -pl welcome-member-email-service -Pcode-coverage
-  - mvn verify -pl welcome-member-email-service -Pprovider-pacts -Dpact.verifier.publishResults=true
   - mvn verify -pl welcome-member-email-service -Pconsumer-pacts
   - docker run --net=host -v `pwd`/welcome-member-email-service/target/pacts:/target/pacts pact-cli publish /target/pacts --broker-base-url=localhost --consumer-app-version=1.0-SNAPSHOT
 
