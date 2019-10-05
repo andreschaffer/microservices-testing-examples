@@ -1,5 +1,6 @@
 package creditscoreservice.it.pacts.verifications;
 
+import au.com.dius.pact.provider.junit.IgnoreNoPactsToVerify;
 import au.com.dius.pact.provider.junit.Provider;
 import au.com.dius.pact.provider.junit.RestPactRunner;
 import au.com.dius.pact.provider.junit.State;
@@ -14,7 +15,8 @@ import static creditscoreservice.it.pacts.PactConstants.*;
 
 @RunWith(RestPactRunner.class)
 @Provider(CREDIT_SCORE_SERVICE)
-@PactBroker(host = PACT_BROKER_URL, port = PACT_BROKER_PORT)
+@IgnoreNoPactsToVerify
+@PactBroker(host = PACT_BROKER_URL, port = PACT_BROKER_PORT, tags = {"${pactbroker.tags:prod}"})
 public class HttpPactVerifications extends IntegrationTestBase {
 
     @TestTarget
