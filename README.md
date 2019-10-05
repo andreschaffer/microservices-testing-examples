@@ -52,25 +52,29 @@ docker build -t pact-cli pact-tools/pact-cli
 # Running the tests
 We can run all the flows with [Maven](https://maven.apache.org/) and the pact cli like this:
 
-For the welcome-member-email-service, we build, create the pacts and publish them:
+For the welcome-member-email-service, we build, create its pacts, publish and tag them:
 ```bash
 mvn clean verify -pl welcome-member-email-service -Pcode-coverage
 mvn verify -pl welcome-member-email-service -Pconsumer-pacts
-docker run --net=host -v `pwd`/welcome-member-email-service/target/pacts:/target/pacts pact-cli publish /target/pacts --broker-base-url=localhost --consumer-app-version=1.0-SNAPSHOT
+docker run --net=host -v `pwd`/welcome-member-email-service/target/pacts:/target/pacts pact-cli publish /target/pacts --broker-base-url=localhost --consumer-app-version=`git rev-parse --short HEAD`
+docker run --net=host -v `pwd`/welcome-member-email-service/target/pacts:/target/pacts pact-cli create-version-tag --pacticipant=welcome-member-email-service --version=`git rev-parse --short HEAD` --tag prod --broker-base-url=localhost
 ```
   
-For the special-membership-service, we build, verify the pacts, create its own pacts and publish them:
+For the special-membership-service, we build, verify consumers' pacts, create its own pacts, publish and tag both the verification and the pacts created:
 ```bash
 mvn clean verify -pl special-membership-service -Pcode-coverage
-mvn verify -pl special-membership-service -Pprovider-pacts -Dpact.verifier.publishResults=true
+mvn verify -pl special-membership-service -Pprovider-pacts -Dpact.verifier.publishResults=true -Dpact.provider.version=`git rev-parse --short HEAD` -Dpactbroker.tags=prod
 mvn verify -pl special-membership-service -Pconsumer-pacts
-docker run --net=host -v `pwd`/special-membership-service/target/pacts:/target/pacts pact-cli publish /target/pacts --broker-base-url=localhost --consumer-app-version=1.0-SNAPSHOT
+docker run --net=host -v `pwd`/special-membership-service/target/pacts:/target/pacts pact-cli publish /target/pacts --broker-base-url=localhost --consumer-app-version=`git rev-parse --short HEAD`docker run --net=host -v `pwd`/special-membership-service/target/pacts:/target/pacts pact-cli create-version-tag --pacticipant=special-membership-service --version=`git rev-parse --short HEAD` --tag prod --broker-base-url=localhost
+docker run --net=host -v `pwd`/special-membership-service/target/pacts:/target/pacts pact-cli create-version-tag --pacticipant=special-membership-service --version=`git rev-parse --short HEAD` --tag prod --broker-base-url=localhost
 ```
   
-For the credit-score-service, we build and verify the pacts:
+For the credit-score-service, we build, verify consumers' pacts and tag the verification:
 ```bash
 mvn clean verify -pl credit-score-service -Pcode-coverage
-mvn verify -pl credit-score-service -Pprovider-pacts -Dpact.verifier.publishResults=true
+mvn verify -pl credit-score-service -Pprovider-pacts -Dpact.verifier.publishResults=true -Dpact.provider.version=`git rev-parse --short HEAD` -Dpactbroker.tags=prod
+docker run --net=host -v `pwd`/credit-score-service/target/pacts:/target/pacts pact-cli create-version-tag --pacticipant=credit-score-service --version=`git rev-parse --short HEAD` --tag prod --broker-base-url=localhost
+
 ```
 
 ### Behind the curtains
@@ -101,7 +105,7 @@ Visit the pact broker page again after running the tests and check the pacts are
 If you would like to help making this project better, see the [CONTRIBUTING.md](CONTRIBUTING.md).  
 
 # Maintainers
-Send any other comments, flowers and suggestions to [André Schaffer](https://github.com/andreschaffer).
+Send any other comments, flowers and suggestions to [André Schaffer](https://github.com/andreschaffer) and [Dan Eidmark](https://github.com/daneidmark).
 
 # License
 This project is distributed under the [MIT License](LICENSE).

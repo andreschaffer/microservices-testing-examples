@@ -1,6 +1,7 @@
 package specialmembershipservice.it.pacts.verifications;
 
 import au.com.dius.pact.provider.PactVerifyProvider;
+import au.com.dius.pact.provider.junit.IgnoreNoPactsToVerify;
 import au.com.dius.pact.provider.junit.MessagePactRunner;
 import au.com.dius.pact.provider.junit.Provider;
 import au.com.dius.pact.provider.junit.State;
@@ -26,7 +27,8 @@ import static specialmembershipservice.it.pacts.PactConstants.*;
 
 @RunWith(MessagePactRunner.class)
 @Provider(SPECIAL_MEMBERSHIP_SERVICE)
-@PactBroker(host = PACT_BROKER_URL, port = PACT_BROKER_PORT)
+@IgnoreNoPactsToVerify
+@PactBroker(host = PACT_BROKER_URL, port = PACT_BROKER_PORT, tags = {"${pactbroker.tags:prod}"})
 public class MessagePactVerifications extends IntegrationTestBase {
 
     @Rule
