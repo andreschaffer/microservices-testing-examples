@@ -1,18 +1,31 @@
 sudo: required
+
 services:
   - docker
+
 before_script:
   - docker-compose -f pact-tools/pact-broker/docker-compose.yml up -d
   - docker build -t pact-cli pact-tools/pact-cli
 
 language: java
+
 jdk:
   - oraclejdk11
+
 script:
-  - mvn clean verify -Pcode-coverage
-  - mvn verify -Pconsumer-pacts
-  - /bin/bash pact-tools/scripts/publish-pacts.sh
-  - mvn verify -Pprovider-pacts -Dpact.verifier.publishResults=true
+  - mvn clean verify -pl welcome-member-email-service -Pcode-coverage
+  - mvn verify -pl welcome-member-email-service -Pprovider-pacts -Dpact.verifier.publishResults=true
+  - mvn verify -pl welcome-member-email-service -Pconsumer-pacts
+  - docker run --net=host -v `pwd`/welcome-member-email-service/target/pacts:/target/pacts pact-cli publish /target/pacts --broker-base-url=localhost --consumer-app-version=1.0-SNAPSHOT
+
+  - mvn clean verify -pl special-membership-service -Pcode-coverage
+  - mvn verify -pl special-membership-service -Pprovider-pacts -Dpact.verifier.publishResults=true
+  - mvn verify -pl special-membership-service -Pconsumer-pacts
+  - docker run --net=host -v `pwd`/special-membership-service/target/pacts:/target/pacts pact-cli publish /target/pacts --broker-base-url=localhost --consumer-app-version=1.0-SNAPSHOT
+
+  - mvn clean verify -pl credit-score-service -Pcode-coverage
+  - mvn verify -pl credit-score-service -Pprovider-pacts -Dpact.verifier.publishResults=true
+
 cache:
   directories:
   - $HOME/.m2
