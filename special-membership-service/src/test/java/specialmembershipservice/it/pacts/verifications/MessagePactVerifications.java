@@ -1,4 +1,4 @@
-package specialmembershipservice.it.pacts.dependents;
+package specialmembershipservice.it.pacts.verifications;
 
 import au.com.dius.pact.provider.PactVerifyProvider;
 import au.com.dius.pact.provider.junit.MessagePactRunner;
@@ -27,7 +27,7 @@ import static specialmembershipservice.it.pacts.PactConstants.*;
 @RunWith(MessagePactRunner.class)
 @Provider(SPECIAL_MEMBERSHIP_SERVICE)
 @PactBroker(host = PACT_BROKER_URL, port = PACT_BROKER_PORT)
-public class MessagePactsVerifications extends IntegrationTestBase {
+public class MessagePactVerifications extends IntegrationTestBase {
 
     @Rule
     public final CreditScoreServiceRule creditScoreServiceRule = new CreditScoreServiceRule(CREDIT_SCORE_SERVICE_PORT);

@@ -1,4 +1,4 @@
-package creditscoreservice.it.pacts.dependents;
+package creditscoreservice.it.pacts.verifications;
 
 import au.com.dius.pact.provider.junit.Provider;
 import au.com.dius.pact.provider.junit.RestPactRunner;
@@ -15,7 +15,7 @@ import static creditscoreservice.it.pacts.PactConstants.*;
 @RunWith(RestPactRunner.class)
 @Provider(CREDIT_SCORE_SERVICE)
 @PactBroker(host = PACT_BROKER_URL, port = PACT_BROKER_PORT)
-public class HttpPactsVerifications extends IntegrationTestBase {
+public class HttpPactVerifications extends IntegrationTestBase {
 
     @TestTarget
     public final Target target = new HttpTarget(SERVICE_RULE.getLocalPort());

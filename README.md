@@ -3,7 +3,7 @@
 # Microservices Testing Examples
 
 # Strategy
-When it comes to testing microservices, there are two alternatives:  
+When it comes to testing microservices, usually there are two alternatives:  
 a) Deploy all of them and test them in an end-to-end fashion  
 b) Mock external dependencies in unit / integration tests
 
@@ -41,29 +41,55 @@ While testing, the way we'll make the interactions records (called pacts from no
 is through a pact broker. We can run it with [Docker Compose](https://docs.docker.com/compose/) and access it on a browser [(http://localhost)](http://localhost).
 
 ```bash
-docker-compose up -d
+docker-compose -f pact-tools/pact-broker/docker-compose.yml up -d
+```
+  
+We will also need to build the [pact cli](https://github.com/pact-foundation/pact_broker-client) tool to interact with the broker.
+```bash
+docker build -t pact-cli pact-tools/pact-cli
 ```
 
 # Running the tests
-We can run all the tests with [Maven](https://maven.apache.org/) like this:
+We can run all the flows with [Maven](https://maven.apache.org/) and the pact cli like this:
+
+For the welcome-member-email-service, we build, create the pacts and publish them:
 ```bash
-mvn clean verify -Pupload-pacts,verify-pacts
+mvn clean verify -pl welcome-member-email-service -Pcode-coverage
+mvn verify -pl welcome-member-email-service -Pconsumer-pacts
+docker run --net=host -v `pwd`/welcome-member-email-service/target/pacts:/target/pacts pact-cli publish /target/pacts --broker-base-url=localhost --consumer-app-version=1.0-SNAPSHOT
+```
+  
+For the special-membership-service, we build, verify the pacts, create its own pacts and publish them:
+```bash
+mvn clean verify -pl special-membership-service -Pcode-coverage
+mvn verify -pl special-membership-service -Pprovider-pacts -Dpact.verifier.publishResults=true
+mvn verify -pl special-membership-service -Pconsumer-pacts
+docker run --net=host -v `pwd`/special-membership-service/target/pacts:/target/pacts pact-cli publish /target/pacts --broker-base-url=localhost --consumer-app-version=1.0-SNAPSHOT
+```
+  
+For the credit-score-service, we build and verify the pacts:
+```bash
+mvn clean verify -pl credit-score-service -Pcode-coverage
+mvn verify -pl credit-score-service -Pprovider-pacts -Dpact.verifier.publishResults=true
 ```
 
 ### Behind the curtains
-We created two auxiliary maven profiles to hold control of uploading the pacts to the broker (upload-pacts) 
-and downloading the pacts from the broker / running the pact verification tests (verify-pacts).  
-Here the welcome-email-service is built first and publishes the pact with special-membership-service;  
-Special-membership-service verifies that pact and publishes its own pact with credit-score-service;  
-Credit-score-service finally verifies the pact, concluding the chain.
+We created two auxiliary maven profiles to hold control of creating the pacts (consumer-pacts) 
+and verifying the pacts (provider-pacts).  
 
 ### Test separation
-Here we separate the pact tests from the other tests. Pact tests are focused on the contracts and shouldn't be abused, otherwise we'll give the providers a hard time verifying an explosion of interactions.  
+Here we separate the pact tests from the other tests. Pact tests are focused on the contracts and shouldn't be abused, 
+otherwise we'll give the providers a hard time verifying an explosion of interactions.  
 
 We have many integration tests with regular mocks for the expected behavior of our services in different scenarios
-and a few pact tests in their own package (\*.pacts). In each pact test we focus on one provider integration contract at a time, specifying only the properties that we need and using appropriate matchers. (Side note: since it's a point-to-point integration we are talking about, we could use pact with unit tests - important to make sure the client used is the same one the service uses. We opted for slim integration tests instead since the services are very small anyway).  
+and a few pact tests in their own package (\*.pacts). In each pact test we focus on one provider integration contract at a time, 
+specifying only the properties that we need and using appropriate matchers. (Side note: since it's a point-to-point integration we are talking about, 
+we could use pact with unit tests - important to make sure the client used is the same one the service uses. We opted for 
+slim integration tests instead since the services are very small anyway).  
 
-The pact verification tests also have their own package (\*.pacts.dependents). Here we need to be able to setup the different states the consumers specify in their interactions and it becomes more evident that we shouldn't abuse pact in order to avoid unnecessary verifications at this point. (Side note: the class names are following a different pattern (\*PactsVerifications) that is aligned with the maven profile (verify-pacts) just so we get a better control of when to run them - similar control can be achieved with jUnit categories as well).  
+The pact verification tests also have their own package (\*.pacts.verifications). Here we need to be able to setup the different states the consumers specify in their interactions 
+and it becomes more evident that we shouldn't abuse pact in order to avoid unnecessary verifications at this point. (Side note: the class names are following a different pattern (\*PactVerifications) 
+that is aligned with the maven profile (provider-pacts) just so we get a better control of when to run them - similar control could be achieved with jUnit categories as well).  
 
 Now it's time for you to go ahead and take a look at those tests! Try changing a contract and see the tests fail :)
 

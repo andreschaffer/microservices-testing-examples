@@ -22,7 +22,7 @@ import static org.junit.Assert.assertThat;
 import static specialmembershipservice.it.pacts.PactConstants.CREDIT_SCORE_SERVICE;
 import static specialmembershipservice.it.pacts.PactConstants.SPECIAL_MEMBERSHIP_SERVICE;
 
-public class CreditScoreServicePactIT extends IntegrationTestBase {
+public class CreditScoreServicePactContracts extends IntegrationTestBase {
 
     @Rule
     public final PactProviderRule creditScoreServiceRule = new PactProviderRule(
