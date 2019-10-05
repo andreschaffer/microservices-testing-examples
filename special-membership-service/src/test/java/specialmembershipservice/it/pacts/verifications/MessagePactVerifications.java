@@ -1,4 +1,4 @@
-package specialmembershipservice.it.pacts.dependents;
+package specialmembershipservice.it.pacts.verifications;
 
 import au.com.dius.pact.provider.PactVerifyProvider;
 import au.com.dius.pact.provider.junit.MessagePactRunner;

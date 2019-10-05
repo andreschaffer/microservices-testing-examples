@@ -1,4 +1,4 @@
-package creditscoreservice.it.pacts.dependents;
+package creditscoreservice.it.pacts.verifications;
 
 import au.com.dius.pact.provider.junit.Provider;
 import au.com.dius.pact.provider.junit.RestPactRunner;
