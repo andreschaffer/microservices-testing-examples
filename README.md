@@ -74,15 +74,13 @@ For the credit-score-service, we build, verify consumers' pacts and tag the veri
 mvn clean verify -pl credit-score-service -Pcode-coverage
 mvn verify -pl credit-score-service -Pprovider-pacts -Dpact.verifier.publishResults=true -Dpact.provider.version=`git rev-parse --short HEAD` -Dpactbroker.tags=prod
 docker run --net host pact-cli create-version-tag --pacticipant credit-score-service --version `git rev-parse --short HEAD` --tag prod --broker-base-url localhost
-
 ```
 
-### Behind the curtains
+## Test separation
 We created two auxiliary maven profiles to hold control of creating the pacts (consumer-pacts) 
 and verifying the pacts (provider-pacts).  
 
-### Test separation
-Here we separate the pact tests from the other tests. Pact tests are focused on the contracts and shouldn't be abused, 
+We separate the pact tests from the other tests. Pact tests are focused on the contracts and shouldn't be abused, 
 otherwise we'll give the providers a hard time verifying an explosion of interactions.  
 
 We have many integration tests with regular mocks for the expected behavior of our services in different scenarios
@@ -97,9 +95,58 @@ that is aligned with the maven profile (provider-pacts) just so we get a better 
 
 Now it's time for you to go ahead and take a look at those tests! Try changing a contract and see the tests fail :)
 
-### Dependencies graph
+## Dependencies graph
 Visit the pact broker page again after running the tests and check the pacts are there together with a cool dependencies graph:  
 ![alt text](https://github.com/andreschaffer/microservices-testing-examples/blob/master/docs/images/pact_broker_dependencies_graph.png "Pact broker dependencies graph")
+
+# Automating it all with pipelines
+                                            (Project A pipeline)
+
+
+    +-------+    +--------------+    +--------------+    +---------------+    +--------+    +-------------+
+    |       |    |              |    |              |    |               |    |        |    |  Tag Pacts  |
+    | Build | +> | Verify Pacts | +> | Create Pacts | +> | Can I Deploy? | +> | Deploy | +> |     as      |
+    |       |    |              |    |              |    |               |    |        |    |    Prod     |
+    +-------+    +--------------+    +--------------+    +---------------+    +--------+    +-------------+
+                    |                   |                             |                                |
+                    |                   |                             |                                |
+                    |                   |                             |                                |
+                    |                   |  2    +-------------+    5  |                                |
+                    |                   +-------+             +-------+                                |
+                    |  1                        | Pact Broker |                                     6  |
+                    +---------------------------+             +----------------------------------------+
+                                                +-------------+
+                                                   |       |
+                            +----------------------+       +---------------------+
+                            |  3                                              4  |
+                            |                                                    |
+                            |             (Project B Support Pipeline)           |
+                            |                                                    |
+                            |                                                    |
+                            |    +-----------------------+    +--------------+   |
+                            |    |                       |    |              |   |
+                            +----+ Checkout Prod Version | +> | Verify Pacts +---+
+                                 |                       |    |              |
+                                 +-----------------------+    +--------------+
+
+
+When a change is pushed to Project A repo, its pipeline is triggered:
+* *Build:* checkout, package and run the regular unit and integration tests.
+* *Verify Pacts:* download its consumers' pacts (tagged as prod) from the pact broker, verify all of them and publish the results to the pact broker.
+* *Create Pacts:* create its pacts and publish them to the pact broker.
+
+Pact broker will trigger all provider pipelines that has a contract with Project A as consumer.
+
+* *Checkout Prod Version:* checkout Project B code corresponding to its prod tag.
+* *Verify Pacts:* download the pacts that Project A created with B, verify them and publish the results to the pact broker.
+
+Meanwhile, the pipeline of Project A was hanging in the *Can I Deploy?* until the pacts it created were marked as verified in the pact broker.
+* *Deploy:* with confidence that it can interact with its neighbours, we can deploy Project A to production.
+* *Tag Pacts as Prod:* tag all its pacts and verifications as prod in the pact broker.
+
+*Disclaimer:* You can see these building blocks in our travis file, but the flow looks a little bit different (e.g. no provider support pipeline), 
+because we have all the projects in the same repo and always run with a new local pact broker.
+
 
 # Contributing
 If you would like to help making this project better, see the [CONTRIBUTING.md](CONTRIBUTING.md).  
