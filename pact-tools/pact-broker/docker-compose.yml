@@ -9,5 +9,9 @@ services:
     environment:
       - PACT_BROKER_DATABASE_HOST=postgres
       - PACT_BROKER_DATABASE_USERNAME=postgres
+      - PACT_BROKER_BASIC_AUTH_USERNAME=rw_user
+      - PACT_BROKER_BASIC_AUTH_PASSWORD=rw_pass
+      - PACT_BROKER_BASIC_AUTH_READ_ONLY_USERNAME=ro_user
+      - PACT_BROKER_BASIC_AUTH_READ_ONLY_PASSWORD=ro_pass
     ports:
       - "80:80"
