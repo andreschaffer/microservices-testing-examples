@@ -56,24 +56,24 @@ For the welcome-member-email-service, we build, create its pacts, publish and ta
 ```bash
 mvn clean verify -pl welcome-member-email-service -Pcode-coverage
 mvn verify -pl welcome-member-email-service -Pconsumer-pacts
-docker run --net host -v `pwd`/welcome-member-email-service/target/pacts:/target/pacts pact-cli publish /target/pacts --consumer-app-version `git rev-parse --short HEAD` --broker-base-url localhost
-docker run --net host pact-cli create-version-tag --pacticipant welcome-member-email-service --version `git rev-parse --short HEAD` --tag prod --broker-base-url localhost
+docker run --net host -v `pwd`/welcome-member-email-service/target/pacts:/target/pacts pact-cli publish /target/pacts --consumer-app-version `git rev-parse --short HEAD` --broker-base-url localhost --broker-username=rw_user --broker-password=rw_pass
+docker run --net host pact-cli create-version-tag --pacticipant welcome-member-email-service --version `git rev-parse --short HEAD` --tag prod --broker-base-url localhost --broker-username=rw_user --broker-password=rw_pass
 ```
   
 For the special-membership-service, we build, verify consumers' pacts, create its own pacts, publish and tag both the verification and the pacts created:
 ```bash
 mvn clean verify -pl special-membership-service -Pcode-coverage
-mvn verify -pl special-membership-service -Pprovider-pacts -Dpact.verifier.publishResults=true -Dpact.provider.version=`git rev-parse --short HEAD` -Dpactbroker.tags=prod
+mvn verify -pl special-membership-service -Pprovider-pacts -Dpact.verifier.publishResults=true -Dpact.provider.version=`git rev-parse --short HEAD` -Dpactbroker.tags=prod -Dpactbroker.user=rw_user -Dpactbroker.pass=rw_pass
 mvn verify -pl special-membership-service -Pconsumer-pacts
-docker run --net host -v `pwd`/special-membership-service/target/pacts:/target/pacts pact-cli publish /target/pacts --consumer-app-version `git rev-parse --short HEAD` --broker-base-url localhost
-docker run --net host pact-cli create-version-tag --pacticipant special-membership-service --version `git rev-parse --short HEAD` --tag prod --broker-base-url localhost
+docker run --net host -v `pwd`/special-membership-service/target/pacts:/target/pacts pact-cli publish /target/pacts --consumer-app-version `git rev-parse --short HEAD` --broker-base-url localhost --broker-username=rw_user --broker-password=rw_pass
+docker run --net host pact-cli create-version-tag --pacticipant special-membership-service --version `git rev-parse --short HEAD` --tag prod --broker-base-url localhost --broker-username=rw_user --broker-password=rw_pass
 ```
   
 For the credit-score-service, we build, verify consumers' pacts and tag the verification:
 ```bash
 mvn clean verify -pl credit-score-service -Pcode-coverage
-mvn verify -pl credit-score-service -Pprovider-pacts -Dpact.verifier.publishResults=true -Dpact.provider.version=`git rev-parse --short HEAD` -Dpactbroker.tags=prod
-docker run --net host pact-cli create-version-tag --pacticipant credit-score-service --version `git rev-parse --short HEAD` --tag prod --broker-base-url localhost
+mvn verify -pl credit-score-service -Pprovider-pacts -Dpact.verifier.publishResults=true -Dpact.provider.version=`git rev-parse --short HEAD` -Dpactbroker.tags=prod -Dpactbroker.user=rw_user -Dpactbroker.pass=rw_pass
+docker run --net host pact-cli create-version-tag --pacticipant credit-score-service --version `git rev-parse --short HEAD` --tag prod --broker-base-url localhost --broker-username=rw_user --broker-password=rw_pass
 ```
 
 ## Test separation

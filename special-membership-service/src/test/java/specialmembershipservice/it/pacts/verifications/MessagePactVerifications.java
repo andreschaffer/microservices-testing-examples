@@ -6,6 +6,7 @@ import au.com.dius.pact.provider.junit.MessagePactRunner;
 import au.com.dius.pact.provider.junit.Provider;
 import au.com.dius.pact.provider.junit.State;
 import au.com.dius.pact.provider.junit.loader.PactBroker;
+import au.com.dius.pact.provider.junit.loader.PactBrokerAuth;
 import au.com.dius.pact.provider.junit.target.AmqpTarget;
 import au.com.dius.pact.provider.junit.target.Target;
 import au.com.dius.pact.provider.junit.target.TestTarget;
@@ -28,7 +29,12 @@ import static specialmembershipservice.it.pacts.PactConstants.*;
 @RunWith(MessagePactRunner.class)
 @Provider(SPECIAL_MEMBERSHIP_SERVICE)
 @IgnoreNoPactsToVerify
-@PactBroker(host = PACT_BROKER_URL, port = PACT_BROKER_PORT, tags = {"${pactbroker.tags:prod}"})
+@PactBroker(
+        host = PACT_BROKER_URL, port = PACT_BROKER_PORT,
+        tags = {"${pactbroker.tags:prod}"},
+        authentication = @PactBrokerAuth(
+                username = "${pactbroker.user:ro_user}", password = "${pactbroker.pass:ro_pass}")
+)
 public class MessagePactVerifications extends IntegrationTestBase {
 
     @Rule

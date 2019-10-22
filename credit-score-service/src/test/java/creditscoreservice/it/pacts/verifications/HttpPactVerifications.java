@@ -5,6 +5,7 @@ import au.com.dius.pact.provider.junit.Provider;
 import au.com.dius.pact.provider.junit.RestPactRunner;
 import au.com.dius.pact.provider.junit.State;
 import au.com.dius.pact.provider.junit.loader.PactBroker;
+import au.com.dius.pact.provider.junit.loader.PactBrokerAuth;
 import au.com.dius.pact.provider.junit.target.HttpTarget;
 import au.com.dius.pact.provider.junit.target.Target;
 import au.com.dius.pact.provider.junit.target.TestTarget;
@@ -16,7 +17,12 @@ import static creditscoreservice.it.pacts.PactConstants.*;
 @RunWith(RestPactRunner.class)
 @Provider(CREDIT_SCORE_SERVICE)
 @IgnoreNoPactsToVerify
-@PactBroker(host = PACT_BROKER_URL, port = PACT_BROKER_PORT, tags = {"${pactbroker.tags:prod}"})
+@PactBroker(
+        host = PACT_BROKER_URL, port = PACT_BROKER_PORT,
+        tags = {"${pactbroker.tags:prod}"},
+        authentication = @PactBrokerAuth(
+                username = "${pactbroker.user:ro_user}", password = "${pactbroker.pass:ro_pass}")
+)
 public class HttpPactVerifications extends IntegrationTestBase {
 
     @TestTarget
