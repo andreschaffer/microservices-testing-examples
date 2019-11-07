@@ -42,20 +42,24 @@ public class WelcomeEmailConsumer implements Managed {
 
     @Override
     public void start() throws Exception {
-        Executors.newFixedThreadPool(1).execute(this::acceptMessages);
+        Executors.newFixedThreadPool(1).execute(this::subscribeConsumer);
     }
 
-    private void acceptMessages() {
+    private void subscribeConsumer() {
         consumer.subscribe(singletonList(topic));
         LOG.info("Subscribed consumer to topic {}", topic);
 
+        acceptMessages();
+    }
+
+    private void acceptMessages() {
         while (!stop.get()) {
             ConsumerRecords<String, String> records;
             try {
                 records = consumer.poll(1000);
             } catch (WakeupException e) {
                 if (!stop.get()) throw e;
-                continue;
+                break;
             }
             for (ConsumerRecord<String, String> record : records) {
                 acceptMessage(record);
@@ -64,17 +68,17 @@ public class WelcomeEmailConsumer implements Managed {
         }
     }
 
-    private void acceptMessage(ConsumerRecord<String, String> message) throws SmtpEmailSenderException {
+    private void acceptMessage(ConsumerRecord<String, String> record) throws SmtpEmailSenderException {
         try {
-            Event event = messageParser.parse(message.value(), Event.class);
+            Event event = messageParser.parse(record.value(), Event.class);
             if (event instanceof MemberSignedUpEvent) {
-                LOG.info("Accepted {}", message.value());
+                LOG.info("Accepted {}", record.value());
                 emailSender.send(((MemberSignedUpEvent) event).getEmail());
             } else {
                 LOG.info("Not a type we are interested in: {}. Ignoring and continuing.", event.getType());
             }
         } catch (InvalidMessageException e) {
-            LOG.warn("Invalid message: {}. Ignoring and continuing.", message.value(), e);
+            LOG.warn("Invalid message: {}. Ignoring and continuing.", record.value(), e);
         }
     }
 
