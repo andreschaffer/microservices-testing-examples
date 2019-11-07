@@ -25,12 +25,18 @@ public class CreditScoreService {
             return Optional.of(creditScoreDto.getCreditScore());
         } catch (NotFoundException e) {
             return Optional.empty();
-        } catch (ServerErrorException e) {
-            throw new TemporarilyUnavailableException(e);
-        } catch (ProcessingException e) {
-            if (e.getCause() instanceof SocketTimeoutException || e.getCause() instanceof ConnectException)
-                throw new TemporarilyUnavailableException(e);
+        } catch (RuntimeException e) {
+            if (isServerRelated(e) || isNetworkRelated(e)) throw new TemporarilyUnavailableException(e);
             throw e;
         }
+    }
+
+    private boolean isServerRelated(RuntimeException e) {
+        return e instanceof ServerErrorException;
+    }
+
+    private boolean isNetworkRelated(RuntimeException e) {
+        return e instanceof ProcessingException &&
+                (e.getCause() instanceof ConnectException || e.getCause() instanceof SocketTimeoutException);
     }
 }
