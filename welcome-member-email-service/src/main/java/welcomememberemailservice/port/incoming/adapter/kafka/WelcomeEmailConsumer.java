@@ -49,22 +49,29 @@ public class WelcomeEmailConsumer implements Managed {
         consumer.subscribe(singletonList(topic));
         LOG.info("Subscribed consumer to topic {}", topic);
 
-        acceptMessages();
+        try {
+            loopMessageConsumption();
+        } finally {
+            consumer.close();
+        }
     }
 
-    private void acceptMessages() {
+    private void loopMessageConsumption() {
         while (!stop.get()) {
             ConsumerRecords<String, String> records;
             try {
                 records = consumer.poll(1000);
             } catch (WakeupException e) {
-                if (!stop.get()) throw e;
                 break;
             }
-            for (ConsumerRecord<String, String> record : records) {
-                acceptMessage(record);
-                commitOffset(record);
-            }
+            acceptMessages(records);
+        }
+    }
+
+    private void acceptMessages(ConsumerRecords<String, String> records) {
+        for (ConsumerRecord<String, String> record : records) {
+            acceptMessage(record);
+            commitOffset(record);
         }
     }
 
