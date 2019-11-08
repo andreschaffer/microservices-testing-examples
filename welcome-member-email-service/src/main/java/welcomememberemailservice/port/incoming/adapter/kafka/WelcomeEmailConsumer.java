@@ -58,8 +58,8 @@ public class WelcomeEmailConsumer implements Managed {
             try {
                 records = consumer.poll(1000);
             } catch (WakeupException e) {
-                if (!stop.get()) throw e;
-                break;
+                if (stop.get()) break;
+                throw e;
             }
             acceptMessages(records);
         }
