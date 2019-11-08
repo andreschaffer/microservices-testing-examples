@@ -49,7 +49,11 @@ public class WelcomeEmailConsumer implements Managed {
         consumer.subscribe(singletonList(topic));
         LOG.info("Subscribed consumer to topic {}", topic);
 
-        loopMessageConsumption();
+        try {
+            loopMessageConsumption();
+        } finally {
+            consumer.close();
+        }
     }
 
     private void loopMessageConsumption() {
@@ -58,8 +62,7 @@ public class WelcomeEmailConsumer implements Managed {
             try {
                 records = consumer.poll(1000);
             } catch (WakeupException e) {
-                if (stop.get()) break;
-                throw e;
+                break;
             }
             acceptMessages(records);
         }
