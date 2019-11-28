@@ -18,7 +18,7 @@ import static creditscoreservice.it.pacts.PactConstants.*;
 @Provider(CREDIT_SCORE_SERVICE)
 @IgnoreNoPactsToVerify
 @PactBroker(
-        host = PACT_BROKER_URL, port = PACT_BROKER_PORT,
+        host = "${pactbroker.host:" + PACT_BROKER_URL + "}", port = "${pactbroker.port:" + PACT_BROKER_PORT + "}",
         tags = {"${pactbroker.tags:prod}"},
         authentication = @PactBrokerAuth(
                 username = "${pactbroker.user:ro_user}", password = "${pactbroker.pass:ro_pass}")
