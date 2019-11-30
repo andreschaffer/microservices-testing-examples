@@ -122,7 +122,7 @@ Visit the pact broker page again after running the tests and check the pacts are
                             +----------------------+       +---------------------+
                             |  3                                              4  |
                             |                                                    |
-                            |             (Project B Support Pipeline)           |
+                            |        (Project B Consumers Support Pipeline)      |
                             |                                                    |
                             |                                                    |
                             |    +-----------------------+    +--------------+   |
