@@ -51,7 +51,7 @@ public abstract class IntegrationTestBase {
 
       return KAFKA_RULE.helper()
           .consumeStrings(topic, 1)
-          .get(1, SECONDS)
+          .get(5, SECONDS)
           .get(0);
   }
 }
