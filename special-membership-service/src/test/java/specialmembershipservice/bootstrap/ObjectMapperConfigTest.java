@@ -5,7 +5,9 @@ import io.dropwizard.jackson.Jackson;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.time.ZonedDateTime;
 
+import static java.time.ZoneOffset.UTC;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -31,9 +33,20 @@ public class ObjectMapperConfigTest {
         assertThat(objectMapper.writeValueAsString(dto), equalTo("{\"twoWords\":\"value\"}"));
     }
 
+    @Test
+    public void iso8601Timestamps() throws IOException {
+        TimestampedDto dto = new TimestampedDto();
+        dto.timestamp = ZonedDateTime.of(2019, 12, 1, 16, 30, 0, 0, UTC);
+        assertThat(objectMapper.writeValueAsString(dto), equalTo("{\"timestamp\":\"2019-12-01T16:30:00Z\"}"));
+    }
+
     private static class BlankDto {}
 
     private static class CamelCasedDto {
         public String twoWords;
+    }
+
+    private static class TimestampedDto {
+        public ZonedDateTime timestamp;
     }
 }
