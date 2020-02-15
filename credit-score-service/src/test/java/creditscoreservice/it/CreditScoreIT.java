@@ -1,7 +1,6 @@
 package creditscoreservice.it;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.google.common.collect.ImmutableMap;
 import org.junit.Test;
 
 import javax.ws.rs.core.Response;
@@ -72,13 +71,4 @@ public class CreditScoreIT extends IntegrationTestBase {
         response.close();
         assertThat(response.getStatus(), equalTo(404));
     }
-
-    @Test
-    public void forwardCompatibility() throws Exception {
-        String email = "hal.jordan@example.com";
-        Response response = resourcesClient.putCreditScore(email, ImmutableMap.of("creditScore", 700, "foo", "bar"));
-        response.close();
-        assertThat(response.getStatus(), equalTo(200));
-    }
-
 }
