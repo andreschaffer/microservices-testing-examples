@@ -1,5 +1,6 @@
 package creditscoreservice.port.incoming.adapter.resources;
 
+import creditscoreservice.port.outgoing.adapter.creditscore.CreditScore;
 import creditscoreservice.port.outgoing.adapter.creditscore.InMemoryCreditScoreRepository;
 
 import javax.validation.Valid;
@@ -25,23 +26,28 @@ public class CreditScoreResource {
 
     @GET
     public Response get(@PathParam("email") String email) {
-        Optional<Integer> possibleCreditScore = creditScoreRepository.lookup(email);
-        if (!possibleCreditScore.isPresent()) return Response.status(NOT_FOUND).build();
-        CreditScoreDto creditScoreDto = toDto(email, possibleCreditScore.get());
+        Optional<CreditScore> possibleCreditScore = creditScoreRepository.lookup(email);
+        if (possibleCreditScore.isEmpty()) return Response.status(NOT_FOUND).build();
+        CreditScoreDto creditScoreDto = toDto(possibleCreditScore.get());
         return Response.ok(creditScoreDto).build();
     }
 
     @PUT
     public Response put(@PathParam("email") String email, @NotNull @Valid CreditScoreDto creditScoreDto) {
-        creditScoreRepository.save(email, creditScoreDto.getCreditScore());
-        CreditScoreDto newCreditScoreDto = toDto(email, creditScoreDto.getCreditScore());
+        CreditScore creditScore = toCreditScore(email, creditScoreDto);
+        creditScoreRepository.save(creditScore);
+        CreditScoreDto newCreditScoreDto = toDto(creditScore);
         return Response.ok(newCreditScoreDto).build();
     }
 
-    private CreditScoreDto toDto(String email, Integer creditScore) {
+    private CreditScoreDto toDto(CreditScore creditScore) {
         CreditScoreDto dto = new CreditScoreDto();
-        dto.setEmail(email);
-        dto.setCreditScore(creditScore);
+        dto.setEmail(creditScore.getEmail());
+        dto.setCreditScore(creditScore.getCreditScore());
         return dto;
+    }
+
+    private CreditScore toCreditScore(String email, CreditScoreDto dto) {
+        return new CreditScore(email, dto.getCreditScore());
     }
 }
