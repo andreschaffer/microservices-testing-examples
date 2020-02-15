@@ -1,5 +1,13 @@
 package specialmembershipservice.it;
 
+import com.google.common.collect.ImmutableMap;
+import org.junit.Rule;
+import org.junit.Test;
+import specialmembershipservice.it.creditscoreservice.CreditScoreServiceRule;
+
+import javax.ws.rs.core.Response;
+import java.util.Map;
+
 import static com.github.restdriver.clientdriver.RestClientDriver.giveEmptyResponse;
 import static com.github.restdriver.clientdriver.RestClientDriver.giveResponse;
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath;
@@ -11,13 +19,6 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static specialmembershipservice.it.matchers.DateFormatMatcher.isIsoDateFormat;
 
-import com.google.common.collect.ImmutableMap;
-import java.util.Map;
-import javax.ws.rs.core.Response;
-import org.junit.Rule;
-import org.junit.Test;
-import specialmembershipservice.it.creditscoreservice.CreditScoreServiceRule;
-
 public class SpecialMembershipsIT extends IntegrationTestBase {
 
     @Rule
@@ -28,8 +29,8 @@ public class SpecialMembershipsIT extends IntegrationTestBase {
     public void create() throws Exception {
         String email = "tony.stark@example.com";
         creditScoreServiceRule.setCreditResponse(email,
-            giveResponse("{\"creditScore\":850}", APPLICATION_JSON));
-        Map<String, Object> specialMembershipDto = singletonMap("email", email);
+            giveResponse(creditScoreDto(850), APPLICATION_JSON));
+        Map<String, Object> specialMembershipDto = specialMembershipDto(email);
         Response response = resourcesClient.postSpecialMembership(specialMembershipDto);
         response.close();
         assertThat(response.getStatus(), equalTo(200));
@@ -40,8 +41,8 @@ public class SpecialMembershipsIT extends IntegrationTestBase {
     public void denyDueToLowCreditScore() throws Exception {
         String email = "peter.parker@example.com";
         creditScoreServiceRule.setCreditResponse(email,
-            giveResponse("{\"creditScore\":300}", APPLICATION_JSON));
-        Map<String, Object> specialMembershipDto = singletonMap("email", email);
+            giveResponse(creditScoreDto(300), APPLICATION_JSON));
+        Map<String, Object> specialMembershipDto = specialMembershipDto(email);
         Response response = resourcesClient.postSpecialMembership(specialMembershipDto);
         response.close();
         assertThat(response.getStatus(), equalTo(403));
@@ -51,7 +52,7 @@ public class SpecialMembershipsIT extends IntegrationTestBase {
     public void denyDueToNoCreditScore() throws Exception {
         String email = "ninja.turtle@example.com";
         creditScoreServiceRule.setCreditResponse(email, giveEmptyResponse().withStatus(404));
-        Map<String, Object> specialMembershipDto = singletonMap("email", email);
+        Map<String, Object> specialMembershipDto = specialMembershipDto(email);
         Response response = resourcesClient.postSpecialMembership(specialMembershipDto);
         response.close();
         assertThat(response.getStatus(), equalTo(403));
@@ -67,7 +68,7 @@ public class SpecialMembershipsIT extends IntegrationTestBase {
 
     @Test
     public void returnClientErrorForBadEmail() throws Exception {
-        Map<String, Object> specialMembershipDto = ImmutableMap.of("email", "notAnEmail");
+        Map<String, Object> specialMembershipDto = specialMembershipDto("notAnEmail");
         Response response = resourcesClient.postSpecialMembership(specialMembershipDto);
         response.close();
         assertThat(response.getStatus(), equalTo(422));
@@ -77,7 +78,7 @@ public class SpecialMembershipsIT extends IntegrationTestBase {
     public void returnServiceUnavailableOnCreditScoreServiceError() throws Exception {
         String email = "the.joker@example.com";
         creditScoreServiceRule.setCreditResponse(email, giveEmptyResponse().withStatus(500));
-        Map<String, Object> specialMembershipDto = singletonMap("email", email);
+        Map<String, Object> specialMembershipDto = specialMembershipDto(email);
         Response response = resourcesClient.postSpecialMembership(specialMembershipDto);
         response.close();
         assertThat(response.getStatus(), equalTo(503));
@@ -88,7 +89,7 @@ public class SpecialMembershipsIT extends IntegrationTestBase {
         String email = "barry.allen@example.com";
         creditScoreServiceRule.setCreditResponse(email,
             giveResponse("{\"creditScore\":300}", APPLICATION_JSON).after(3, SECONDS));
-        Map<String, Object> specialMembershipDto = singletonMap("email", email);
+        Map<String, Object> specialMembershipDto = specialMembershipDto(email);
         Response response = resourcesClient.postSpecialMembership(specialMembershipDto);
         response.close();
         assertThat(response.getStatus(), equalTo(503));
@@ -104,6 +105,14 @@ public class SpecialMembershipsIT extends IntegrationTestBase {
         response.close();
         assertThat(response.getStatus(), equalTo(200));
         verifyPublishedMemberSignedUpEvent(email);
+    }
+
+    private Map<String, Object> specialMembershipDto(String email) {
+        return singletonMap("email", email);
+    }
+
+    private String creditScoreDto(Integer creditScore) {
+        return String.format("{\"creditScore\":%d}", creditScore);
     }
 
     private void verifyPublishedMemberSignedUpEvent(String email) throws Exception {

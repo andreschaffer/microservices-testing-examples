@@ -47,8 +47,8 @@ public class MessagePactVerifications extends IntegrationTestBase {
     public void tonyStarkBecameANewMember() {
         String email = "tony.stark@example.com";
         creditScoreServiceRule.setCreditResponse(email,
-            giveResponse("{\"creditScore\":850}", APPLICATION_JSON));
-        Map<String, Object> specialMembershipDto = singletonMap("email", email);
+            giveResponse(creditScoreDto(850), APPLICATION_JSON));
+        Map<String, Object> specialMembershipDto = specialMembershipDto(email);
         Response response = resourcesClient.postSpecialMembership(specialMembershipDto);
         response.close();
         assertThat(response.getStatus(), equalTo(200));
@@ -57,5 +57,13 @@ public class MessagePactVerifications extends IntegrationTestBase {
     @PactVerifyProvider("An event notifying Tony Stark's new membership")
     public String verifyTonyStarksNewMembershipEvent() throws Exception {
         return readPublishedMessage();
+    }
+
+    private String creditScoreDto(Integer creditScore) {
+        return String.format("{\"creditScore\":%d}", creditScore);
+    }
+
+    private Map<String, Object> specialMembershipDto(String email) {
+        return singletonMap("email", email);
     }
 }
