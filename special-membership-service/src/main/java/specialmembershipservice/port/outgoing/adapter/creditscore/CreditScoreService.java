@@ -18,11 +18,11 @@ public class CreditScoreService {
         this.webTarget = checkNotNull(webTarget);
     }
 
-    public Optional<Integer> lookup(String email) throws TemporarilyUnavailableException {
+    public Optional<CreditScoreDto> lookup(String email) throws TemporarilyUnavailableException {
         try {
             CreditScoreDto creditScoreDto = webTarget.path("credit-scores").path(email)
                                                      .request().get(CreditScoreDto.class);
-            return Optional.of(creditScoreDto.getCreditScore());
+            return Optional.of(creditScoreDto);
         } catch (NotFoundException e) {
             return Optional.empty();
         } catch (RuntimeException e) {

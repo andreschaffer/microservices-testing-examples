@@ -1,5 +1,6 @@
 package specialmembershipservice.port.incoming.adapter.resources;
 
+import specialmembershipservice.port.outgoing.adapter.creditscore.CreditScoreDto;
 import specialmembershipservice.port.outgoing.adapter.creditscore.CreditScoreService;
 import specialmembershipservice.port.outgoing.adapter.creditscore.TemporarilyUnavailableException;
 import specialmembershipservice.port.outgoing.adapter.eventpublisher.EventPublisher;
@@ -37,13 +38,13 @@ public class SpecialMembershipsResource {
 
     @POST
     public Response post(@NotNull @Valid SpecialMembershipDto specialMembershipDto) {
-        Optional<Integer> possibleCreditScore;
+        Optional<CreditScoreDto> possibleCreditScore;
         try {
             possibleCreditScore = creditScoreService.lookup(specialMembershipDto.getEmail());
         } catch (TemporarilyUnavailableException e) {
             return Response.status(SERVICE_UNAVAILABLE).build();
         }
-        if (!possibleCreditScore.isPresent() || possibleCreditScore.get() < MIN_ACCEPTED_CREDIT_SCORE)
+        if (possibleCreditScore.isEmpty() || possibleCreditScore.get().getCreditScore() < MIN_ACCEPTED_CREDIT_SCORE)
             return Response.status(FORBIDDEN).build();
 
         eventPublisher.publish(new MemberSignedUpEvent(specialMembershipDto.getEmail(), now(UTC)));
