@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
+import org.subethamail.wiser.WiserMessage;
 
 public class WelcomeEmailConsumerIT extends IntegrationTestBase {
 
@@ -12,9 +13,13 @@ public class WelcomeEmailConsumerIT extends IntegrationTestBase {
     public void sendWelcomeEmailToNewMember() throws Exception {
         String email = "clark.kent@example.com";
         String memberSignedUpEvent = memberSignedUpEvent(email);
+
         publishMembershipMessageAndWaitToBeConsumed(memberSignedUpEvent);
+
         assertAnEmailWasSent();
-        assertThat(getLastSentEmail().getEnvelopeReceiver(), equalTo(email));
+        WiserMessage emailSent = getLastSentEmail();
+        assertThat(emailSent.getEnvelopeReceiver(), equalTo(email));
+        assertThat(emailSent.getMimeMessage().getSubject(), equalTo("Welcome!"));
     }
 
     @Test
