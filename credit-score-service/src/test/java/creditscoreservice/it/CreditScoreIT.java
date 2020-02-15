@@ -1,13 +1,13 @@
 package creditscoreservice.it;
 
-import static java.util.Collections.singletonMap;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.ImmutableMap;
-import javax.ws.rs.core.Response;
 import org.junit.Test;
+
+import javax.ws.rs.core.Response;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
 
 public class CreditScoreIT extends IntegrationTestBase {
 
@@ -15,7 +15,8 @@ public class CreditScoreIT extends IntegrationTestBase {
     public void saveCreditScore() throws Exception {
         String email = "bruce.wayne@example.com";
         Integer creditScore = 850;
-        Response response = resourcesClient.putCreditScore(email, singletonMap("creditScore", creditScore));
+
+        Response response = resourcesClient.putCreditScore(email, creditScoreDto(creditScore));
         JsonNode creditScoreDto = response.readEntity(JsonNode.class);
         assertThat(creditScoreDto.path("creditScore").intValue(), equalTo(creditScore));
         assertThat(creditScoreDto.path("email").textValue(), equalTo(email));
@@ -27,7 +28,8 @@ public class CreditScoreIT extends IntegrationTestBase {
         String email = "slumdog.millionaire@example.com";
         Integer oldCreditScore = 300, newCreditScore = 850;
         setupCreditScoreState(email, oldCreditScore);
-        Response response = resourcesClient.putCreditScore(email, singletonMap("creditScore", newCreditScore));
+
+        Response response = resourcesClient.putCreditScore(email, creditScoreDto(newCreditScore));
         JsonNode creditScoreDto = response.readEntity(JsonNode.class);
         assertThat(creditScoreDto.path("creditScore").intValue(), equalTo(newCreditScore));
         assertThat(creditScoreDto.path("email").textValue(), equalTo(email));
@@ -37,7 +39,7 @@ public class CreditScoreIT extends IntegrationTestBase {
     @Test
     public void returnClientErrorForInvalidLowCreditScore() throws Exception {
         String email = "ant.man@example.com";
-        Response response = resourcesClient.putCreditScore(email, singletonMap("creditScore", 299));
+        Response response = resourcesClient.putCreditScore(email, creditScoreDto(299));
         response.close();
         assertThat(response.getStatus(), equalTo(422));
     }
@@ -45,7 +47,7 @@ public class CreditScoreIT extends IntegrationTestBase {
     @Test
     public void returnClientErrorForInvalidHighCreditScore() throws Exception {
         String email = "scrooge.mcduck@example.com";
-        Response response = resourcesClient.putCreditScore(email, singletonMap("creditScore", 851));
+        Response response = resourcesClient.putCreditScore(email, creditScoreDto(851));
         response.close();
         assertThat(response.getStatus(), equalTo(422));
     }
@@ -55,6 +57,7 @@ public class CreditScoreIT extends IntegrationTestBase {
         String email = "nemo@example.com";
         Integer creditScore = 600;
         setupCreditScoreState(email, creditScore);
+
         Response response = resourcesClient.getCreditScore(email);
         JsonNode creditScoreDto = response.readEntity(JsonNode.class);
         assertThat(creditScoreDto.path("creditScore").intValue(), equalTo(creditScore));
@@ -77,4 +80,5 @@ public class CreditScoreIT extends IntegrationTestBase {
         response.close();
         assertThat(response.getStatus(), equalTo(200));
     }
+
 }
