@@ -43,7 +43,7 @@ public class CreditScoreServicePactContracts extends IntegrationTestBase {
     @PactVerification(value = CREDIT_SCORE_SERVICE, fragment = "tonyStarkCreditScore")
     @Test
     public void createSpecialMembershipToTonyStark() throws Exception {
-        Map<String, Object> specialMembershipDto = singletonMap("email", "tony.stark@example.com");
+        Map<String, Object> specialMembershipDto = specialMembershipDto("tony.stark@example.com");
         Response response = resourcesClient.postSpecialMembership(specialMembershipDto);
         response.close();
         assertThat(response.getStatus(), equalTo(200));
@@ -62,9 +62,13 @@ public class CreditScoreServicePactContracts extends IntegrationTestBase {
     @PactVerification(value = CREDIT_SCORE_SERVICE, fragment = "hawleyGriffinCreditScore")
     @Test
     public void denySpecialMembershipToHawleyGriffin() throws Exception {
-        Map<String, Object> specialMembershipDto = singletonMap("email", "hawley.griffin@example.com");
+        Map<String, Object> specialMembershipDto = specialMembershipDto("hawley.griffin@example.com");
         Response response = resourcesClient.postSpecialMembership(specialMembershipDto);
         response.close();
         assertThat(response.getStatus(), equalTo(403));
+    }
+
+    private Map<String, Object> specialMembershipDto(String email) {
+        return singletonMap("email", email);
     }
 }

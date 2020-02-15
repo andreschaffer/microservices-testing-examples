@@ -87,7 +87,7 @@ public class SpecialMembershipsIT extends IntegrationTestBase {
     public void returnServiceUnavailableOnCreditScoreServiceTimeout() throws Exception {
         String email = "barry.allen@example.com";
         creditScoreServiceRule.setCreditResponse(email,
-            giveResponse("{\"creditScore\":300}", APPLICATION_JSON).after(3, SECONDS));
+            giveResponse(creditScoreDto(300), APPLICATION_JSON).after(3, SECONDS));
         Map<String, Object> specialMembershipDto = specialMembershipDto(email);
         Response response = resourcesClient.postSpecialMembership(specialMembershipDto);
         response.close();
