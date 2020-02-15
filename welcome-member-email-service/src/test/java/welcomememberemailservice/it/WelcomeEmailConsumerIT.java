@@ -1,11 +1,11 @@
 package welcomememberemailservice.it;
 
+import org.junit.Test;
+import org.subethamail.wiser.WiserMessage;
+
 import static java.lang.String.format;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
-
-import org.junit.Test;
-import org.subethamail.wiser.WiserMessage;
 
 public class WelcomeEmailConsumerIT extends IntegrationTestBase {
 
@@ -41,15 +41,6 @@ public class WelcomeEmailConsumerIT extends IntegrationTestBase {
     public void ignoreMalformedEvent() throws Exception {
         publishMembershipMessageAndWaitToBeConsumed("foobar");
         assertNoEmailWasSent();
-    }
-
-    @Test
-    public void forwardCompatibility() throws Exception {
-        String type = "memberSignedUpEvent", email = "clark.kent@example.com";
-        String memberSignedUpEvent = format("{\"@type\":\"%s\",\"email\":\"%s\",\"foo\":\"bar\"}", type, email);
-        publishMembershipMessageAndWaitToBeConsumed(memberSignedUpEvent);
-        assertAnEmailWasSent();
-        assertThat(getLastSentEmail().getEnvelopeReceiver(), equalTo(email));
     }
 
     private String memberSignedUpEvent(String email) {
