@@ -10,26 +10,25 @@ public class WelcomeEmailConsumerIT extends IntegrationTestBase {
 
     @Test
     public void sendWelcomeEmailToNewMember() throws Exception {
-        String type = "memberSignedUpEvent", email = "clark.kent@example.com";
-        String memberSignedUpEvent = format("{\"@type\":\"%s\",\"email\":\"%s\"}", type, email);
+        String email = "clark.kent@example.com";
+        String memberSignedUpEvent = memberSignedUpEvent(email);
         publishMembershipMessageAndWaitToBeConsumed(memberSignedUpEvent);
         assertAnEmailWasSent();
         assertThat(getLastSentEmail().getEnvelopeReceiver(), equalTo(email));
     }
 
     @Test
-    public void ignoreUnknownEvent() throws Exception {
-        String type = "unknownEvent", email = "the.riddler@example.com";
-        String memberSignedUpEvent = format("{\"@type\":\"%s\",\"email\":\"%s\"}", type, email);
+    public void ignoreMemberSignedUpEventWithBadProperties() throws Exception {
+        String email = "notAnEmail";
+        String memberSignedUpEvent = memberSignedUpEvent(email);
         publishMembershipMessageAndWaitToBeConsumed(memberSignedUpEvent);
         assertNoEmailWasSent();
     }
 
     @Test
-    public void ignoreMemberSignedUpEventWithBadProperties() throws Exception {
-        String type = "memberSignedUpEvent", email = "notAnEmail";
-        String memberSignedUpEvent = format("{\"@type\":\"%s\",\"email\":\"%s\"}", type, email);
-        publishMembershipMessageAndWaitToBeConsumed(memberSignedUpEvent);
+    public void ignoreUnknownEvent() throws Exception {
+        String unknownEvent = "{\"@type\":\"unknownEvent\"}";
+        publishMembershipMessageAndWaitToBeConsumed(unknownEvent);
         assertNoEmailWasSent();
     }
 
@@ -46,5 +45,9 @@ public class WelcomeEmailConsumerIT extends IntegrationTestBase {
         publishMembershipMessageAndWaitToBeConsumed(memberSignedUpEvent);
         assertAnEmailWasSent();
         assertThat(getLastSentEmail().getEnvelopeReceiver(), equalTo(email));
+    }
+
+    private String memberSignedUpEvent(String email) {
+        return format("{\"@type\":\"memberSignedUpEvent\",\"email\":\"%s\"}", email);
     }
 }
