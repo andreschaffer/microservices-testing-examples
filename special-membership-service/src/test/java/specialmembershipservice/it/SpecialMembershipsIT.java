@@ -1,6 +1,5 @@
 package specialmembershipservice.it;
 
-import com.google.common.collect.ImmutableMap;
 import org.junit.Rule;
 import org.junit.Test;
 import specialmembershipservice.it.creditscoreservice.CreditScoreServiceRule;
@@ -93,18 +92,6 @@ public class SpecialMembershipsIT extends IntegrationTestBase {
         Response response = resourcesClient.postSpecialMembership(specialMembershipDto);
         response.close();
         assertThat(response.getStatus(), equalTo(503));
-    }
-
-    @Test
-    public void forwardCompatibility() throws Exception {
-        String email = "marty.mcfly@example.com";
-        creditScoreServiceRule.setCreditResponse(email,
-            giveResponse("{\"creditScore\":850,\"foo\":\"bar\"}", APPLICATION_JSON));
-        Map<String, Object> specialMembershipDto = ImmutableMap.of("email", email, "foo", "bar");
-        Response response = resourcesClient.postSpecialMembership(specialMembershipDto);
-        response.close();
-        assertThat(response.getStatus(), equalTo(200));
-        verifyPublishedMemberSignedUpEvent(email);
     }
 
     private Map<String, Object> specialMembershipDto(String email) {

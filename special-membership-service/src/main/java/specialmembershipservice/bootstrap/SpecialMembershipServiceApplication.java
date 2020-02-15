@@ -1,6 +1,5 @@
 package specialmembershipservice.bootstrap;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.dropwizard.Application;
 import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.setup.Environment;
@@ -10,8 +9,6 @@ import specialmembershipservice.port.outgoing.adapter.eventpublisher.EventPublis
 
 import javax.ws.rs.client.WebTarget;
 
-import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
-import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS;
 import static org.glassfish.jersey.client.ClientProperties.CONNECT_TIMEOUT;
 import static org.glassfish.jersey.client.ClientProperties.READ_TIMEOUT;
 
@@ -19,13 +16,8 @@ public class SpecialMembershipServiceApplication extends Application<SpecialMemb
 
     @Override
     public void run(SpecialMembershipServiceConfiguration configuration, Environment environment) throws Exception {
-        configureObjectMapper(environment.getObjectMapper());
+        ObjectMapperConfig.applyTo(environment.getObjectMapper());
         registerResources(configuration, environment);
-    }
-
-    private void configureObjectMapper(ObjectMapper objectMapper) {
-        objectMapper.configure(FAIL_ON_UNKNOWN_PROPERTIES, false)
-                .disable(WRITE_DATES_AS_TIMESTAMPS);
     }
 
     private void registerResources(SpecialMembershipServiceConfiguration configuration, Environment environment) {
@@ -49,6 +41,6 @@ public class SpecialMembershipServiceApplication extends Application<SpecialMemb
         return new EventPublisher(
                 configuration.getEventPublisher().getTopic(),
                 configuration.getEventPublisher().getConfigs(),
-                environment.getObjectMapper());
+                environment.getObjectMapper().copy());
     }
 }
