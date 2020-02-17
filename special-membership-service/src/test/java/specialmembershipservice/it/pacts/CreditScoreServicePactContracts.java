@@ -67,8 +67,4 @@ public class CreditScoreServicePactContracts extends IntegrationTestBase {
         response.close();
         assertThat(response.getStatus(), equalTo(403));
     }
-
-    private Map<String, Object> specialMembershipDto(String email) {
-        return singletonMap("email", email);
-    }
 }

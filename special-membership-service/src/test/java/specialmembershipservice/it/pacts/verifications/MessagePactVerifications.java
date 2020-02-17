@@ -20,7 +20,6 @@ import java.util.Map;
 
 import static com.github.restdriver.clientdriver.RestClientDriver.giveResponse;
 import static java.util.Collections.singletonList;
-import static java.util.Collections.singletonMap;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
@@ -57,13 +56,5 @@ public class MessagePactVerifications extends IntegrationTestBase {
     @PactVerifyProvider("An event notifying Tony Stark's new membership")
     public String verifyTonyStarksNewMembershipEvent() throws Exception {
         return readPublishedMessage();
-    }
-
-    private String creditScoreDto(Integer creditScore) {
-        return String.format("{\"creditScore\":%d}", creditScore);
-    }
-
-    private Map<String, Object> specialMembershipDto(String email) {
-        return singletonMap("email", email);
     }
 }

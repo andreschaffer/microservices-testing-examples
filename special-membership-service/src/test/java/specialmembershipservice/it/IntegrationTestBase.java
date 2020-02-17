@@ -1,11 +1,14 @@
 package specialmembershipservice.it;
 
 import static io.dropwizard.testing.ResourceHelpers.resourceFilePath;
+import static java.util.Collections.singletonMap;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 import com.github.charithe.kafka.EphemeralKafkaBroker;
 import com.github.charithe.kafka.KafkaJunitRule;
 import io.dropwizard.testing.junit.DropwizardAppRule;
+
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import org.junit.BeforeClass;
@@ -53,5 +56,13 @@ public abstract class IntegrationTestBase {
           .consumeStrings(topic, 1)
           .get(5, SECONDS)
           .get(0);
+  }
+
+  protected Map<String, Object> specialMembershipDto(String email) {
+      return singletonMap("email", email);
+  }
+
+  protected String creditScoreDto(Integer creditScore) {
+      return String.format("{\"creditScore\":%d}", creditScore);
   }
 }

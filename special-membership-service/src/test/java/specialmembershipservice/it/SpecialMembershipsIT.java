@@ -94,14 +94,6 @@ public class SpecialMembershipsIT extends IntegrationTestBase {
         assertThat(response.getStatus(), equalTo(503));
     }
 
-    private Map<String, Object> specialMembershipDto(String email) {
-        return singletonMap("email", email);
-    }
-
-    private String creditScoreDto(Integer creditScore) {
-        return String.format("{\"creditScore\":%d}", creditScore);
-    }
-
     private void verifyPublishedMemberSignedUpEvent(String email) throws Exception {
         String memberSignedUpEvent = readPublishedMessage();
         String eventType = "memberSignedUpEvent";
