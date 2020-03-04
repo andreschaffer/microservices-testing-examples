@@ -1,6 +1,7 @@
 [![Build Status](https://travis-ci.org/andreschaffer/microservices-testing-examples.svg?branch=master)](https://travis-ci.org/andreschaffer/microservices-testing-examples)
 [![Coverage Status](https://coveralls.io/repos/github/andreschaffer/microservices-testing-examples/badge.svg?branch=master)](https://coveralls.io/github/andreschaffer/microservices-testing-examples?branch=master)
 [![Maintainability](https://api.codeclimate.com/v1/badges/77358dd72d38afa63fce/maintainability)](https://codeclimate.com/github/andreschaffer/microservices-testing-examples/maintainability)
+[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=andreschaffer/microservices-testing-examples)](https://dependabot.com)
 
 # Microservices Testing Examples
 
