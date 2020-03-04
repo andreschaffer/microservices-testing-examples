@@ -66,7 +66,7 @@
             <dependency>
                 <groupId>com.github.charithe</groupId>
                 <artifactId>kafka-junit</artifactId>
-                <version>3.0.2</version>
+                <version>4.1.7</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.slf4j</groupId>
