@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.subethamail.wiser.WiserMessage;
 import welcomememberemailservice.bootstrap.WelcomeMemberEmailServiceApplication;
 import welcomememberemailservice.bootstrap.WelcomeMemberEmailServiceConfiguration;
-import welcomememberemailservice.it.kafka.KafkaOffsets;
+import welcomememberemailservice.it.kafka.KafkaConsumerOffsets;
 import welcomememberemailservice.it.smtp.SmtpServerRule;
 
 import java.lang.invoke.MethodHandles;
@@ -76,13 +76,15 @@ public abstract class IntegrationTestBase {
     }
 
     protected void publishMessageAndWaitToBeConsumed(String topic, String message, String groupId) {
-        KafkaOffsets kafkaOffsets = new KafkaOffsets(KAFKA_HOST, KAFKA_RULE.helper().kafkaPort());
-        long previousOffset = Math.max(kafkaOffsets.readOffset(topic, groupId), 0);
+        KafkaConsumerOffsets kafkaConsumerOffsets =
+                new KafkaConsumerOffsets(KAFKA_HOST, KAFKA_RULE.helper().kafkaPort(), groupId);
+
+        long previousOffset = Math.max(kafkaConsumerOffsets.readOffset(topic), 0);
 
         LOG.info("Publishing message {} to topic {}", message, topic);
         KAFKA_RULE.helper().produceStrings(topic, message);
 
         LOG.info("Waiting for message to be consumed from topic {}", topic);
-        await().atMost(5, SECONDS).until(() -> kafkaOffsets.readOffset(topic, groupId), equalTo(previousOffset + 1));
+        await().atMost(5, SECONDS).until(() -> kafkaConsumerOffsets.readOffset(topic), equalTo(previousOffset + 1));
     }
 }

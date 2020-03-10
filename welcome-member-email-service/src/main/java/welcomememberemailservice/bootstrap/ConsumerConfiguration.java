@@ -1,10 +1,13 @@
 package welcomememberemailservice.bootstrap;
 
+import org.apache.kafka.common.serialization.StringDeserializer;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.apache.kafka.clients.consumer.ConsumerConfig.*;
 
 public class ConsumerConfiguration {
 
@@ -25,12 +28,12 @@ public class ConsumerConfiguration {
 
     public Map<String, Object> getConfigs() {
         Map<String, Object> configs = new HashMap<>();
-        configs.put("enable.auto.commit", "false");
-        configs.put("auto.commit.interval.ms", "1000");
-        configs.put("auto.offset.reset", "earliest");
-        configs.put("session.timeout.ms", "30000");
-        configs.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        configs.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        configs.put(ENABLE_AUTO_COMMIT_CONFIG, "false");
+        configs.put(AUTO_COMMIT_INTERVAL_MS_CONFIG, "1000");
+        configs.put(AUTO_OFFSET_RESET_CONFIG, "earliest");
+        configs.put(SESSION_TIMEOUT_MS_CONFIG, "30000");
+        configs.put(KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        configs.put(VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         configs.putAll(this.configs);
         return configs;
     }
