@@ -1,10 +1,13 @@
 package specialmembershipservice.bootstrap;
 
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.apache.kafka.clients.producer.ProducerConfig.*;
 
 public class EventPublisherConfiguration {
 
@@ -24,13 +27,13 @@ public class EventPublisherConfiguration {
 
     public Map<String, Object> getConfigs() {
         Map<String, Object> configs = new HashMap<>();
-        configs.put("acks", "all");
-        configs.put("retries", 1);
-        configs.put("batch.size", 16384);
-        configs.put("linger.ms", 1);
-        configs.put("buffer.memory", 33554432);
-        configs.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-        configs.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+        configs.put(ACKS_CONFIG, "all");
+        configs.put(RETRIES_CONFIG, 1);
+        configs.put(BATCH_SIZE_CONFIG, 16384);
+        configs.put(LINGER_MS_CONFIG, 1);
+        configs.put(BUFFER_MEMORY_CONFIG, 33554432);
+        configs.put(KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configs.put(VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configs.putAll(this.configs);
         return configs;
     }

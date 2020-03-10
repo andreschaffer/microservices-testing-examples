@@ -14,6 +14,7 @@ import welcomememberemailservice.port.outgoing.adapter.email.SmtpEmailSender;
 import welcomememberemailservice.port.outgoing.adapter.email.SmtpEmailSenderException;
 
 import javax.validation.Validator;
+import java.time.Duration;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -60,7 +61,7 @@ public class WelcomeEmailConsumer implements Managed {
         while (!stop.get()) {
             ConsumerRecords<String, String> records;
             try {
-                records = consumer.poll(1000);
+                records = consumer.poll(Duration.ofSeconds(1));
             } catch (WakeupException e) {
                 break;
             }
