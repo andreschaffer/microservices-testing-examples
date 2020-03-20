@@ -16,7 +16,7 @@
     </modules>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>12</java.version>
         <dropwizard.version>2.0.2</dropwizard.version>
         <pact.version>4.0.7</pact.version>
         <jaxb-api.version>2.3.1</jaxb-api.version>
@@ -204,6 +204,19 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                    <showWarnings>true</showWarnings>
+                    <failOnWarning>true</failOnWarning>
+                    <compilerArgs>
+                        <arg>-XDcompilePolicy=simple</arg>
+                        <arg>-Xplugin:ErrorProne</arg>
+                    </compilerArgs>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>com.google.errorprone</groupId>
+                            <artifactId>error_prone_core</artifactId>
+                            <version>2.3.4</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
 

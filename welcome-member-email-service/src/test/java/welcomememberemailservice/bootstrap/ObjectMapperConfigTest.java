@@ -10,7 +10,6 @@ import java.time.ZonedDateTime;
 import static java.time.ZoneOffset.UTC;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 public class ObjectMapperConfigTest {
 
@@ -22,7 +21,7 @@ public class ObjectMapperConfigTest {
         try {
             objectMapper.readValue(dto, BlankDto.class);
         } catch (IOException e) {
-            fail("Should not fail de-serializing unknown fields");
+            throw new AssertionError("Should not fail de-serializing unknown fields", e);
         }
     }
 

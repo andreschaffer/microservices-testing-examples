@@ -16,8 +16,8 @@ import welcomememberemailservice.port.outgoing.adapter.email.SmtpEmailSenderExce
 import javax.validation.Validator;
 import java.time.Duration;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Collections.singletonList;
@@ -30,7 +30,7 @@ public class WelcomeEmailConsumer implements Managed {
     private final KafkaConsumer<String, String> consumer;
     private final MessageParser messageParser;
     private final SmtpEmailSender emailSender;
-    private final AtomicBoolean stop;
+    private final CountDownLatch shutdownLatch;
 
     public WelcomeEmailConsumer(String topic, Map<String, Object> configs, ObjectMapper objectMapper,
                                 Validator validator, SmtpEmailSender emailSender) {
@@ -38,7 +38,7 @@ public class WelcomeEmailConsumer implements Managed {
         this.consumer = new KafkaConsumer<>(checkNotNull(configs));
         this.messageParser = new MessageParser(objectMapper, validator);
         this.emailSender = checkNotNull(emailSender);
-        this.stop = new AtomicBoolean(false);
+        this.shutdownLatch = new CountDownLatch(1);
     }
 
     @Override
@@ -50,22 +50,19 @@ public class WelcomeEmailConsumer implements Managed {
         consumer.subscribe(singletonList(topic));
         LOG.info("Subscribed consumer to topic {}", topic);
 
-        try {
+        try (consumer) {
             loopMessageConsumption();
-        } finally {
-            consumer.close();
         }
     }
 
     private void loopMessageConsumption() {
-        while (!stop.get()) {
-            ConsumerRecords<String, String> records;
+        while (shutdownLatch.getCount() > 0) {
             try {
-                records = consumer.poll(Duration.ofSeconds(1));
+                ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(1));
+                acceptMessages(records);
             } catch (WakeupException e) {
-                break;
+                shutdownLatch.countDown();
             }
-            acceptMessages(records);
         }
     }
 
@@ -99,7 +96,7 @@ public class WelcomeEmailConsumer implements Managed {
 
     @Override
     public void stop() throws Exception {
-        stop.set(true);
         consumer.wakeup();
+        shutdownLatch.await();
     }
 }

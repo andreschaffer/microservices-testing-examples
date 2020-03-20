@@ -15,11 +15,11 @@ import welcomememberemailservice.it.kafka.KafkaConsumerOffsets;
 import welcomememberemailservice.it.smtp.SmtpServerRule;
 
 import java.lang.invoke.MethodHandles;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
 import static io.dropwizard.testing.ResourceHelpers.resourceFilePath;
-import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
@@ -85,6 +85,6 @@ public abstract class IntegrationTestBase {
         KAFKA_RULE.helper().produceStrings(topic, message);
 
         LOG.info("Waiting for message to be consumed from topic {}", topic);
-        await().atMost(5, SECONDS).until(() -> kafkaConsumerOffsets.readOffset(topic), equalTo(previousOffset + 1));
+        await().atMost(Duration.ofSeconds(5)).until(() -> kafkaConsumerOffsets.readOffset(topic), equalTo(previousOffset + 1));
     }
 }
