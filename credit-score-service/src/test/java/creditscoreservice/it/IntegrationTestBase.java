@@ -1,8 +1,8 @@
 package creditscoreservice.it;
 
 import creditscoreservice.bootstrap.CreditScoreServiceApplication;
-import creditscoreservice.bootstrap.CreditScoreServiceConfiguration;
 import creditscoreservice.it.client.ResourcesClient;
+import io.dropwizard.Configuration;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -20,7 +20,7 @@ public abstract class IntegrationTestBase {
     private static final String INTEGRATION_YML = resourceFilePath("integration.yml");
 
     @ClassRule
-    public static final DropwizardAppRule<CreditScoreServiceConfiguration> SERVICE_RULE =
+    public static final DropwizardAppRule<Configuration> SERVICE_RULE =
         new DropwizardAppRule<>(CreditScoreServiceApplication.class, INTEGRATION_YML);
 
     protected static ResourcesClient resourcesClient;
