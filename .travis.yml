@@ -10,7 +10,7 @@ before_script:
 language: java
 
 jdk:
-  - oraclejdk11
+  - oraclejdk12
 
 script:
   # Welcome member email service pipeline
