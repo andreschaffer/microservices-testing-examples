@@ -8,14 +8,14 @@ import io.dropwizard.setup.Environment;
 
 public class CreditScoreServiceApplication extends Application<Configuration> {
 
-    @Override
-    public void run(Configuration configuration, Environment environment) throws Exception {
-        ObjectMapperConfig.applyTo(environment.getObjectMapper());
-        registerResources(environment);
-    }
+  @Override
+  public void run(Configuration configuration, Environment environment) throws Exception {
+    ObjectMapperConfig.applyTo(environment.getObjectMapper());
+    registerResources(environment);
+  }
 
-    private void registerResources(Environment environment) {
-        InMemoryCreditScoreRepository creditScoreRepository = new InMemoryCreditScoreRepository();
-        environment.jersey().register(new CreditScoreResource(creditScoreRepository));
-    }
+  private void registerResources(Environment environment) {
+    InMemoryCreditScoreRepository creditScoreRepository = new InMemoryCreditScoreRepository();
+    environment.jersey().register(new CreditScoreResource(creditScoreRepository));
+  }
 }

@@ -65,7 +65,7 @@ script:
 
 cache:
   directories:
-  - $HOME/.m2
+    - $HOME/.m2
 
 after_success:
   - mvn coveralls:report -Pcode-coverage

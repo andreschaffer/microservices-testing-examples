@@ -7,7 +7,6 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import com.github.charithe.kafka.EphemeralKafkaBroker;
 import com.github.charithe.kafka.KafkaJunitRule;
 import io.dropwizard.testing.junit.DropwizardAppRule;
-
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
@@ -20,12 +19,11 @@ import specialmembershipservice.it.client.ResourcesClient;
 
 public abstract class IntegrationTestBase {
 
+  protected static final String CREDIT_SCORE_SERVICE_HOST = "localhost";
+  protected static final int CREDIT_SCORE_SERVICE_PORT = 8088;
   private static final String INTEGRATION_YML = resourceFilePath("integration.yml");
   private static final int KAFKA_PORT = 9092;
   private static final String SPECIAL_MEMBERSHIP_TOPIC = "special-membership-topic";
-  protected static final String CREDIT_SCORE_SERVICE_HOST = "localhost";
-  protected static final int CREDIT_SCORE_SERVICE_PORT = 8088;
-
   private static final EphemeralKafkaBroker KAFKA_BROKER = EphemeralKafkaBroker.create(KAFKA_PORT);
   private static final KafkaJunitRule KAFKA_RULE = new KafkaJunitRule(KAFKA_BROKER);
   private static final DropwizardAppRule<SpecialMembershipServiceConfiguration> SERVICE_RULE =
@@ -40,7 +38,8 @@ public abstract class IntegrationTestBase {
 
   @BeforeClass
   public static void setUpClass() throws Exception {
-      resourcesClient = new ResourcesClient(SERVICE_RULE.getEnvironment(), SERVICE_RULE.getLocalPort());
+    resourcesClient = new ResourcesClient(SERVICE_RULE.getEnvironment(),
+        SERVICE_RULE.getLocalPort());
   }
 
   protected String readPublishedMessage()
@@ -52,17 +51,17 @@ public abstract class IntegrationTestBase {
   protected String readOneMessage(String topic)
       throws InterruptedException, ExecutionException, TimeoutException {
 
-      return KAFKA_RULE.helper()
-          .consumeStrings(topic, 1)
-          .get(5, SECONDS)
-          .get(0);
+    return KAFKA_RULE.helper()
+        .consumeStrings(topic, 1)
+        .get(5, SECONDS)
+        .get(0);
   }
 
   protected Map<String, Object> specialMembershipDto(String email) {
-      return singletonMap("email", email);
+    return singletonMap("email", email);
   }
 
   protected String creditScoreDto(Integer creditScore) {
-      return String.format("{\"creditScore\":%d}", creditScore);
+    return String.format("{\"creditScore\":%d}", creditScore);
   }
 }

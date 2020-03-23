@@ -1,19 +1,19 @@
 package welcomememberemailservice.port.incoming.adapter.kafka;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import org.hibernate.validator.constraints.Email;
+import javax.validation.constraints.Email;
 
 @JsonTypeName("memberSignedUpEvent")
 public class MemberSignedUpEvent extends Event {
 
-    @Email
-    private String email;
+  @Email
+  private String email;
 
-    public String getEmail() {
-        return email;
-    }
+  public String getEmail() {
+    return email;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 }

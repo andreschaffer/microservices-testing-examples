@@ -8,14 +8,14 @@ import com.github.restdriver.clientdriver.ClientDriverRule;
 
 public class CreditScoreServiceRule extends ClientDriverRule {
 
-    public CreditScoreServiceRule(int port) {
-        super(port);
-    }
+  public CreditScoreServiceRule(int port) {
+    super(port);
+  }
 
-    public void setCreditResponse(String email, ClientDriverResponse giveResponse) {
-        addExpectation(
-            onRequestTo("/credit-scores/" + email)
-                .withMethod(GET),
-            giveResponse);
-    }
+  public void setCreditResponse(String email, ClientDriverResponse giveResponse) {
+    addExpectation(
+        onRequestTo("/credit-scores/" + email)
+            .withMethod(GET),
+        giveResponse);
+  }
 }
