@@ -19,8 +19,8 @@ server:
 logging:
   level: INFO
   loggers:
-      kafka: WARN
-      org.apache.kafka: WARN
-      org.apache.zookeeper: WARN
+    kafka: WARN
+    org.apache.kafka: WARN
+    org.apache.zookeeper: WARN
   appenders:
     - type: console
