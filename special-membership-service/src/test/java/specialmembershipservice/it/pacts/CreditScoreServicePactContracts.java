@@ -4,7 +4,7 @@ import static au.com.dius.pact.core.model.PactSpecVersion.V3;
 import static java.util.Collections.singletonMap;
 import static javax.ws.rs.core.HttpHeaders.CONTENT_TYPE;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static specialmembershipservice.it.pacts.PactConstants.CREDIT_SCORE_SERVICE;
 import static specialmembershipservice.it.pacts.PactConstants.SPECIAL_MEMBERSHIP_SERVICE;

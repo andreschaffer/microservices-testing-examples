@@ -19,8 +19,19 @@
     </dependency>
 
     <dependency>
-      <groupId>io.dropwizard</groupId>
-      <artifactId>dropwizard-client</artifactId>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest</artifactId>
       <scope>test</scope>
     </dependency>
 
@@ -31,14 +42,14 @@
     </dependency>
 
     <dependency>
-      <groupId>au.com.dius</groupId>
-      <artifactId>pact-jvm-provider-junit</artifactId>
+      <groupId>io.dropwizard</groupId>
+      <artifactId>dropwizard-client</artifactId>
       <scope>test</scope>
     </dependency>
 
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
+      <groupId>au.com.dius</groupId>
+      <artifactId>pact-jvm-provider-junit</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

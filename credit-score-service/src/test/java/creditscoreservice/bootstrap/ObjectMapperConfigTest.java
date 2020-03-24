@@ -1,7 +1,7 @@
 package creditscoreservice.bootstrap;
 
 import static java.time.ZoneOffset.UTC;
-import static org.hamcrest.core.IsEqual.equalTo;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
