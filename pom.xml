@@ -226,89 +226,7 @@
         <configuration>
           <source>${java.version}</source>
           <target>${java.version}</target>
-          <showWarnings>true</showWarnings>
-          <failOnWarning>true</failOnWarning>
-          <compilerArgs>
-            <arg>-XDcompilePolicy=simple</arg>
-            <arg>-Xplugin:ErrorProne</arg>
-          </compilerArgs>
-          <annotationProcessorPaths>
-            <path>
-              <groupId>com.google.errorprone</groupId>
-              <artifactId>error_prone_core</artifactId>
-              <version>2.3.4</version>
-            </path>
-          </annotationProcessorPaths>
         </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-enforcer-plugin</artifactId>
-        <version>3.0.0-M3</version>
-        <executions>
-          <execution>
-            <id>enforce</id>
-            <phase>validate</phase>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-            <configuration>
-              <rules>
-                <banDuplicatePomDependencyVersions/>
-                <requireUpperBoundDeps>
-                  <excludes>
-                    <exclude>javax.mail:mail</exclude>
-                  </excludes>
-                </requireUpperBoundDeps>
-              </rules>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <version>3.1.2</version>
-        <configuration>
-          <failOnWarning>true</failOnWarning>
-          <outputXML>true</outputXML>
-          <ignoredUsedUndeclaredDependencies>
-            <!-- part of dropwizard core -->
-            <ignoredUsedUndeclaredDependency>io.dropwizard:*</ignoredUsedUndeclaredDependency>
-            <ignoredUsedUndeclaredDependency>
-              com.fasterxml.jackson.core:*
-            </ignoredUsedUndeclaredDependency>
-            <ignoredUsedUndeclaredDependency>
-              org.hibernate.validator:hibernate-validator:*
-            </ignoredUsedUndeclaredDependency>
-            <ignoredUsedUndeclaredDependency>jakarta.validation:*</ignoredUsedUndeclaredDependency>
-            <ignoredUsedUndeclaredDependency>jakarta.ws.rs:*</ignoredUsedUndeclaredDependency>
-            <ignoredUsedUndeclaredDependency>
-              org.glassfish.jersey.core:*
-            </ignoredUsedUndeclaredDependency>
-            <!-- part of pact jvm junit -->
-            <ignoredUsedUndeclaredDependency>
-              au.com.dius:pact-jvm-core-model:*
-            </ignoredUsedUndeclaredDependency>
-            <ignoredUsedUndeclaredDependency>
-              au.com.dius:pact-jvm-consumer:*
-            </ignoredUsedUndeclaredDependency>
-            <ignoredUsedUndeclaredDependency>
-              au.com.dius:pact-jvm-provider:*
-            </ignoredUsedUndeclaredDependency>
-          </ignoredUsedUndeclaredDependencies>
-        </configuration>
-        <executions>
-          <execution>
-            <id>analyze</id>
-            <phase>test-compile</phase>
-            <goals>
-              <goal>analyze-only</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
 
       <plugin>
@@ -403,6 +321,103 @@
                   <useManifestOnlyJar>false</useManifestOnlyJar>
                   <useSystemClassLoader>true</useSystemClassLoader>
                 </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>static-code-analysis</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+              <showWarnings>true</showWarnings>
+              <failOnWarning>true</failOnWarning>
+              <compilerArgs>
+                <arg>-XDcompilePolicy=simple</arg>
+                <arg>-Xplugin:ErrorProne</arg>
+              </compilerArgs>
+              <annotationProcessorPaths>
+                <path>
+                  <groupId>com.google.errorprone</groupId>
+                  <artifactId>error_prone_core</artifactId>
+                  <version>2.3.4</version>
+                </path>
+              </annotationProcessorPaths>
+            </configuration>
+          </plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-enforcer-plugin</artifactId>
+            <version>3.0.0-M3</version>
+            <executions>
+              <execution>
+                <id>enforce</id>
+                <phase>validate</phase>
+                <goals>
+                  <goal>enforce</goal>
+                </goals>
+                <configuration>
+                  <rules>
+                    <banDuplicatePomDependencyVersions/>
+                    <requireUpperBoundDeps>
+                      <excludes>
+                        <exclude>javax.mail:mail</exclude>
+                      </excludes>
+                    </requireUpperBoundDeps>
+                  </rules>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>3.1.2</version>
+            <configuration>
+              <failOnWarning>true</failOnWarning>
+              <outputXML>true</outputXML>
+              <ignoredUsedUndeclaredDependencies>
+                <!-- part of dropwizard core -->
+                <ignoredUsedUndeclaredDependency>io.dropwizard:*</ignoredUsedUndeclaredDependency>
+                <ignoredUsedUndeclaredDependency>
+                  com.fasterxml.jackson.core:*
+                </ignoredUsedUndeclaredDependency>
+                <ignoredUsedUndeclaredDependency>
+                  org.hibernate.validator:hibernate-validator:*
+                </ignoredUsedUndeclaredDependency>
+                <ignoredUsedUndeclaredDependency>jakarta.validation:*
+                </ignoredUsedUndeclaredDependency>
+                <ignoredUsedUndeclaredDependency>jakarta.ws.rs:*</ignoredUsedUndeclaredDependency>
+                <ignoredUsedUndeclaredDependency>
+                  org.glassfish.jersey.core:*
+                </ignoredUsedUndeclaredDependency>
+                <!-- part of pact jvm junit -->
+                <ignoredUsedUndeclaredDependency>
+                  au.com.dius:pact-jvm-core-model:*
+                </ignoredUsedUndeclaredDependency>
+                <ignoredUsedUndeclaredDependency>
+                  au.com.dius:pact-jvm-consumer:*
+                </ignoredUsedUndeclaredDependency>
+                <ignoredUsedUndeclaredDependency>
+                  au.com.dius:pact-jvm-provider:*
+                </ignoredUsedUndeclaredDependency>
+              </ignoredUsedUndeclaredDependencies>
+            </configuration>
+            <executions>
+              <execution>
+                <id>analyze</id>
+                <phase>test-compile</phase>
+                <goals>
+                  <goal>analyze-only</goal>
+                </goals>
               </execution>
             </executions>
           </plugin>
