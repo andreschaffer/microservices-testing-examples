@@ -15,7 +15,7 @@ jdk:
 script:
   # Welcome member email service pipeline
   ## Build
-  - mvn clean verify -pl welcome-member-email-service -Pcode-coverage
+  - mvn clean verify -pl welcome-member-email-service -Pcode-coverage -Pstatic-code-analysis
   ## Verify pacts
   ### No pacts to verify
   ## Create pacts
@@ -34,7 +34,7 @@ script:
 
   # Special membership service pipeline
   ## Build
-  - mvn clean verify -pl special-membership-service -Pcode-coverage
+  - mvn clean verify -pl special-membership-service -Pcode-coverage -Pstatic-code-analysis
   ## Verify pacts
   - mvn verify -pl special-membership-service -Pprovider-pacts -Dpact.verifier.publishResults=true -Dpact.provider.version=`git rev-parse --short HEAD` -Dpactbroker.tags=prod -Dpactbroker.user=rw_user -Dpactbroker.pass=rw_pass
   ## Create pacts
@@ -53,7 +53,7 @@ script:
 
   # Credit score service pipeline
   ## Build
-  - mvn clean verify -pl credit-score-service -Pcode-coverage
+  - mvn clean verify -pl credit-score-service -Pcode-coverage -Pstatic-code-analysis
   ## Verify pacts
   - mvn verify -pl credit-score-service -Pprovider-pacts -Dpact.verifier.publishResults=true -Dpact.provider.version=`git rev-parse --short HEAD` -Dpactbroker.tags=prod -Dpactbroker.user=rw_user -Dpactbroker.pass=rw_pass
   ## Create pacts
