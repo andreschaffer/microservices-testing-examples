@@ -8,7 +8,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.dropwizard.jackson.Discoverable;
 import javax.validation.constraints.NotBlank;
 
-@JsonTypeInfo(use = NAME, include = PROPERTY, property = "@type", visible = true, defaultImpl = Event.class)
+@JsonTypeInfo(use = NAME, include = PROPERTY, property = "@type", visible = true,
+    defaultImpl = Event.class)
 public class Event implements Discoverable {
 
   @NotBlank

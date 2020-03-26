@@ -24,7 +24,8 @@ public class CreditScoreIT extends IntegrationTestBase {
   @Test
   public void updateCreditScore() throws Exception {
     String email = "slumdog.millionaire@example.com";
-    Integer oldCreditScore = 300, newCreditScore = 850;
+    Integer oldCreditScore = 300;
+    Integer newCreditScore = 850;
     setupCreditScoreState(email, oldCreditScore);
 
     Response response = resourcesClient.putCreditScore(email, creditScoreDto(newCreditScore));

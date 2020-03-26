@@ -79,7 +79,7 @@ public abstract class IntegrationTestBase {
     KafkaConsumerOffsets kafkaConsumerOffsets =
         new KafkaConsumerOffsets(KAFKA_HOST, KAFKA_RULE.helper().kafkaPort(), groupId);
 
-    long previousOffset = Math.max(kafkaConsumerOffsets.readOffset(topic), 0);
+    final long previousOffset = Math.max(kafkaConsumerOffsets.readOffset(topic), 0);
 
     LOG.info("Publishing message {} to topic {}", message, topic);
     KAFKA_RULE.helper().produceStrings(topic, message);
