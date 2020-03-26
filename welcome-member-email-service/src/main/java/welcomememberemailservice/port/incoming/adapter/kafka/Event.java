@@ -6,9 +6,10 @@ import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.dropwizard.jackson.Discoverable;
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 
-@JsonTypeInfo(use = NAME, include = PROPERTY, property = "@type", visible = true, defaultImpl = Event.class)
+@JsonTypeInfo(use = NAME, include = PROPERTY, property = "@type", visible = true,
+    defaultImpl = Event.class)
 public class Event implements Discoverable {
 
   @NotBlank

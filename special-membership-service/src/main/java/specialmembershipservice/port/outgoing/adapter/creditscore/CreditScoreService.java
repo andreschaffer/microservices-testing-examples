@@ -38,8 +38,9 @@ public class CreditScoreService {
   }
 
   private boolean isNetworkRelated(RuntimeException e) {
-    return e instanceof ProcessingException &&
-        (e.getCause() instanceof ConnectException ||
-            e.getCause() instanceof SocketTimeoutException);
+    return e instanceof ProcessingException
+        &&
+        (e.getCause() instanceof ConnectException
+            || e.getCause() instanceof SocketTimeoutException);
   }
 }

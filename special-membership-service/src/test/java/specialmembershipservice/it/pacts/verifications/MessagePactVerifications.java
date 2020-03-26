@@ -3,7 +3,7 @@ package specialmembershipservice.it.pacts.verifications;
 import static com.github.restdriver.clientdriver.RestClientDriver.giveResponse;
 import static java.util.Collections.singletonList;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static specialmembershipservice.it.pacts.PactConstants.PACT_BROKER_PORT;
 import static specialmembershipservice.it.pacts.PactConstants.PACT_BROKER_URL;

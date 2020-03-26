@@ -1,6 +1,6 @@
 package creditscoreservice.it;
 
-import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -24,7 +24,8 @@ public class CreditScoreIT extends IntegrationTestBase {
   @Test
   public void updateCreditScore() throws Exception {
     String email = "slumdog.millionaire@example.com";
-    Integer oldCreditScore = 300, newCreditScore = 850;
+    Integer oldCreditScore = 300;
+    Integer newCreditScore = 850;
     setupCreditScoreState(email, oldCreditScore);
 
     Response response = resourcesClient.putCreditScore(email, creditScoreDto(newCreditScore));

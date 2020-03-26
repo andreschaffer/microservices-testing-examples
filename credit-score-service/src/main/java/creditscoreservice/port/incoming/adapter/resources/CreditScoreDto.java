@@ -3,8 +3,9 @@ package creditscoreservice.port.incoming.adapter.resources;
 import static com.fasterxml.jackson.annotation.JsonProperty.Access.READ_ONLY;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.Range;
 
 public class CreditScoreDto {
 
@@ -12,7 +13,8 @@ public class CreditScoreDto {
   private String email;
 
   @NotNull
-  @Range(min = 300, max = 850)
+  @Min(300)
+  @Max(850)
   private Integer creditScore;
 
   public String getEmail() {
