@@ -145,7 +145,7 @@ Meanwhile, the pipeline of Project A was hanging in the **Can I Deploy?** until 
 * **Deploy:** with confidence that it can interact with its neighbours, we can deploy Project A to production.
 * **Tag Pacts as Prod:** tag all its pacts and verifications as prod in the pact broker.
 
-**Disclaimer**: You can see these building blocks in our travis file, but the flow looks a little bit different whereas the provider support pipelines are simulated.
+**Disclaimer**: You can see these building blocks in our github actions build file, but the flow there looks a little bit different whereas the support pipelines from the providers are simulated.
 
 
 # Contributing
