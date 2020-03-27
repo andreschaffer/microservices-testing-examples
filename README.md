@@ -1,5 +1,5 @@
 ![Build](https://github.com/andreschaffer/microservices-testing-examples/workflows/Build/badge.svg)
-[![Coverage Status](https://coveralls.io/repos/github/andreschaffer/microservices-testing-examples/badge.svg?branch=master)](https://coveralls.io/github/andreschaffer/microservices-testing-examples?branch=master)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/77358dd72d38afa63fce/test_coverage)](https://codeclimate.com/github/andreschaffer/microservices-testing-examples/test_coverage)
 [![Maintainability](https://api.codeclimate.com/v1/badges/77358dd72d38afa63fce/maintainability)](https://codeclimate.com/github/andreschaffer/microservices-testing-examples/maintainability)
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=andreschaffer/microservices-testing-examples)](https://dependabot.com)
 
