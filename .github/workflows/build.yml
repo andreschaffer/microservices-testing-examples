@@ -91,6 +91,16 @@ jobs:
       - name: Coveralls Report
         run: mvn coveralls:report -Pcode-coverage -DrepoToken=${{ secrets.COVERALLS_TOKEN }}
 
+      - name: Code Coverage Report to Code Climate
+        run: |
+          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+          chmod +x ./cc-test-reporter
+          export GIT_BRANCH="${GITHUB_REF/refs\/heads\//}"
+          export JACOCO_SOURCE_PATH="credit-score-service/src/main/java special-membership-service/src/main/java welcome-member-email-service/src/main/java"
+          mvn jacoco:report-aggregate -Pcode-coverage
+          ./cc-test-reporter format-coverage -t jacoco target/site/jacoco-aggregate/jacoco.xml
+          ./cc-test-reporter upload-coverage -r "${{ secrets.CC_TEST_REPORTER_ID }}"
+
       - name: Stop dependencies with docker-compose
         run: docker-compose -f pact-tools/pact-broker/docker-compose.yml down
         if: always()
