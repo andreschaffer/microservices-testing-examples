@@ -1,0 +1,96 @@
+# This workflow will build a Java project with Maven
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: Build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Start dependencies with docker-compose
+        run: docker-compose -f pact-tools/pact-broker/docker-compose.yml up -d
+
+      - name: Build pact-cli
+        run: docker build -t pact-cli pact-tools/pact-cli
+
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 12
+
+      - name: Cache
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Build welcome-member-email-service
+        run: |
+          # build
+          mvn clean verify -pl welcome-member-email-service -Pcode-coverage -Pstatic-code-analysis
+          # verify pacts
+          ## No pacts to verify
+          # create pacts
+          mvn verify -pl welcome-member-email-service -Pconsumer-pacts
+          docker run --rm --net host -v `pwd`/welcome-member-email-service/target/pacts:/target/pacts pact-cli publish /target/pacts --consumer-app-version `git rev-parse --short HEAD` --tag `git rev-parse --abbrev-ref HEAD` --broker-base-url localhost --broker-username=rw_user --broker-password=rw_pass
+          # simulate that we run the providers' support pipelines
+          ## simulate that there is a prod version of the provider deployed
+          docker run --rm --net host pact-cli create-version-tag --pacticipant special-membership-service --version `git rev-parse --short HEAD` --tag prod --broker-base-url localhost --broker-username=rw_user --broker-password=rw_pass
+          ## verify pacts of welcome member email service that were just published
+          mvn verify -pl special-membership-service -Pprovider-pacts -Dpact.verifier.publishResults=true -Dpact.provider.version=`git rev-parse --short HEAD` -Dpactbroker.consumers=welcome-member-email-service -Dpactbroker.tags=`git rev-parse --abbrev-ref HEAD` -Dpactbroker.user=rw_user -Dpactbroker.pass=rw_pass
+          # meanwhile, this is happening in the welcome member email service pipeline
+          # can-i-deploy
+          docker run --rm --net host pact-cli can-i-deploy -v --pacticipant welcome-member-email-service --version `git rev-parse --short HEAD` --to prod --broker-base-url localhost --broker-username=rw_user --broker-password=rw_pass
+          # tag pacts as production
+          docker run --rm --net host pact-cli create-version-tag --pacticipant welcome-member-email-service --version `git rev-parse --short HEAD` --tag prod --broker-base-url localhost --broker-username=rw_user --broker-password=rw_pass
+
+      - name: Build special-membership-service
+        run: |
+          # build
+          mvn clean verify -pl special-membership-service -Pcode-coverage -Pstatic-code-analysis
+          # verify pacts
+          mvn verify -pl special-membership-service -Pprovider-pacts -Dpact.verifier.publishResults=true -Dpact.provider.version=`git rev-parse --short HEAD` -Dpactbroker.tags=prod -Dpactbroker.user=rw_user -Dpactbroker.pass=rw_pass
+          # create pacts
+          mvn verify -pl special-membership-service -Pconsumer-pacts
+          docker run --rm --net host -v `pwd`/special-membership-service/target/pacts:/target/pacts pact-cli publish /target/pacts --consumer-app-version `git rev-parse --short HEAD` --tag `git rev-parse --abbrev-ref HEAD` --broker-base-url localhost --broker-username=rw_user --broker-password=rw_pass
+          # simulate that we run the providers' support pipelines
+          ## simulate that there is a prod version of the provider deployed
+          docker run --rm --net host pact-cli create-version-tag --pacticipant credit-score-service --version `git rev-parse --short HEAD` --tag prod --broker-base-url localhost --broker-username=rw_user --broker-password=rw_pass
+          ## verify pacts of special membership service that were just published
+          mvn verify -pl credit-score-service -Pprovider-pacts -Dpact.verifier.publishResults=true -Dpact.provider.version=`git rev-parse --short HEAD` -Dpactbroker.consumers=special-membership-service -Dpactbroker.tags=`git rev-parse --abbrev-ref HEAD` -Dpactbroker.user=rw_user -Dpactbroker.pass=rw_pass
+          # meanwhile, this is happening in the special membership service pipeline
+          # can-i-deploy
+          docker run --rm --net host pact-cli can-i-deploy -v --pacticipant special-membership-service --version `git rev-parse --short HEAD` --to prod --broker-base-url localhost --broker-username=rw_user --broker-password=rw_pass
+          # tag pacts as production
+          docker run --rm --net host pact-cli create-version-tag --pacticipant special-membership-service --version `git rev-parse --short HEAD` --tag prod --broker-base-url localhost --broker-username=rw_user --broker-password=rw_pass
+
+      - name: Build credit-score-service
+        run: |
+          # build
+          mvn clean verify -pl credit-score-service -Pcode-coverage -Pstatic-code-analysis
+          # verify pacts
+          mvn verify -pl credit-score-service -Pprovider-pacts -Dpact.verifier.publishResults=true -Dpact.provider.version=`git rev-parse --short HEAD` -Dpactbroker.tags=prod -Dpactbroker.user=rw_user -Dpactbroker.pass=rw_pass
+          # create pacts
+          ## no pacts to create
+          # can-i-deploy
+          ## no need to run since it doesn't create any pacts
+          # tag pacts as production
+          docker run --rm --net host pact-cli create-version-tag --pacticipant credit-score-service --version `git rev-parse --short HEAD` --tag prod --broker-base-url localhost --broker-username=rw_user --broker-password=rw_pass
+
+      - name: Coveralls Report
+        run: mvn coveralls:report -Pcode-coverage -DrepoToken=${{ secrets.COVERALLS_TOKEN }}
+
+      - name: Stop dependencies with docker-compose
+        run: docker-compose -f pact-tools/pact-broker/docker-compose.yml down
+        if: always()
