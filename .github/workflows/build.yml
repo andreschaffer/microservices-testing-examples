@@ -97,8 +97,13 @@ jobs:
           chmod +x ./cc-test-reporter
           export GIT_BRANCH="${GITHUB_REF/refs\/heads\//}"
           export JACOCO_SOURCE_PATH="credit-score-service/src/main/java special-membership-service/src/main/java welcome-member-email-service/src/main/java"
-          mvn jacoco:report-aggregate -Pcode-coverage
-          ./cc-test-reporter format-coverage -t jacoco target/site/jacoco-aggregate/jacoco.xml
+          ./cc-test-reporter format-coverage -t jacoco credit-score-service/target/site/jacoco/jacoco.xml -o coverage/credit-score-service-unit.json
+          ./cc-test-reporter format-coverage -t jacoco credit-score-service/target/site/jacoco-it/jacoco.xml -o coverage/credit-score-service-it.json
+          ./cc-test-reporter format-coverage -t jacoco special-membership-service/target/site/jacoco/jacoco.xml -o coverage/special-membership-service-unit.json
+          ./cc-test-reporter format-coverage -t jacoco special-membership-service/target/site/jacoco-it/jacoco.xml -o coverage/special-membership-service-it.json
+          ./cc-test-reporter format-coverage -t jacoco welcome-member-email-service/target/site/jacoco/jacoco.xml -o coverage/welcome-member-email-service-unit.json
+          ./cc-test-reporter format-coverage -t jacoco welcome-member-email-service/target/site/jacoco-it/jacoco.xml -o coverage/welcome-member-email-service-it.json
+          ./cc-test-reporter sum-coverage coverage/*.json -p 6
           ./cc-test-reporter upload-coverage -r "${{ secrets.CC_TEST_REPORTER_ID }}"
 
       - name: Stop dependencies with docker-compose
