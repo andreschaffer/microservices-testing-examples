@@ -88,10 +88,7 @@ jobs:
           # tag pacts as production
           docker run --rm --net host pact-cli create-version-tag --pacticipant credit-score-service --version `git rev-parse --short HEAD` --tag prod --broker-base-url localhost --broker-username=rw_user --broker-password=rw_pass
 
-      - name: Coveralls Report
-        run: mvn coveralls:report -Pcode-coverage -DrepoToken=${{ secrets.COVERALLS_TOKEN }}
-
-      - name: Code Coverage Report to Code Climate
+      - name: Code Coverage Report
         run: |
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
           chmod +x ./cc-test-reporter
