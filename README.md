@@ -15,12 +15,12 @@ The problem with alternative _b_ is that the mocks might not behave the same way
 and thus we might miss integration problems.
 
 So, how to proceed? Glad you asked.  
-This project will focus on [Consumer Driven Contract Testing](http://martinfowler.com/articles/consumerDrivenContracts.html) to overcome those limitations. 
-It is a technique based on mocks, so that we benefit from fast feedback and no scalability issues, that attacks
+This project will focus on [Consumer-Driven Contract Testing](http://martinfowler.com/articles/consumerDrivenContracts.html) to overcome those limitations. 
+It is a technique based on mocks, so that we benefit from fast feedback and no scalability issues, and attacks
 the problem of potential incompatible behavior by recording the interactions with the mocks 
 and then allowing the real services to test that they behave the same way the mock did instead.
 
-Some of the tools that support Consumer Driven Contract Testing are:
+Some of the tools that support Consumer-Driven Contract Testing are:
 [Pact](https://docs.pact.io/),
 [Pacto](http://thoughtworks.github.io/pacto/)
 and [Spring Cloud Contract](https://cloud.spring.io/spring-cloud-contract/spring-cloud-contract.html).
