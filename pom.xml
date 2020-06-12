@@ -16,7 +16,7 @@
   </modules>
 
   <properties>
-    <java.version>12</java.version>
+    <java.version>14</java.version>
     <dropwizard.version>2.0.10</dropwizard.version>
     <pact.version>4.0.10</pact.version>
     <kotlin.version>1.3.72</kotlin.version>
@@ -224,8 +224,7 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.8.1</version>
         <configuration>
-          <source>${java.version}</source>
-          <target>${java.version}</target>
+          <release>${java.version}</release>
         </configuration>
       </plugin>
 
