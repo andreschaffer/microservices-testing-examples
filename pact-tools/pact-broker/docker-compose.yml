@@ -3,7 +3,7 @@ services:
   postgres:
     image: postgres:9.6.1-alpine
   pact-broker:
-    image: dius/pact-broker:2.39.0-1
+    image: pactfoundation/pact-broker:2.59.2.0
     links:
       - postgres
     environment:
@@ -14,4 +14,4 @@ services:
       - PACT_BROKER_BASIC_AUTH_READ_ONLY_USERNAME=ro_user
       - PACT_BROKER_BASIC_AUTH_READ_ONLY_PASSWORD=ro_pass
     ports:
-      - "80:80"
+      - "9292:9292"
