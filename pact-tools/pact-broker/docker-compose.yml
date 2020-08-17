@@ -1,14 +1,28 @@
-version: '2'
+version: "2.1"
 services:
+
   postgres:
-    image: postgres:9.6.1-alpine
+    image: postgres:9.6.19-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    healthcheck:
+      test: [ "CMD-SHELL", "psql -h 'localhost' -U 'postgres' -c '\\l'" ]
+      interval: 1s
+      timeout: 1s
+      retries: 10
+
   pact-broker:
     image: pactfoundation/pact-broker:2.59.2.0
+    depends_on:
+      postgres:
+        condition: service_healthy
     links:
       - postgres
     environment:
       - PACT_BROKER_DATABASE_HOST=postgres
       - PACT_BROKER_DATABASE_USERNAME=postgres
+      - PACT_BROKER_DATABASE_PASSWORD=postgres
       - PACT_BROKER_BASIC_AUTH_USERNAME=rw_user
       - PACT_BROKER_BASIC_AUTH_PASSWORD=rw_pass
       - PACT_BROKER_BASIC_AUTH_READ_ONLY_USERNAME=ro_user
