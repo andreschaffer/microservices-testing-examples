@@ -11,7 +11,7 @@ public abstract class Event {
   private final String type;
   private final ZonedDateTime timestamp;
 
-  public Event(String type, ZonedDateTime timestamp) {
+  protected Event(String type, ZonedDateTime timestamp) {
     this.type = checkNotNull(type);
     this.timestamp = checkNotNull(timestamp);
   }
