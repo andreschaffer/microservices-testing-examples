@@ -71,7 +71,7 @@ For the credit-score-service, we build it, verify consumers' pacts and tag the v
 ```bash
 mvn clean verify -pl credit-score-service
 mvn verify -pl credit-score-service -Pprovider-pacts -Dpact.verifier.publishResults=true -Dpact.provider.version=`git rev-parse --short HEAD` -Dpactbroker.tags=prod -Dpactbroker.user=rw_user -Dpactbroker.pass=rw_pass
-docker run --rm --net host pactfoundation/pact-cli:0.12.3.0 create-version-tag --pacticipant credit-score-service --version `git rev-parse --short HEAD` --tag prod --broker-base-url localhost:9292 --broker-username=rw_user --broker-password=rw_pass
+docker run --rm --net host pactfoundation/pact-cli:0.12.3.0 broker create-version-tag --pacticipant credit-score-service --version `git rev-parse --short HEAD` --tag prod --broker-base-url localhost:9292 --broker-username=rw_user --broker-password=rw_pass
 ```
 
 ## Test separation
