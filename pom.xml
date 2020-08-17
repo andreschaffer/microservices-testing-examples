@@ -55,13 +55,19 @@
       <dependency>
         <groupId>com.github.charithe</groupId>
         <artifactId>kafka-junit</artifactId>
-        <version>4.1.9</version>
+        <version>4.1.10</version>
         <exclusions>
           <exclusion>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
           </exclusion>
         </exclusions>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.zookeeper</groupId>
+        <artifactId>zookeeper</artifactId>
+        <version>3.5.8</version>
       </dependency>
 
       <dependency>
