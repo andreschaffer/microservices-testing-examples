@@ -22,7 +22,7 @@
     <kotlin.version>1.4.0</kotlin.version>
     <netty.version>4.1.51.Final</netty.version>
     <error_prone.version>2.4.0</error_prone.version>
-    <mvn-test-plugins.version>3.0.0-M4</mvn-test-plugins.version>
+    <mvn-test-plugins.version>3.0.0-M5</mvn-test-plugins.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
