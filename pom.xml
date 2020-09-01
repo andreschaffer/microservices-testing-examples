@@ -17,7 +17,7 @@
 
   <properties>
     <java.version>14</java.version>
-    <dropwizard.version>2.0.12</dropwizard.version>
+    <dropwizard.version>2.0.13</dropwizard.version>
     <pact.version>4.0.10</pact.version>
     <kotlin.version>1.4.0</kotlin.version>
     <netty.version>4.1.51.Final</netty.version>
