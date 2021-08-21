@@ -26,6 +26,7 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 14
+          distribution: 'adopt'
 
       - name: Cache
         uses: actions/cache@v2.1.4
@@ -89,6 +90,7 @@ jobs:
           docker run --rm --net host ${PACT_CLI_IMG} broker create-version-tag --pacticipant credit-score-service --version `git rev-parse --short HEAD` --tag prod --broker-base-url ${PACT_BROKER_URL} --broker-username=rw_user --broker-password=rw_pass
 
       - name: Code Coverage Report
+        if: ${{ github.actor != 'dependabot[bot]' }}
         env:
           GIT_BRANCH: ${GITHUB_REF/refs\/heads\//}
           JACOCO_SOURCE_PATH: credit-score-service/src/main/java special-membership-service/src/main/java welcome-member-email-service/src/main/java
