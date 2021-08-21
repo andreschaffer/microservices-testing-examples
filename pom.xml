@@ -19,7 +19,7 @@
     <java.version>14</java.version>
     <dropwizard.version>2.0.20</dropwizard.version>
     <pact.version>4.0.10</pact.version>
-    <kotlin.version>1.5.20</kotlin.version>
+    <kotlin.version>1.5.21</kotlin.version>
     <netty.version>4.1.65.Final</netty.version>
     <error_prone.version>2.4.0</error_prone.version>
     <mvn-test-plugins.version>3.0.0-M4</mvn-test-plugins.version>
@@ -92,7 +92,7 @@
       <dependency>
         <groupId>com.jayway.jsonpath</groupId>
         <artifactId>json-path-assert</artifactId>
-        <version>2.5.0</version>
+        <version>2.6.0</version>
       </dependency>
 
       <dependency>
@@ -195,7 +195,7 @@
       <dependency>
         <groupId>org.checkerframework</groupId>
         <artifactId>checker-qual</artifactId>
-        <version>3.15.0</version>
+        <version>3.17.0</version>
       </dependency>
 
       <dependency>
@@ -472,7 +472,7 @@
           <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.6</version>
+            <version>0.8.7</version>
             <executions>
               <execution>
                 <id>prepare-agent</id>
