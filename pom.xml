@@ -21,7 +21,7 @@
     <pact.version>4.0.10</pact.version>
     <kotlin.version>1.6.10</kotlin.version>
     <netty.version>4.1.73.Final</netty.version>
-    <error_prone.version>2.10.0</error_prone.version>
+    <error_prone.version>2.11.0</error_prone.version>
     <mvn-test-plugins.version>3.0.0-M4</mvn-test-plugins.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -189,7 +189,7 @@
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
-        <version>1.7.33</version>
+        <version>1.7.35</version>
       </dependency>
 
       <dependency>
