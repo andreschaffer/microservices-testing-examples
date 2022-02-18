@@ -206,12 +206,6 @@
       </dependency>
 
       <dependency>
-        <groupId>org.apache.zookeeper</groupId>
-        <artifactId>zookeeper</artifactId>
-        <version>3.5.7</version>
-      </dependency>
-
-      <dependency>
         <groupId>io.netty</groupId>
         <artifactId>netty-handler</artifactId>
         <version>${netty.version}</version>
@@ -245,6 +239,12 @@
         <groupId>com.google.errorprone</groupId>
         <artifactId>error_prone_annotations</artifactId>
         <version>${error_prone.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>commons-codec</groupId>
+        <artifactId>commons-codec</artifactId>
+        <version>1.11</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -424,7 +424,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-enforcer-plugin</artifactId>
-            <version>3.0.0-M3</version>
+            <version>3.0.0</version>
             <executions>
               <execution>
                 <id>enforce</id>
@@ -438,6 +438,11 @@
                     <requireUpperBoundDeps>
                       <excludes>
                         <exclude>javax.mail:mail</exclude>
+                        <exclude>log4j:log4j</exclude>
+                        <exclude>org.slf4j:log4j-over-slf4j</exclude>
+                        <exclude>org.slf4j:jcl-over-slf4j</exclude>
+                        <exclude>org.jboss.logging:jboss-logging</exclude>
+                        <exclude>org.testng:testng</exclude>
                       </excludes>
                     </requireUpperBoundDeps>
                   </rules>
