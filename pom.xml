@@ -46,12 +46,6 @@
         <groupId>io.dropwizard</groupId>
         <artifactId>dropwizard-testing</artifactId>
         <version>${dropwizard.version}</version>
-        <exclusions>
-          <exclusion>
-            <groupId>org.hibernate.validator</groupId>
-            <artifactId>hibernate-core</artifactId>
-          </exclusion>
-        </exclusions>
       </dependency>
 
       <dependency>
