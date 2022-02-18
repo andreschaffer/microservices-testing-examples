@@ -212,12 +212,6 @@
       </dependency>
 
       <dependency>
-        <groupId>org.apache.zookeeper</groupId>
-        <artifactId>zookeeper</artifactId>
-        <version>3.5.7</version>
-      </dependency>
-
-      <dependency>
         <groupId>io.netty</groupId>
         <artifactId>netty-handler</artifactId>
         <version>${netty.version}</version>
