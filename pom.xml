@@ -19,10 +19,10 @@
     <java.version>14</java.version>
     <dropwizard.version>2.1.1</dropwizard.version>
     <pact.version>4.0.10</pact.version>
-    <kotlin.version>1.7.0</kotlin.version>
+    <kotlin.version>1.7.10</kotlin.version>
     <jersey.version>2.36</jersey.version>
-    <netty.version>4.1.78.Final</netty.version>
-    <error_prone.version>2.14.0</error_prone.version>
+    <netty.version>4.1.80.Final</netty.version>
+    <error_prone.version>2.15.0</error_prone.version>
     <mvn-test-plugins.version>3.0.0-M7</mvn-test-plugins.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -196,7 +196,7 @@
       <dependency>
         <groupId>org.checkerframework</groupId>
         <artifactId>checker-qual</artifactId>
-        <version>3.22.2</version>
+        <version>3.24.0</version>
       </dependency>
 
       <dependency>
@@ -396,7 +396,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-checkstyle-plugin</artifactId>
-            <version>3.1.2</version>
+            <version>3.2.0</version>
             <configuration>
               <encoding>UTF-8</encoding>
               <consoleOutput>true</consoleOutput>
