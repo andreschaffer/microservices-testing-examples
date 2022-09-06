@@ -19,6 +19,26 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: "Honeycomb: setup recording"
+        uses: honeycombio/gha-buildevents@v1
+        with:
+    # Required: a Honeycomb API key - needed to send traces.
+    #   must be set in your GitHub repository under Settings > Secrets > Actions
+          apikey: ${{ secrets.BUILDEVENTS_APIKEY }}
+
+    # Required: the Honeycomb dataset to send traces to
+          dataset: mydataset
+
+    # Required: the job status, this will be used in the post section and sent
+    #   as status of the trace. Must always be ${{ job.status }}.
+          job-status: ${{ job.status }}
+
+    # Optional: this should only be used in combination with matrix builds. Set
+    # this to a value uniquely describing each matrix configuration.
+    # matrix-key: ${{ matrix.service }}
+
+
+
       - name: Start dependencies with docker-compose
         run: docker-compose -f pact-tools/pact-broker/docker-compose.yml up -d
 
