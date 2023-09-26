@@ -57,7 +57,7 @@
       <dependency>
         <groupId>com.github.charithe</groupId>
         <artifactId>kafka-junit</artifactId>
-        <version>4.1.11</version>
+        <version>4.2.7</version>
         <exclusions>
           <exclusion>
             <groupId>org.junit.jupiter</groupId>
