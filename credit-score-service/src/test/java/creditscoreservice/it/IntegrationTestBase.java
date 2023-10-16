@@ -2,30 +2,32 @@ package creditscoreservice.it;
 
 import static io.dropwizard.testing.ResourceHelpers.resourceFilePath;
 import static java.util.Collections.singletonMap;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
 
 import creditscoreservice.bootstrap.CreditScoreServiceApplication;
 import creditscoreservice.it.client.ResourcesClient;
-import io.dropwizard.Configuration;
-import io.dropwizard.testing.junit.DropwizardAppRule;
+import io.dropwizard.core.Configuration;
+import io.dropwizard.testing.junit5.DropwizardAppExtension;
+import jakarta.ws.rs.core.Response;
 import java.util.Map;
-import javax.ws.rs.core.Response;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
 public abstract class IntegrationTestBase {
 
   private static final String INTEGRATION_YML = resourceFilePath("integration.yml");
 
-  @ClassRule
-  public static final DropwizardAppRule<Configuration> SERVICE_RULE =
-      new DropwizardAppRule<>(CreditScoreServiceApplication.class, INTEGRATION_YML);
+  @RegisterExtension
+  @Order(Integer.MAX_VALUE)
+  public static final DropwizardAppExtension<Configuration> SERVICE_RULE =
+      new DropwizardAppExtension<>(CreditScoreServiceApplication.class, INTEGRATION_YML);
 
   protected static ResourcesClient resourcesClient;
 
-  @BeforeClass
-  public static void setUpClass() throws Exception {
+  @BeforeAll
+  public static void setUpClass() {
     resourcesClient = new ResourcesClient(SERVICE_RULE.getEnvironment(),
         SERVICE_RULE.getLocalPort());
   }

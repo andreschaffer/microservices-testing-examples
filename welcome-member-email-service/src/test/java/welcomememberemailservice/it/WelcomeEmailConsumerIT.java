@@ -1,11 +1,12 @@
 package welcomememberemailservice.it;
 
 import static java.lang.String.format;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.subethamail.wiser.WiserMessage;
+
 
 public class WelcomeEmailConsumerIT extends IntegrationTestBase {
 

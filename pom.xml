@@ -16,12 +16,13 @@
   </modules>
 
   <properties>
-    <java.version>14</java.version>
+    <java.version>19</java.version>
     <dropwizard.version>4.0.2</dropwizard.version>
-    <pact.version>4.0.10</pact.version>
+    <pact.version>4.6.3</pact.version>
     <kotlin.version>1.9.10</kotlin.version>
-    <jersey.version>2.37</jersey.version>
+    <jersey.version>3.0.11</jersey.version>
     <netty.version>4.1.98.Final</netty.version>
+    <junit.version>5.10.0</junit.version>
     <error_prone.version>2.22.0</error_prone.version>
     <mvn-test-plugins.version>3.1.2</mvn-test-plugins.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -55,21 +56,15 @@
       </dependency>
 
       <dependency>
-        <groupId>com.github.charithe</groupId>
-        <artifactId>kafka-junit</artifactId>
-        <version>4.1.11</version>
-        <exclusions>
-          <exclusion>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-          </exclusion>
-        </exclusions>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>kafka</artifactId>
+        <version>1.19.1</version>
       </dependency>
 
       <dependency>
-        <groupId>org.apache.zookeeper</groupId>
-        <artifactId>zookeeper</artifactId>
-        <version>3.5.8</version>
+        <groupId>org.wiremock</groupId>
+        <artifactId>wiremock</artifactId>
+        <version>3.2.0</version>
       </dependency>
 
       <dependency>
@@ -97,39 +92,22 @@
       </dependency>
 
       <dependency>
-        <groupId>com.github.rest-driver</groupId>
-        <artifactId>rest-client-driver</artifactId>
-        <version>2.0.0</version>
-        <exclusions>
-          <exclusion>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-server</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-
-      <dependency>
-        <groupId>au.com.dius</groupId>
-        <artifactId>pact-jvm-consumer-junit</artifactId>
+        <groupId>au.com.dius.pact.consumer</groupId>
+        <artifactId>junit5</artifactId>
         <version>${pact.version}</version>
       </dependency>
 
       <dependency>
-        <groupId>au.com.dius</groupId>
-        <artifactId>pact-jvm-provider-junit</artifactId>
+        <groupId>au.com.dius.pact.provider</groupId>
+        <artifactId>junit5</artifactId>
         <version>${pact.version}</version>
       </dependency>
 
       <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>4.13.2</version>
-        <exclusions>
-          <exclusion>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-core</artifactId>
-          </exclusion>
-        </exclusions>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <version>${junit.version}</version>
+        <scope>test</scope>
       </dependency>
 
       <dependency>
@@ -185,12 +163,6 @@
         <groupId>commons-io</groupId>
         <artifactId>commons-io</artifactId>
         <version>2.13.0</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-api</artifactId>
-        <version>1.7.36</version>
       </dependency>
 
       <dependency>
@@ -398,7 +370,8 @@
             <artifactId>maven-checkstyle-plugin</artifactId>
             <version>3.3.0</version>
             <configuration>
-              <encoding>UTF-8</encoding>
+              <inputEncoding>UTF-8</inputEncoding>
+              <outputEncoding>UTF-8</outputEncoding>
               <consoleOutput>true</consoleOutput>
               <failsOnError>true</failsOnError>
               <violationSeverity>warning</violationSeverity>
@@ -424,7 +397,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-enforcer-plugin</artifactId>
-            <version>3.2.1</version>
+            <version>3.4.1</version>
             <executions>
               <execution>
                 <id>enforce</id>

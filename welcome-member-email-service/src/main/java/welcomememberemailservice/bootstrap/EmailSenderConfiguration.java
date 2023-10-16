@@ -1,8 +1,8 @@
 package welcomememberemailservice.bootstrap;
 
+import jakarta.validation.constraints.NotBlank;
 import java.util.Properties;
 import javax.mail.Session;
-import javax.validation.constraints.NotBlank;
 
 public class EmailSenderConfiguration {
 

@@ -1,32 +1,25 @@
 package specialmembershipservice.it.pacts.verifications;
 
-import static com.github.restdriver.clientdriver.RestClientDriver.giveResponse;
+import static com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder.okForJson;
 import static java.util.Collections.singletonList;
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
 import static specialmembershipservice.it.pacts.PactConstants.PACT_BROKER_PORT;
 import static specialmembershipservice.it.pacts.PactConstants.PACT_BROKER_URL;
 import static specialmembershipservice.it.pacts.PactConstants.SPECIAL_MEMBERSHIP_SERVICE;
 
 import au.com.dius.pact.provider.PactVerifyProvider;
-import au.com.dius.pact.provider.junit.IgnoreNoPactsToVerify;
-import au.com.dius.pact.provider.junit.MessagePactRunner;
-import au.com.dius.pact.provider.junit.Provider;
-import au.com.dius.pact.provider.junit.State;
-import au.com.dius.pact.provider.junit.loader.PactBroker;
-import au.com.dius.pact.provider.junit.loader.PactBrokerAuth;
-import au.com.dius.pact.provider.junit.target.AmqpTarget;
-import au.com.dius.pact.provider.junit.target.Target;
-import au.com.dius.pact.provider.junit.target.TestTarget;
+import au.com.dius.pact.provider.junit5.MessageTestTarget;
+import au.com.dius.pact.provider.junitsupport.IgnoreNoPactsToVerify;
+import au.com.dius.pact.provider.junitsupport.Provider;
+import au.com.dius.pact.provider.junitsupport.State;
+import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
+import au.com.dius.pact.provider.junitsupport.loader.PactBrokerAuth;
+import au.com.dius.pact.provider.junitsupport.target.TestTarget;
+import jakarta.ws.rs.core.Response;
 import java.util.Map;
-import javax.ws.rs.core.Response;
-import org.junit.Rule;
-import org.junit.runner.RunWith;
 import specialmembershipservice.it.IntegrationTestBase;
-import specialmembershipservice.it.creditscoreservice.CreditScoreServiceRule;
 
-@RunWith(MessagePactRunner.class)
 @Provider(SPECIAL_MEMBERSHIP_SERVICE)
 @IgnoreNoPactsToVerify
 @PactBroker(
@@ -38,19 +31,14 @@ import specialmembershipservice.it.creditscoreservice.CreditScoreServiceRule;
 )
 public class MessagePactVerifications extends IntegrationTestBase {
 
-  @Rule
-  public final CreditScoreServiceRule creditScoreServiceRule = new CreditScoreServiceRule(
-      CREDIT_SCORE_SERVICE_PORT);
-
   @TestTarget
-  public final Target target = new AmqpTarget(
+  public final MessageTestTarget target = new MessageTestTarget(
       singletonList(this.getClass().getPackage().getName()));
 
   @State("Tony Stark became a new member")
   public void tonyStarkBecameANewMember() {
     String email = "tony.stark@example.com";
-    creditScoreServiceRule.setCreditResponse(email,
-        giveResponse(creditScoreDto(850), APPLICATION_JSON));
+    setCreditResponse(email, okForJson(creditScoreDto(850)));
     Map<String, Object> specialMembershipDto = specialMembershipDto(email);
     Response response = resourcesClient.postSpecialMembership(specialMembershipDto);
     response.close();

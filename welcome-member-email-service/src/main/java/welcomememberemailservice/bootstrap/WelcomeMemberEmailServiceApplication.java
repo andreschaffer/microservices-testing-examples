@@ -1,7 +1,7 @@
 package welcomememberemailservice.bootstrap;
 
-import io.dropwizard.Application;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.Application;
+import io.dropwizard.core.setup.Environment;
 import welcomememberemailservice.port.incoming.adapter.kafka.WelcomeEmailConsumer;
 import welcomememberemailservice.port.outgoing.adapter.email.SmtpEmailSender;
 

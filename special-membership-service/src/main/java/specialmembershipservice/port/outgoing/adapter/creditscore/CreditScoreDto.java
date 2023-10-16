@@ -1,6 +1,6 @@
 package specialmembershipservice.port.outgoing.adapter.creditscore;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 public class CreditScoreDto {
 

@@ -1,31 +1,27 @@
 package specialmembershipservice.it.pacts;
 
-import static au.com.dius.pact.core.model.PactSpecVersion.V3;
+import static jakarta.ws.rs.core.HttpHeaders.CONTENT_TYPE;
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 import static java.util.Collections.singletonMap;
-import static javax.ws.rs.core.HttpHeaders.CONTENT_TYPE;
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
 import static specialmembershipservice.it.pacts.PactConstants.CREDIT_SCORE_SERVICE;
 import static specialmembershipservice.it.pacts.PactConstants.SPECIAL_MEMBERSHIP_SERVICE;
 
 import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
-import au.com.dius.pact.consumer.junit.PactProviderRule;
-import au.com.dius.pact.consumer.junit.PactVerification;
+import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
+import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.core.model.RequestResponsePact;
 import au.com.dius.pact.core.model.annotations.Pact;
+import jakarta.ws.rs.core.Response;
 import java.util.Map;
-import javax.ws.rs.core.Response;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import specialmembershipservice.it.IntegrationTestBase;
 
+@ExtendWith(PactConsumerTestExt.class)
 public class CreditScoreServicePactContracts extends IntegrationTestBase {
-
-  @Rule
-  public final PactProviderRule creditScoreServiceRule = new PactProviderRule(
-      CREDIT_SCORE_SERVICE, CREDIT_SCORE_SERVICE_HOST, CREDIT_SCORE_SERVICE_PORT, V3, this);
 
   @Pact(provider = CREDIT_SCORE_SERVICE, consumer = SPECIAL_MEMBERSHIP_SERVICE)
   public RequestResponsePact tonyStarkCreditScore(PactDslWithProvider pact) {
@@ -39,8 +35,8 @@ public class CreditScoreServicePactContracts extends IntegrationTestBase {
         .toPact();
   }
 
-  @PactVerification(value = CREDIT_SCORE_SERVICE, fragment = "tonyStarkCreditScore")
   @Test
+  @PactTestFor(providerName = CREDIT_SCORE_SERVICE, pactMethod = "tonyStarkCreditScore")
   public void createSpecialMembershipToTonyStark() throws Exception {
     Map<String, Object> specialMembershipDto = specialMembershipDto("tony.stark@example.com");
     Response response = resourcesClient.postSpecialMembership(specialMembershipDto);
@@ -58,8 +54,8 @@ public class CreditScoreServicePactContracts extends IntegrationTestBase {
         .toPact();
   }
 
-  @PactVerification(value = CREDIT_SCORE_SERVICE, fragment = "hawleyGriffinCreditScore")
   @Test
+  @PactTestFor(providerName = CREDIT_SCORE_SERVICE, pactMethod = "hawleyGriffinCreditScore")
   public void denySpecialMembershipToHawleyGriffin() throws Exception {
     Map<String, Object> specialMembershipDto = specialMembershipDto("hawley.griffin@example.com");
     Response response = resourcesClient.postSpecialMembership(specialMembershipDto);

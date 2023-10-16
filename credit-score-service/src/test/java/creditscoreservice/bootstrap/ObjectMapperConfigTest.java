@@ -1,14 +1,14 @@
 package creditscoreservice.bootstrap;
 
 import static java.time.ZoneOffset.UTC;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.dropwizard.jackson.Jackson;
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ObjectMapperConfigTest {
 

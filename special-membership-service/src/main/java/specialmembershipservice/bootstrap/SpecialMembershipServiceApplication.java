@@ -3,10 +3,10 @@ package specialmembershipservice.bootstrap;
 import static org.glassfish.jersey.client.ClientProperties.CONNECT_TIMEOUT;
 import static org.glassfish.jersey.client.ClientProperties.READ_TIMEOUT;
 
-import io.dropwizard.Application;
 import io.dropwizard.client.JerseyClientBuilder;
-import io.dropwizard.setup.Environment;
-import javax.ws.rs.client.WebTarget;
+import io.dropwizard.core.Application;
+import io.dropwizard.core.setup.Environment;
+import jakarta.ws.rs.client.WebTarget;
 import specialmembershipservice.port.incoming.adapter.resources.SpecialMembershipsResource;
 import specialmembershipservice.port.outgoing.adapter.creditscore.CreditScoreService;
 import specialmembershipservice.port.outgoing.adapter.eventpublisher.EventPublisher;
