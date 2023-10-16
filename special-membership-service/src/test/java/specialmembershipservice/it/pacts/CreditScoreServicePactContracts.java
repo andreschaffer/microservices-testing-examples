@@ -6,12 +6,16 @@ import static java.util.Collections.singletonMap;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static specialmembershipservice.it.pacts.PactConstants.CREDIT_SCORE_SERVICE;
+import static specialmembershipservice.it.pacts.PactConstants.CREDIT_SCORE_SERVICE_MOCK_PORT;
 import static specialmembershipservice.it.pacts.PactConstants.SPECIAL_MEMBERSHIP_SERVICE;
 
+import au.com.dius.pact.consumer.MockServer;
 import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
+import au.com.dius.pact.consumer.junit.MockServerConfig;
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
+import au.com.dius.pact.core.model.PactSpecVersion;
 import au.com.dius.pact.core.model.RequestResponsePact;
 import au.com.dius.pact.core.model.annotations.Pact;
 import jakarta.ws.rs.core.Response;
@@ -21,6 +25,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import specialmembershipservice.it.IntegrationTestBase;
 
 @ExtendWith(PactConsumerTestExt.class)
+@MockServerConfig(port = CREDIT_SCORE_SERVICE_MOCK_PORT)
 public class CreditScoreServicePactContracts extends IntegrationTestBase {
 
   @Pact(provider = CREDIT_SCORE_SERVICE, consumer = SPECIAL_MEMBERSHIP_SERVICE)
@@ -36,8 +41,8 @@ public class CreditScoreServicePactContracts extends IntegrationTestBase {
   }
 
   @Test
-  @PactTestFor(providerName = CREDIT_SCORE_SERVICE, pactMethod = "tonyStarkCreditScore")
-  public void createSpecialMembershipToTonyStark() throws Exception {
+  @PactTestFor(pactMethod = "tonyStarkCreditScore", pactVersion = PactSpecVersion.V3)
+  public void createSpecialMembershipToTonyStark(MockServer mockServer) throws Exception {
     Map<String, Object> specialMembershipDto = specialMembershipDto("tony.stark@example.com");
     Response response = resourcesClient.postSpecialMembership(specialMembershipDto);
     response.close();
@@ -55,8 +60,8 @@ public class CreditScoreServicePactContracts extends IntegrationTestBase {
   }
 
   @Test
-  @PactTestFor(providerName = CREDIT_SCORE_SERVICE, pactMethod = "hawleyGriffinCreditScore")
-  public void denySpecialMembershipToHawleyGriffin() throws Exception {
+  @PactTestFor(pactMethod = "hawleyGriffinCreditScore", pactVersion = PactSpecVersion.V3)
+  public void denySpecialMembershipToHawleyGriffin(MockServer mockServer) throws Exception {
     Map<String, Object> specialMembershipDto = specialMembershipDto("hawley.griffin@example.com");
     Response response = resourcesClient.postSpecialMembership(specialMembershipDto);
     response.close();

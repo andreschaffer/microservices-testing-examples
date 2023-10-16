@@ -5,17 +5,21 @@ import static welcomememberemailservice.it.pacts.PactConstants.WELCOME_MEMBER_EM
 
 import au.com.dius.pact.consumer.MessagePactBuilder;
 import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
+import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.consumer.junit5.ProviderType;
 import au.com.dius.pact.core.model.PactSpecVersion;
-import au.com.dius.pact.core.model.V4Interaction;
 import au.com.dius.pact.core.model.annotations.Pact;
+import au.com.dius.pact.core.model.messaging.Message;
 import au.com.dius.pact.core.model.messaging.MessagePact;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import welcomememberemailservice.it.IntegrationTestBase;
 
+@ExtendWith(PactConsumerTestExt.class)
 public class MemberSignedUpEventPactContracts extends IntegrationTestBase {
 
   @Pact(consumer = WELCOME_MEMBER_EMAIL_SERVICE, provider = SPECIAL_MEMBERSHIP_SERVICE)
@@ -34,10 +38,10 @@ public class MemberSignedUpEventPactContracts extends IntegrationTestBase {
   }
 
   @Test
-  @PactTestFor(providerName = SPECIAL_MEMBERSHIP_SERVICE, pactMethod = "newMemberTonyStark",
-      providerType = ProviderType.ASYNCH, pactVersion = PactSpecVersion.V4)
-  public void sendWelcomeEmailToTonyStark(V4Interaction.AsynchronousMessage message) {
-    String memberSignedUpEvent = message.contentsAsString();
+  @PactTestFor(pactMethod = "newMemberTonyStark",
+      providerType = ProviderType.ASYNCH, pactVersion = PactSpecVersion.V3)
+  public void sendWelcomeEmailToTonyStark(List<Message> messages) {
+    String memberSignedUpEvent = messages.get(0).contentsAsString();
     publishMembershipMessageAndWaitToBeConsumed(memberSignedUpEvent);
     assertAnEmailWasSent();
   }
