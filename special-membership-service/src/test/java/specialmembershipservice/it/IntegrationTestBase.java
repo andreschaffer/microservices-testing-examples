@@ -23,7 +23,7 @@ import specialmembershipservice.it.kafka.KafkaContainerExtension;
 public abstract class IntegrationTestBase {
 
   protected static final String CREDIT_SCORE_SERVICE_HOST = "localhost";
-  protected static final int CREDIT_SCORE_SERVICE_PORT = 8088;
+  protected static final int CREDIT_SCORE_SERVICE_PORT = 18088;
   protected static final String KAFKA_HOST = "localhost";
   protected static final int KAFKA_PORT = 19092;
   private static final String INTEGRATION_YML = resourceFilePath("integration.yml");
