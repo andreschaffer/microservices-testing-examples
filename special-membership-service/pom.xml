@@ -29,11 +29,6 @@
     </dependency>
 
     <dependency>
-      <groupId>commons-codec</groupId>
-      <artifactId>commons-codec</artifactId>
-    </dependency>
-
-    <dependency>
       <groupId>org.apache.kafka</groupId>
       <artifactId>kafka-clients</artifactId>
     </dependency>
@@ -83,6 +78,12 @@
     <dependency>
       <groupId>au.com.dius.pact.provider</groupId>
       <artifactId>junit5</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
