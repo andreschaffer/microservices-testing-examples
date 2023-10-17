@@ -5,13 +5,17 @@ import static creditscoreservice.it.pacts.PactConstants.PACT_BROKER_PORT;
 import static creditscoreservice.it.pacts.PactConstants.PACT_BROKER_URL;
 
 import au.com.dius.pact.provider.junit5.HttpTestTarget;
+import au.com.dius.pact.provider.junit5.PactVerificationContext;
+import au.com.dius.pact.provider.junit5.PactVerificationInvocationContextProvider;
 import au.com.dius.pact.provider.junitsupport.IgnoreNoPactsToVerify;
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
 import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
 import au.com.dius.pact.provider.junitsupport.loader.PactBrokerAuth;
-import au.com.dius.pact.provider.junitsupport.target.TestTarget;
 import creditscoreservice.it.IntegrationTestBase;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestTemplate;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 @Provider(CREDIT_SCORE_SERVICE)
 @IgnoreNoPactsToVerify
@@ -24,8 +28,16 @@ import creditscoreservice.it.IntegrationTestBase;
 )
 public class HttpPactVerifications extends IntegrationTestBase {
 
-  @TestTarget
-  public final HttpTestTarget target = new HttpTestTarget("localhost", SERVICE_RULE.getLocalPort());
+  @TestTemplate
+  @ExtendWith(PactVerificationInvocationContextProvider.class)
+  public void pactVerificationTestTemplate(PactVerificationContext context) {
+    context.verifyInteraction();
+  }
+
+  @BeforeEach
+  public void before(PactVerificationContext context) {
+    context.setTarget(new HttpTestTarget("localhost", SERVICE_RULE.getLocalPort()));
+  }
 
   @State("There is a tony.stark@example.com")
   public void tonyStarkCreditScore() {
