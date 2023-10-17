@@ -2,9 +2,9 @@ package creditscoreservice.bootstrap;
 
 import creditscoreservice.port.incoming.adapter.resources.CreditScoreResource;
 import creditscoreservice.port.outgoing.adapter.creditscore.InMemoryCreditScoreRepository;
-import io.dropwizard.Application;
-import io.dropwizard.Configuration;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.Application;
+import io.dropwizard.core.Configuration;
+import io.dropwizard.core.setup.Environment;
 
 public class CreditScoreServiceApplication extends Application<Configuration> {
 

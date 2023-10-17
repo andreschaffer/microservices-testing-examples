@@ -1,7 +1,7 @@
 consumer:
   topic: special-membership-topic
   configs:
-    bootstrap.servers: localhost:9092
+    bootstrap.servers: localhost:19092
     group.id: welcome-member-email-consumer
 
 emailSender:

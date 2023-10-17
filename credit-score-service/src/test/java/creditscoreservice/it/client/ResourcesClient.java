@@ -1,19 +1,19 @@
 package creditscoreservice.it.client;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static jakarta.ws.rs.client.Entity.json;
 import static java.util.logging.Level.INFO;
 import static java.util.logging.Logger.getLogger;
-import static javax.ws.rs.client.Entity.json;
 import static org.glassfish.jersey.client.ClientProperties.CONNECT_TIMEOUT;
 import static org.glassfish.jersey.client.ClientProperties.READ_TIMEOUT;
 import static org.glassfish.jersey.logging.LoggingFeature.DEFAULT_LOGGER_NAME;
 import static org.glassfish.jersey.logging.LoggingFeature.Verbosity.PAYLOAD_ANY;
 
 import io.dropwizard.client.JerseyClientBuilder;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.setup.Environment;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.core.Response;
 import java.util.Map;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.core.Response;
 import org.glassfish.jersey.logging.LoggingFeature;
 
 public class ResourcesClient {

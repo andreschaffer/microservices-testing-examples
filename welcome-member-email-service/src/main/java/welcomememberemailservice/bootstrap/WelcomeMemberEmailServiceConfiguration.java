@@ -1,8 +1,9 @@
 package welcomememberemailservice.bootstrap;
 
-import io.dropwizard.Configuration;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+
+import io.dropwizard.core.Configuration;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 public class WelcomeMemberEmailServiceConfiguration extends Configuration {
 

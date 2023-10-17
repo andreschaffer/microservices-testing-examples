@@ -1,7 +1,7 @@
 package specialmembershipservice.it.client;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static javax.ws.rs.core.UriBuilder.fromUri;
+import static jakarta.ws.rs.core.UriBuilder.fromUri;
 
 import java.net.URI;
 

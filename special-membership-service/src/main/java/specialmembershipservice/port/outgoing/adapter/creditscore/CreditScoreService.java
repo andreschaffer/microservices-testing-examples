@@ -2,13 +2,13 @@ package specialmembershipservice.port.outgoing.adapter.creditscore;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.ProcessingException;
+import jakarta.ws.rs.ServerErrorException;
+import jakarta.ws.rs.client.WebTarget;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.util.Optional;
-import javax.ws.rs.NotFoundException;
-import javax.ws.rs.ProcessingException;
-import javax.ws.rs.ServerErrorException;
-import javax.ws.rs.client.WebTarget;
 
 public class CreditScoreService {
 

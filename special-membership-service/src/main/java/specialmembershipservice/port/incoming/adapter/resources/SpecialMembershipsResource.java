@@ -1,20 +1,20 @@
 package specialmembershipservice.port.incoming.adapter.resources;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+import static jakarta.ws.rs.core.Response.Status.FORBIDDEN;
+import static jakarta.ws.rs.core.Response.Status.SERVICE_UNAVAILABLE;
 import static java.time.ZoneOffset.UTC;
 import static java.time.ZonedDateTime.now;
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static javax.ws.rs.core.Response.Status.FORBIDDEN;
-import static javax.ws.rs.core.Response.Status.SERVICE_UNAVAILABLE;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.Response;
 import java.util.Optional;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Response;
 import specialmembershipservice.port.outgoing.adapter.creditscore.CreditScoreDto;
 import specialmembershipservice.port.outgoing.adapter.creditscore.CreditScoreService;
 import specialmembershipservice.port.outgoing.adapter.creditscore.TemporarilyUnavailableException;

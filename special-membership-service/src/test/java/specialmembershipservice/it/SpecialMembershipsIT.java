@@ -1,32 +1,38 @@
 package specialmembershipservice.it;
 
-import static com.github.restdriver.clientdriver.RestClientDriver.giveEmptyResponse;
-import static com.github.restdriver.clientdriver.RestClientDriver.giveResponse;
+import static com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder.okForJson;
+import static com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder.responseDefinition;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.common.ContentTypes.APPLICATION_JSON;
+import static com.github.tomakehurst.wiremock.common.ContentTypes.CONTENT_TYPE;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath;
 import static java.util.Collections.emptyMap;
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
 import static specialmembershipservice.it.matchers.DateFormatMatcher.isIsoDateFormat;
 
+import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
+import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
+import jakarta.ws.rs.core.Response;
 import java.util.Map;
-import javax.ws.rs.core.Response;
-import org.junit.Rule;
-import org.junit.Test;
-import specialmembershipservice.it.creditscoreservice.CreditScoreServiceRule;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
 public class SpecialMembershipsIT extends IntegrationTestBase {
 
-  @Rule
-  public final CreditScoreServiceRule creditScoreServiceRule =
-      new CreditScoreServiceRule(CREDIT_SCORE_SERVICE_PORT);
+  @RegisterExtension
+  @Order(0)
+  private static WireMockExtension CREDIT_SCORE_SERVICE_RULE = WireMockExtension.newInstance()
+      .options(wireMockConfig().port(CREDIT_SCORE_SERVICE_PORT))
+      .build();
 
   @Test
   public void create() throws Exception {
     String email = "tony.stark@example.com";
-    creditScoreServiceRule.setCreditResponse(email,
-        giveResponse(creditScoreDto(850), APPLICATION_JSON));
+    setCreditResponse(email, responseDefinition().withBody(creditScoreDto(850))
+        .withHeader(CONTENT_TYPE, APPLICATION_JSON));
     Map<String, Object> specialMembershipDto = specialMembershipDto(email);
     Response response = resourcesClient.postSpecialMembership(specialMembershipDto);
     response.close();
@@ -37,8 +43,8 @@ public class SpecialMembershipsIT extends IntegrationTestBase {
   @Test
   public void denyDueToLowCreditScore() throws Exception {
     String email = "peter.parker@example.com";
-    creditScoreServiceRule.setCreditResponse(email,
-        giveResponse(creditScoreDto(300), APPLICATION_JSON));
+    setCreditResponse(email, responseDefinition().withBody(creditScoreDto(300))
+        .withHeader(CONTENT_TYPE, APPLICATION_JSON));
     Map<String, Object> specialMembershipDto = specialMembershipDto(email);
     Response response = resourcesClient.postSpecialMembership(specialMembershipDto);
     response.close();
@@ -48,7 +54,7 @@ public class SpecialMembershipsIT extends IntegrationTestBase {
   @Test
   public void denyDueToNoCreditScore() throws Exception {
     String email = "ninja.turtle@example.com";
-    creditScoreServiceRule.setCreditResponse(email, giveEmptyResponse().withStatus(404));
+    setCreditResponse(email, responseDefinition().withStatus(404));
     Map<String, Object> specialMembershipDto = specialMembershipDto(email);
     Response response = resourcesClient.postSpecialMembership(specialMembershipDto);
     response.close();
@@ -74,7 +80,7 @@ public class SpecialMembershipsIT extends IntegrationTestBase {
   @Test
   public void returnServiceUnavailableOnCreditScoreServiceError() throws Exception {
     String email = "the.joker@example.com";
-    creditScoreServiceRule.setCreditResponse(email, giveEmptyResponse().withStatus(500));
+    setCreditResponse(email, responseDefinition().withStatus(500));
     Map<String, Object> specialMembershipDto = specialMembershipDto(email);
     Response response = resourcesClient.postSpecialMembership(specialMembershipDto);
     response.close();
@@ -84,8 +90,7 @@ public class SpecialMembershipsIT extends IntegrationTestBase {
   @Test
   public void returnServiceUnavailableOnCreditScoreServiceTimeout() throws Exception {
     String email = "barry.allen@example.com";
-    creditScoreServiceRule.setCreditResponse(email,
-        giveResponse(creditScoreDto(300), APPLICATION_JSON).after(3, SECONDS));
+    setCreditResponse(email, okForJson(creditScoreDto(300)).withFixedDelay(3000));
     Map<String, Object> specialMembershipDto = specialMembershipDto(email);
     Response response = resourcesClient.postSpecialMembership(specialMembershipDto);
     response.close();
@@ -98,5 +103,9 @@ public class SpecialMembershipsIT extends IntegrationTestBase {
     assertThat(memberSignedUpEvent, hasJsonPath("$.@type", equalTo(eventType)));
     assertThat(memberSignedUpEvent, hasJsonPath("$.email", equalTo(email)));
     assertThat(memberSignedUpEvent, hasJsonPath("$.timestamp", isIsoDateFormat()));
+  }
+
+  protected void setCreditResponse(String email, ResponseDefinitionBuilder response) {
+    CREDIT_SCORE_SERVICE_RULE.stubFor(get("/credit-scores/" + email).willReturn(response));
   }
 }

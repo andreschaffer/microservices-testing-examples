@@ -1,8 +1,8 @@
 package specialmembershipservice.bootstrap;
 
-import io.dropwizard.Configuration;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import io.dropwizard.core.Configuration;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.URL;
 
 public class SpecialMembershipServiceConfiguration extends Configuration {

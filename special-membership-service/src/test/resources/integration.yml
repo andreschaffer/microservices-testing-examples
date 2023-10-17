@@ -1,9 +1,9 @@
-creditScoreServiceUrl: http://localhost:8088
+creditScoreServiceUrl: http://localhost:18088
 
 eventPublisher:
   topic: special-membership-topic
   configs:
-    bootstrap.servers: localhost:9092
+    bootstrap.servers: localhost:19092
 
 server:
   applicationConnectors:
