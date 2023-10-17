@@ -42,7 +42,7 @@ public class CreditScoreServicePactContracts extends IntegrationTestBase {
 
   @Test
   @PactTestFor(pactMethod = "tonyStarkCreditScore", pactVersion = PactSpecVersion.V3)
-  public void createSpecialMembershipToTonyStark(MockServer mockServer) throws Exception {
+  public void createSpecialMembershipToTonyStark() throws Exception {
     Map<String, Object> specialMembershipDto = specialMembershipDto("tony.stark@example.com");
     Response response = resourcesClient.postSpecialMembership(specialMembershipDto);
     response.close();
@@ -61,7 +61,7 @@ public class CreditScoreServicePactContracts extends IntegrationTestBase {
 
   @Test
   @PactTestFor(pactMethod = "hawleyGriffinCreditScore", pactVersion = PactSpecVersion.V3)
-  public void denySpecialMembershipToHawleyGriffin(MockServer mockServer) throws Exception {
+  public void denySpecialMembershipToHawleyGriffin() throws Exception {
     Map<String, Object> specialMembershipDto = specialMembershipDto("hawley.griffin@example.com");
     Response response = resourcesClient.postSpecialMembership(specialMembershipDto);
     response.close();
