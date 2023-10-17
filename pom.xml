@@ -256,6 +256,9 @@
             </goals>
           </execution>
         </executions>
+        <configuration>
+          <useSystemClassLoader>false</useSystemClassLoader>
+        </configuration>
       </plugin>
     </plugins>
   </build>
