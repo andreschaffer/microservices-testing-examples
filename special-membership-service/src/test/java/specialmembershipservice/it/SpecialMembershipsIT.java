@@ -2,19 +2,31 @@ package specialmembershipservice.it;
 
 import static com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder.okForJson;
 import static com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder.responseDefinition;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.common.ContentTypes.APPLICATION_JSON;
 import static com.github.tomakehurst.wiremock.common.ContentTypes.CONTENT_TYPE;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath;
 import static java.util.Collections.emptyMap;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static specialmembershipservice.it.matchers.DateFormatMatcher.isIsoDateFormat;
 
+import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
+import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import jakarta.ws.rs.core.Response;
 import java.util.Map;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
 public class SpecialMembershipsIT extends IntegrationTestBase {
+
+  @RegisterExtension
+  @Order(0)
+  private static WireMockExtension CREDIT_SCORE_SERVICE_RULE = WireMockExtension.newInstance()
+      .options(wireMockConfig().port(CREDIT_SCORE_SERVICE_PORT))
+      .build();
 
   @Test
   public void create() throws Exception {
@@ -91,5 +103,9 @@ public class SpecialMembershipsIT extends IntegrationTestBase {
     assertThat(memberSignedUpEvent, hasJsonPath("$.@type", equalTo(eventType)));
     assertThat(memberSignedUpEvent, hasJsonPath("$.email", equalTo(email)));
     assertThat(memberSignedUpEvent, hasJsonPath("$.timestamp", isIsoDateFormat()));
+  }
+
+  protected void setCreditResponse(String email, ResponseDefinitionBuilder response) {
+    CREDIT_SCORE_SERVICE_RULE.stubFor(get("/credit-scores/" + email).willReturn(response));
   }
 }

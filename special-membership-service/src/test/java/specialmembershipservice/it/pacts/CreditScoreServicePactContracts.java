@@ -9,7 +9,6 @@ import static specialmembershipservice.it.pacts.PactConstants.CREDIT_SCORE_SERVI
 import static specialmembershipservice.it.pacts.PactConstants.CREDIT_SCORE_SERVICE_MOCK_PORT;
 import static specialmembershipservice.it.pacts.PactConstants.SPECIAL_MEMBERSHIP_SERVICE;
 
-import au.com.dius.pact.consumer.MockServer;
 import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit.MockServerConfig;

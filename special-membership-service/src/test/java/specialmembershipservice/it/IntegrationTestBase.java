@@ -30,12 +30,6 @@ public abstract class IntegrationTestBase {
   private static final String SPECIAL_MEMBERSHIP_TOPIC = "special-membership-topic";
 
   @RegisterExtension
-  @Order(0)
-  private static WireMockExtension CREDIT_SCORE_SERVICE_RULE = WireMockExtension.newInstance()
-      .options(wireMockConfig().port(CREDIT_SCORE_SERVICE_PORT))
-      .build();
-
-  @RegisterExtension
   @Order(1)
   private static final KafkaContainerExtension KAFKA_RULE = new KafkaContainerExtension(
       KAFKA_HOST, KAFKA_PORT);
@@ -69,9 +63,5 @@ public abstract class IntegrationTestBase {
 
   protected String creditScoreDto(Integer creditScore) {
     return String.format("{\"creditScore\":%d}", creditScore);
-  }
-
-  protected void setCreditResponse(String email, ResponseDefinitionBuilder response) {
-    CREDIT_SCORE_SERVICE_RULE.stubFor(get("/credit-scores/" + email).willReturn(response));
   }
 }
