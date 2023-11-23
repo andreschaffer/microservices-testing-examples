@@ -19,7 +19,7 @@
     <java.version>19</java.version>
     <dropwizard.version>4.0.3</dropwizard.version>
     <pact.version>4.6.3</pact.version>
-    <kotlin.version>1.9.20</kotlin.version>
+    <kotlin.version>1.9.21</kotlin.version>
     <jersey.version>3.0.11</jersey.version>
     <netty.version>4.1.101.Final</netty.version>
     <junit.version>5.10.1</junit.version>
