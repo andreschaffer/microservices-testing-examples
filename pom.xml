@@ -20,7 +20,7 @@
     <dropwizard.version>4.0.4</dropwizard.version>
     <pact.version>4.6.3</pact.version>
     <kotlin.version>1.9.20</kotlin.version>
-    <jersey.version>3.0.11</jersey.version>
+    <jersey.version>3.1.5</jersey.version>
     <netty.version>4.1.100.Final</netty.version>
     <junit.version>5.10.1</junit.version>
     <error_prone.version>2.23.0</error_prone.version>
@@ -205,6 +205,12 @@
         <groupId>org.glassfish.jersey.core</groupId>
         <artifactId>jersey-common</artifactId>
         <version>${jersey.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>jakarta.ws.rs</groupId>
+        <artifactId>jakarta.ws.rs-api</artifactId>
+        <version>3.1.0</version>
       </dependency>
 
       <dependency>
