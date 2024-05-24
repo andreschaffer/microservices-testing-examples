@@ -20,7 +20,7 @@
     <dropwizard.version>4.0.7</dropwizard.version>
     <pact.version>4.6.9</pact.version>
     <kotlin.version>2.0.0</kotlin.version>
-    <jersey.version>3.1.6</jersey.version>
+    <jersey.version>3.1.7</jersey.version>
     <netty.version>4.1.110.Final</netty.version>
     <junit.version>5.10.2</junit.version>
     <error_prone.version>2.27.1</error_prone.version>
