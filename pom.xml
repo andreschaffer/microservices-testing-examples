@@ -21,7 +21,7 @@
     <pact.version>4.6.11</pact.version>
     <kotlin.version>2.0.0</kotlin.version>
     <jersey.version>3.1.7</jersey.version>
-    <netty.version>4.1.111.Final</netty.version>
+    <netty.version>4.1.112.Final</netty.version>
     <junit.version>5.10.3</junit.version>
     <error_prone.version>2.29.1</error_prone.version>
     <mvn-test-plugins.version>3.3.1</mvn-test-plugins.version>
