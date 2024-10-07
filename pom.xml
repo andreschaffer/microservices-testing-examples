@@ -24,7 +24,7 @@
     <netty.version>4.1.114.Final</netty.version>
     <junit.version>5.11.2</junit.version>
     <error_prone.version>2.33.0</error_prone.version>
-    <mvn-test-plugins.version>3.5.0</mvn-test-plugins.version>
+    <mvn-test-plugins.version>3.5.1</mvn-test-plugins.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
