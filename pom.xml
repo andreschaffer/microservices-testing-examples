@@ -22,7 +22,7 @@
     <kotlin.version>2.0.21</kotlin.version>
     <jersey.version>3.1.10</jersey.version>
     <netty.version>4.2.1.Final</netty.version>
-    <junit.version>5.11.3</junit.version>
+    <junit.version>5.12.2</junit.version>
     <error_prone.version>2.38.0</error_prone.version>
     <mvn-test-plugins.version>3.5.2</mvn-test-plugins.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
