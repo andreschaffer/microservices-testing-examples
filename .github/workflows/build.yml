@@ -17,7 +17,7 @@ jobs:
       PACT_CLI_IMG: pactfoundation/pact-cli:0.12.3.0
       PACT_BROKER_URL: localhost:9292
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Start dependencies with docker-compose
         run: docker compose -f pact-tools/pact-broker/docker-compose.yml up -d
