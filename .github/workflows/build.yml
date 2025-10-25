@@ -93,7 +93,29 @@ jobs:
           # tag pacts as production
           docker run --rm --net host ${PACT_CLI_IMG} broker create-version-tag --pacticipant credit-score-service --version `git rev-parse --short HEAD` --tag prod --broker-base-url ${PACT_BROKER_URL} --broker-username=rw_user --broker-password=rw_pass
 
-      - name: Code Coverage Report
+      - name: Code Coverage Report welcome-member-email-service
+        if: ${{ github.actor != 'dependabot[bot]' }}
+        uses: qltysh/qlty-action/coverage@v2
+        with:
+          oidc: true
+          files: |
+            welcome-member-email-service/target/site/jacoco/jacoco.xml
+            welcome-member-email-service/target/site/jacoco-it/jacoco.xml
+          add-prefix: welcome-member-email-service/src/main/java/
+          tag: welcome-member-email-service
+
+      - name: Code Coverage Report special-membership-service
+        if: ${{ github.actor != 'dependabot[bot]' }}
+        uses: qltysh/qlty-action/coverage@v2
+        with:
+          oidc: true
+          files: |
+            special-membership-service/target/site/jacoco/jacoco.xml
+            special-membership-service/target/site/jacoco-it/jacoco.xml
+          add-prefix: special-membership-service/src/main/java/
+          tag: special-membership-service
+
+      - name: Code Coverage Report credit-score-service
         if: ${{ github.actor != 'dependabot[bot]' }}
         uses: qltysh/qlty-action/coverage@v2
         with:
@@ -101,14 +123,8 @@ jobs:
           files: |
             credit-score-service/target/site/jacoco/jacoco.xml
             credit-score-service/target/site/jacoco-it/jacoco.xml
-            special-membership-service/target/site/jacoco/jacoco.xml
-            special-membership-service/target/site/jacoco-it/jacoco.xml
-            welcome-member-email-service/target/site/jacoco/jacoco.xml
-            welcome-member-email-service/target/site/jacoco-it/jacoco.xml
-          add-prefix: |
-            credit-score-service/src/main/java/
-            special-membership-service/src/main/java/
-            welcome-member-email-service/src/main/java/
+          add-prefix: credit-score-service/src/main/java/
+          tag: credit-score-service
 
       - name: Stop dependencies with docker-compose
         run: docker compose -f pact-tools/pact-broker/docker-compose.yml down
