@@ -127,6 +127,7 @@ jobs:
         with:
           oidc: true
           files: coverage/merged-jacoco.xml
+          add-prefix: credit-score-service/src/main/java/,special-membership-service/src/main/java/,welcome-member-email-service/src/main/java/
 
       - name: Stop dependencies with docker-compose
         run: docker compose -f pact-tools/pact-broker/docker-compose.yml down
