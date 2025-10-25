@@ -93,15 +93,30 @@ jobs:
           # tag pacts as production
           docker run --rm --net host ${PACT_CLI_IMG} broker create-version-tag --pacticipant credit-score-service --version `git rev-parse --short HEAD` --tag prod --broker-base-url ${PACT_BROKER_URL} --broker-username=rw_user --broker-password=rw_pass
 
+      - name: Merge Code Coverage Report Files
+        if: ${{ github.actor != 'dependabot[bot]' }}
+        env:
+          JACOCO_SOURCE_PATH: credit-score-service/src/main/java special-membership-service/src/main/java welcome-member-email-service/src/main/java
+        run: |
+          mkdir -p coverage
+
+          curl -L https://www.jacoco.org/jacoco/trunk/org.jacoco.cli-0.8.15.jar -o jacococli.jar
+
+          java -jar jacococli.jar merge \
+            credit-score-service/target/site/jacoco/jacoco.xml \
+            credit-score-service/target/site/jacoco-it/jacoco.xml \
+            special-membership-service/target/site/jacoco/jacoco.xml \
+            special-membership-service/target/site/jacoco-it/jacoco.xml \
+            welcome-member-email-service/target/site/jacoco/jacoco.xml \
+            welcome-member-email-service/target/site/jacoco-it/jacoco.xml \
+            --destfile coverage/merged-jacoco.xml
+
       - name: Code Coverage Report
         if: ${{ github.actor != 'dependabot[bot]' }}
         uses: qltysh/qlty-action/coverage@v2
         with:
           oidc: true
-          files: |
-            target/site/jacoco/jacoco.xml
-            target/site/jacoco-it/jacoco.xml
-          add-prefix: credit-score-service/src/main/java/,special-membership-service/src/main/java/,welcome-member-email-service/src/main/java/
+          files: coverage/merged-jacoco.xml
 
       - name: Stop dependencies with docker-compose
         run: docker compose -f pact-tools/pact-broker/docker-compose.yml down
