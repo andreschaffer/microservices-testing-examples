@@ -100,7 +100,7 @@ jobs:
         run: |
           mkdir -p coverage
 
-          curl -L https://www.jacoco.org/jacoco/trunk/org.jacoco.cli-0.8.15.jar -o jacococli.jar
+          curl -L -o jacococli.jar https://repo1.maven.org/maven2/org/jacoco/org.jacoco.cli/0.8.15/org.jacoco.cli-0.8.15-nodeps.jar
 
           java -jar jacococli.jar merge \
             credit-score-service/target/site/jacoco/jacoco.xml \
