@@ -42,9 +42,6 @@ jobs:
 
       - name: Build welcome-member-email-service
         run: |
-          JACOCO_VERSION=$(grep -A 1 "<artifactId>jacoco-maven-plugin</artifactId>" pom.xml | grep "<version>" | sed -E "s/.*<version>(.*)<\/version>.*/\1/")
-          echo "JaCoCo version from pom.xml: $JACOCO_VERSION"
-          
           # build
           mvn clean verify -pl welcome-member-email-service -Pcode-coverage -Pstatic-code-analysis
           # verify pacts
@@ -98,8 +95,6 @@ jobs:
 
       - name: Merge Code Coverage Report Files
         if: ${{ github.actor != 'dependabot[bot]' }}
-        env:
-          JACOCO_SOURCE_PATH: credit-score-service/src/main/java special-membership-service/src/main/java welcome-member-email-service/src/main/java
         run: |
           JACOCO_VERSION=$(grep -A 1 "<artifactId>jacoco-maven-plugin</artifactId>" pom.xml | grep "<version>" | sed -E "s/.*<version>(.*)<\/version>.*/\1/")
           echo "JaCoCo version from pom.xml: $JACOCO_VERSION"
