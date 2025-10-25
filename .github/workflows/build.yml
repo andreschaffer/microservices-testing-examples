@@ -102,15 +102,24 @@ jobs:
           curl -L -o jacococli.jar "https://repo1.maven.org/maven2/org/jacoco/org.jacoco.cli/$JACOCO_VERSION/org.jacoco.cli-$JACOCO_VERSION-nodeps.jar"
 
           mkdir -p coverage
-          
+
           java -jar jacococli.jar merge \
-            credit-score-service/target/site/jacoco/jacoco.xml \
-            credit-score-service/target/site/jacoco-it/jacoco.xml \
-            special-membership-service/target/site/jacoco/jacoco.xml \
-            special-membership-service/target/site/jacoco-it/jacoco.xml \
-            welcome-member-email-service/target/site/jacoco/jacoco.xml \
-            welcome-member-email-service/target/site/jacoco-it/jacoco.xml \
-            --destfile coverage/merged-jacoco.xml
+            credit-score-service/target/jacoco.exec \
+            credit-score-service/target/jacoco-it.exec \
+            special-membership-service/target/jacoco.exec \
+            special-membership-service/target/jacoco-it.exec \
+            welcome-member-email-service/target/jacoco.exec \
+            welcome-member-email-service/target/jacoco-it.exec \
+            --destfile coverage/merged.exec
+          
+          java -jar jacococli.jar report coverage/merged.exec \
+            --classfiles credit-score-service/target/classes \
+            --classfiles special-membership-service/target/classes \
+            --classfiles welcome-member-email-service/target/classes \
+            --sourcefiles credit-score-service/src/main/java \
+            --sourcefiles special-membership-service/src/main/java \
+            --sourcefiles welcome-member-email-service/src/main/java \
+            --xml coverage/merged-jacoco.xml
 
       - name: Code Coverage Report
         if: ${{ github.actor != 'dependabot[bot]' }}
