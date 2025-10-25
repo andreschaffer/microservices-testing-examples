@@ -105,7 +105,10 @@ jobs:
             special-membership-service/target/site/jacoco-it/jacoco.xml
             welcome-member-email-service/target/site/jacoco/jacoco.xml
             welcome-member-email-service/target/site/jacoco-it/jacoco.xml
-          add-prefix: credit-score-service/src/main/java/,special-membership-service/src/main/java/,welcome-member-email-service/src/main/java/
+          add-prefix: |
+            credit-score-service/src/main/java/
+            special-membership-service/src/main/java/
+            welcome-member-email-service/src/main/java/
 
       - name: Stop dependencies with docker-compose
         run: docker compose -f pact-tools/pact-broker/docker-compose.yml down
