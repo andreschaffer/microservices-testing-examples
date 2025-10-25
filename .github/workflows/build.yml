@@ -98,10 +98,13 @@ jobs:
         env:
           JACOCO_SOURCE_PATH: credit-score-service/src/main/java special-membership-service/src/main/java welcome-member-email-service/src/main/java
         run: |
+          JACOCO_VERSION=$(xmllint --xpath "string(//plugin[artifactId='jacoco-maven-plugin']/version)" pom.xml)
+          echo "JaCoCo version from pom.xml: $JACOCO_VERSION"
+
+          curl -L -o jacococli.jar "https://repo1.maven.org/maven2/org/jacoco/org.jacoco.cli/$JACOCO_VERSION/org.jacoco.cli-$JACOCO_VERSION-nodeps.jar"
+
           mkdir -p coverage
-
-          curl -L -o jacococli.jar https://repo1.maven.org/maven2/org/jacoco/org.jacoco.cli/0.8.15/org.jacoco.cli-0.8.15-nodeps.jar
-
+          
           java -jar jacococli.jar merge \
             credit-score-service/target/site/jacoco/jacoco.xml \
             credit-score-service/target/site/jacoco-it/jacoco.xml \
