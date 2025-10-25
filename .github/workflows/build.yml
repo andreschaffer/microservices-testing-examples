@@ -93,40 +93,18 @@ jobs:
           # tag pacts as production
           docker run --rm --net host ${PACT_CLI_IMG} broker create-version-tag --pacticipant credit-score-service --version `git rev-parse --short HEAD` --tag prod --broker-base-url ${PACT_BROKER_URL} --broker-username=rw_user --broker-password=rw_pass
 
-      - name: Merge Code Coverage Report Files
-        if: ${{ github.actor != 'dependabot[bot]' }}
-        run: |
-          JACOCO_VERSION=$(grep -A 1 "<artifactId>jacoco-maven-plugin</artifactId>" pom.xml | grep "<version>" | sed -E "s/.*<version>(.*)<\/version>.*/\1/")
-          echo "JaCoCo version from pom.xml: $JACOCO_VERSION"
-
-          curl -L -o jacococli.jar "https://repo1.maven.org/maven2/org/jacoco/org.jacoco.cli/$JACOCO_VERSION/org.jacoco.cli-$JACOCO_VERSION-nodeps.jar"
-
-          mkdir -p coverage
-
-          java -jar jacococli.jar merge \
-            credit-score-service/target/jacoco.exec \
-            credit-score-service/target/jacoco-it.exec \
-            special-membership-service/target/jacoco.exec \
-            special-membership-service/target/jacoco-it.exec \
-            welcome-member-email-service/target/jacoco.exec \
-            welcome-member-email-service/target/jacoco-it.exec \
-            --destfile coverage/merged.exec
-          
-          java -jar jacococli.jar report coverage/merged.exec \
-            --classfiles credit-score-service/target/classes \
-            --classfiles special-membership-service/target/classes \
-            --classfiles welcome-member-email-service/target/classes \
-            --sourcefiles credit-score-service/src/main/java \
-            --sourcefiles special-membership-service/src/main/java \
-            --sourcefiles welcome-member-email-service/src/main/java \
-            --xml coverage/merged-jacoco.xml
-
       - name: Code Coverage Report
         if: ${{ github.actor != 'dependabot[bot]' }}
         uses: qltysh/qlty-action/coverage@v2
         with:
           oidc: true
-          files: coverage/merged-jacoco.xml
+          files: |
+            credit-score-service/target/site/jacoco/jacoco.xml
+            credit-score-service/target/site/jacoco-it/jacoco.xml
+            special-membership-service/target/site/jacoco/jacoco.xml
+            special-membership-service/target/site/jacoco-it/jacoco.xml
+            welcome-member-email-service/target/site/jacoco/jacoco.xml
+            welcome-member-email-service/target/site/jacoco-it/jacoco.xml
           add-prefix: credit-score-service/src/main/java/,special-membership-service/src/main/java/,welcome-member-email-service/src/main/java/
 
       - name: Stop dependencies with docker-compose
