@@ -1,6 +1,6 @@
 [![Build](https://github.com/andreschaffer/microservices-testing-examples/actions/workflows/build.yml/badge.svg)](https://github.com/andreschaffer/microservices-testing-examples/actions/workflows/build.yml)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/77358dd72d38afa63fce/test_coverage)](https://codeclimate.com/github/andreschaffer/microservices-testing-examples/test_coverage)
-[![Maintainability](https://api.codeclimate.com/v1/badges/77358dd72d38afa63fce/maintainability)](https://codeclimate.com/github/andreschaffer/microservices-testing-examples/maintainability)
+[![Code Coverage](https://qlty.sh/gh/andreschaffer/projects/microservices-testing-examples/coverage.svg)](https://qlty.sh/gh/andreschaffer/projects/microservices-testing-examples)
+[![Maintainability](https://qlty.sh/gh/andreschaffer/projects/microservices-testing-examples/maintainability.svg)](https://qlty.sh/gh/andreschaffer/projects/microservices-testing-examples)
 [![Dependabot](https://img.shields.io/badge/Dependabot-enabled-blue?logo=dependabot)](https://docs.github.com/en/github/administering-a-repository/keeping-your-dependencies-updated-automatically)
 
 # Microservices Testing Examples
