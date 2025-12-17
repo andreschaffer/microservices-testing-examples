@@ -18,7 +18,7 @@
   <properties>
     <java.version>19</java.version>
     <dropwizard.version>4.0.10</dropwizard.version>
-    <pact.version>4.6.18</pact.version>
+    <pact.version>4.6.19</pact.version>
     <kotlin.version>2.0.21</kotlin.version>
     <jersey.version>3.1.11</jersey.version>
     <netty.version>4.2.9.Final</netty.version>
